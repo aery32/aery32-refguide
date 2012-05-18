@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# avr32-boilerplate documentation build configuration file, created by
+# Aery32 documentation build configuration file, created by
 # sphinx-quickstart on Tue Dec 06 17:47:29 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'avr32-boilerplatedoc'
+htmlhelp_basename = 'aery32doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'avr32-boilerplate.tex', u'avr32-boilerplate Documentation',
+  ('index', 'aery32.tex', u'Aery32 Reference Guide',
    u'Muiku Oy', 'manual'),
 ]
 
@@ -213,7 +213,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'avr32-boilerplate', u'avr32-boilerplate Documentation',
+    ('index', 'Aery32', u'Aery32 Reference Guide',
      [u'Muiku Oy'], 1)
 ]
 
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'avr32-boilerplate', u'avr32-boilerplate Documentation',
-   u'Muiku Oy', 'avr32-boilerplate', 'One line description of project.',
+  ('index', 'aery32', u'Aery32 Reference Guide',
+   u'Muiku Oy', 'Aery32', 'One line description of project.',
    'Miscellaneous'),
 ]
 

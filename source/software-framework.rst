@@ -207,21 +207,6 @@ Edit this line so that it looks like this::
 If you need to add a header file for the ``newfile.c``, put it under ``src/`` or ``include/`` directory. You don't have to edit the Makefile at this point anymore.
 
 
-
-Library components
-------------------
-
-.. toctree::
-  :maxdepth: 1
-
-  aery32_gpio
-  aery32_interrupts
-  aery32_pm
-  aery32_rtc
-  aery32_spi
-
-
-
 Examples
 --------
 

@@ -11,6 +11,7 @@ Welcome to Aery32's documentation!
 
    getting-started
    software-framework
+   modules
    development-board
    use-with
    contribute
