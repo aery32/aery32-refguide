@@ -1,7 +1,7 @@
 Modules
 =======
 
-**Modules are library components that operate with the AVR32 internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_``, etc. To use the module component, just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file ``aery32/pm.h``.
+**Modules are library components that operate with the AVR32 internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file `aery32/pm.h`, ``#include "aery32/pm.h"``.
 
 .. hint::
 
@@ -10,15 +10,15 @@ Modules
 General Periheral Input/Output (gpio)
 -------------------------------------
 
-To init any pin output high, there is a oneliner
+To initialize any pin to output high, there is a oneliner which can be used
 
 .. code-block:: c
 
     aery_gpio_init_pin(AVR32_PIN_PC04, GPIO_OUTPUT|GPIO_HIGH);
 
-The first argument is GPIO pin number and the second is for options. For 100 pin Atmel AVR32UC3 the GPIO pin number is a decimal number from 0 to 69. Fortunately, you do not have to remember which number represent what port and pin. Instead you can use predefined aliases as it was done above with the pin PC04 (5th pin in port C if the PC00 is the 1st).
+The first argument is the GPIO pin number and the second one is for options. For 100 pin Atmel AVR32UC3, the GPIO pin number is a decimal number from 0 to 69. Fortunately, you do not have to remember which number represent what port and pin. Instead you can use predefined aliases as it was done above with the pin PC04 (5th pin in port C if the PC00 is the 1st).
 
-The available options are
+The available pin init options are:
 
 - GPIO_OUTPUT
 - GPIO_INPUT
@@ -36,7 +36,7 @@ The available options are
 - GPIO_GLITCH_FILTER
 - GPIO_HIZ
 
-These options can be combined with the pipe operator (boolean OR) to carry out several commands at once. Without this feature the above oneliner should be written with in lines of code
+These options can be combined with the pipe operator (boolean OR) to carry out several commands at once. Without this feature the above oneliner should be written with two lines of code:
 
 .. code-block:: c
 
@@ -55,13 +55,13 @@ and that the following toggles it
 
     aery_gpio_toggle_pin(AVR32_PIN_PC04);
 
-and finally there is a read function
+and finally it should not be surprise that there is a read function too
 
 .. code-block:: c
 
     state = aery_gpio_read_pin(AVR32_PIN_PC04);
 
-But before going any further, let's quickly go through those pin init options. ``FUNCTION_A``, ``B``, ``C`` and ``D`` assing the pin to the specific peripheral function, see datasheet pages 45--48. ``INT_PIN_CHANGE``, ``RAISING_EDGE`` and ``FALLING_EDGE`` enables interrupt events on that pin. Interrupts are trigged on pin change, at the rising edge or falling edge, respectively. ``GPIO_PULLUP`` connects pin to internal pull up resistor. ``GPIO_OPENDRAIN`` in turn makes the pin operate as an open drain mode. This mode is gererally used with pull up resistors to guarantee a high level on line when no driver is active. Lastly ``GPIO_GLITCH_FILTER`` activates the glitch filter and ``GPIO_HIZ`` makes pin high impedance.
+But before going any further, let's quickly go through those pin init options. ``FUNCTION_A``, ``B``, ``C`` and ``D`` assing the pin to the specific peripheral function, see datasheet pages 45--48. ``INT_PIN_CHANGE``, ``RAISING_EDGE`` and ``FALLING_EDGE`` enables interrupt events on the pin. Interrupts are trigged on pin change, at the rising edge or at falling edge, respectively. ``GPIO_PULLUP`` connects pin to the internal pull up resistor. ``GPIO_OPENDRAIN`` in turn makes the pin operate as an open drain mode. This mode is gererally used with pull up resistors to guarantee a high level on line when no driver is active. Lastly ``GPIO_GLITCH_FILTER`` activates the glitch filter and ``GPIO_HIZ`` makes the pin high impedance.
 
 .. note::
 
@@ -73,22 +73,22 @@ Usually you want to init several pins at once -- not only one pin. This can be d
 
     aery_gpio_init_pins(porta, 0xffffffff, GPIO_INPUT); // initializes all pins input
 
-The first argument is a pointer to the port register and the second is pin mask. Aery32 GPIO module declares these ``porta``, ``b`` and ``c`` global pointers to the ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively.
+The first argument is a pointer to the port register and the second one is the pin mask. Aery32 GPIO module declares these ``porta``, ``b`` and ``c`` global pointers to the ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively.
 
 .. hint::
 
-    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port you can access its registers with arrow operator, for example, instead of using function ``aery_gpio_toggle_pin(AVR32_PIN_PC04)`` you can write ``portc->ovrt = (1 << 4);``
+    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``aery_gpio_toggle_pin(AVR32_PIN_PC04)`` you could write ``portc->ovrt = (1 << 4);``
 
 Local GPIO bus
 ''''''''''''''
 
-AVR32 includes so called local bus interface that connects its CPU to device-specific high-speed systems, such as floating-point units and fast GPIO ports. To enable local bus
+AVR32 includes so called local bus interface that connects its CPU to device-specific high-speed systems, such as floating-point units and fast GPIO ports. To enable local bus call
 
 .. code-block:: c
 
     aery_gpio_enable_localbus();
 
-When enabled you have to operate with `local` GPIO registers. The convinience functions described above does not work anymore. Aery32 GPIO module provides shortcuts to local bus by declaring ``lporta``, ``b`` and ``c`` global pointers. Use these to read and write local port registers. For example, to toggle pin through local bus you can write
+When enabled you have to operate with `local` GPIO registers. That is because, the convenience functions described above does not work local bus. To ease operating with local bus Aery32 GPIO module provides shortcuts to local ports by declaring ``lporta``, ``b`` and ``c`` global pointers. Use these to read and write local port registers. For example, to toggle pin through local bus you can write
 
 .. code-block:: c
 
@@ -102,7 +102,7 @@ When enabled you have to operate with `local` GPIO registers. The convinience fu
 
     CPU clock has to match with PBB clock to make local bus functional
 
-To disable local bus and go back to normal
+To disable local bus and go back to normal operation call
 
 .. code-block:: c
 
