@@ -77,7 +77,7 @@ The first argument is a pointer to the port register and the second one is the p
 
 .. hint::
 
-    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``aery_gpio_toggle_pin(AVR32_PIN_PC04)`` you could write ``portc->ovrt = (1 << 4);``
+    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``aery_gpio_toggle_pin(AVR32_PIN_PC04)`` you could write ``portc->ovrt = (1 << 4);`` Refer to datasheet pages 175--177 for GPIO Register Map.
 
 Local GPIO bus
 ''''''''''''''
@@ -93,10 +93,6 @@ When enabled you have to operate with `local` GPIO registers. That is because, t
 .. code-block:: c
 
     lporta->ovrt = (1 << 4);
-
-.. hint::
-
-    Refer to datasheet pages 175--177 for GPIO Register Map.
 
 .. note::
 
