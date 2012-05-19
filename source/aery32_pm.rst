@@ -1,5 +1,0 @@
-Power Manager (PM)
-====
-
-todo
-
