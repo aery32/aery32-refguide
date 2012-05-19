@@ -1,7 +1,7 @@
 Modules
 =======
 
-**Modules are library components that operate with the AVR32 internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file `aery32/pm.h`, ``#include "aery32/pm.h"``.
+**Modules are library components that operate with the MCU's internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file `aery32/pm.h`, ``#include "aery32/pm.h"``.
 
 .. hint::
 
@@ -107,6 +107,79 @@ To disable local bus and go back to normal operation call
 Power Manager (pm)
 ------------------
 
+Power Manager controls integrated oscillators and PLLs among other, well, power related things. One of the first things what to do after the board has been power up is initialization of oscillators and setting the master clock. In Aery32 development board this can be done in this way
+
+.. code-block:: c
+
+    // Starts OSC0
+    aery_pm_start_osc(
+        0,                  /* oscillator number */
+        PM_OSC_MODE_GAIN3,  /* oscillator mode, see datasheet p.74 */
+        PM_OSC_STARTUP_36ms /* oscillator startup time */
+    );
+
+    // Remember to wait OSC to stabilize
+    aery_pm_wait_osc_to_stabilize(0);
+
+    // Initialize f_vco0 of PLL0 to be 132 MHz.
+    aery_pm_init_pllvco(
+        pll0,               /* pointer to pll address */
+        PM_PLL_SOURCE_OSC0, /* source clock */
+        11,                 /* multiplier */
+        1,                  /* divider */
+        false               /* high frequency */
+    );
+
+    // Enables PLL0 with divide by two block, f_pll0 = 132 MHz / 2
+    aery_pm_enable_pll(pll0, true  /* divide by two */);
+
+    // Remember to wait PLL0 has been locked
+    aery_pm_wait_pll_to_lock(pll0);
+
+    // Set main clock source to PLL0 that is 66 MHz
+    aery_pm_select_mck(PM_MCK_SOURCE_PLL0 /* master clock source */);
+
+.. important::
+
+    PLL VCO frequency, initialized by calling ``aery_pm_init_pllvco()`` has to be between 80--180 MHz or 160--240 MHz with high frequency enabled.
+
+.. hint::
+
+    For your convenience Aery32 PM module declares three global pointers by default, ``pm``, ``pll0`` and ``pll1``.
+
+.. hint::
+
+    To save power disable modules that you do not need, see datasheet page 70. This can be done by changing the peripheral clock masking. The following example disables clocks from the TWI, PWM, SSC, TC, ABDAC and all the USART modules
+
+    .. code-block:: c
+
+        #define PBAMASK_DEFAULT 0x0F
+        pm->pbamask = PBAMASK_DEFAULT;
+
+General clocks
+''''''''''''''
+
+PM can generate dedicated general clocks. These can be assigned to GPIO pins or used for internal peripherals such as USB that needs 48 MHz clock to be functional. To offer this 48 MHz for USB peripheral you first have to initialize either of the PLLs to work on, for example, 96 MHz frequency:
+
+.. code-block:: c
+
+    aery_pm_init_pllvco(pll1, PM_PLL_SOURCE_OSC0, 16, 1, false); // 192 MHz
+    aery_pm_enable_pll(pll1, true); // 96 MHz
+    aery_pm_wait_pll_to_lock(pll0);
+
+Then init and enable USB generic clock
+
+.. code-block:: c
+
+    pm_init_gclk(
+        PM_GCLK_USBB,        /* generic clock number, see the allocation
+                              * table at datasheet p. 63 */
+        PM_GCLK_SOURCE_PLL1, /* clock source for the generic clock */
+        0                    /* divider, f_gclk = f_src/(2*(div+1)) */
+    );
+    pm_enable_gclk(PM_GCLK_USBB);
+
+
 Realtime Counter (rtc)
 ----------------------
 
@@ -152,7 +225,7 @@ The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` an
         aery_spi_init_master(spi0);
         spi0->MR.pcsdec = 1;
 
- When the SPI peripheral has been initialized as a master, we still have to setup CS line 0 (NPCS0) with the desired SPI mode and shift register width. To set these to SPI mode 0 and 16 bit call the npcs setup function with the following parameters
+When the SPI peripheral has been initialized as a master, we still have to setup CS line 0 (NPCS0) with the desired SPI mode and shift register width. To set these to SPI mode 0 and 16 bit, call the npcs setup function with the following parameters
 
 .. code-block:: c
 
