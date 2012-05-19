@@ -1,5 +1,5 @@
 Modules
-=======
+=>=>=>=
 
 **Modules are library components that operate with the AVR32 internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file `aery32/pm.h`, ``#include "aery32/pm.h"``.
 
@@ -112,3 +112,110 @@ Realtime Counter (rtc)
 
 Serial Periheral Bus (spi)
 --------------------------
+
+AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
+
+- PA07 => NPCS3
+- PA08 => NPCS1
+- PA09 => NPCS2
+- PA10 => NPCS0
+- PA11 => MISO 
+- PA12 => MOSI 
+- PA13 => SCK
+
+So let's define the pin mask for SPI0 with NPCS0 (Numeric Processor Chip Select, also known as slave select):
+
+.. code-block:: c
+
+    #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
+
+Next we have to initialize these pins to the right peripheral function that is FUNCTION A. To do that use pin initializer from gpio module:
+
+.. code-block:: c
+
+    aery_gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
+
+Now the GPIO pins have been assigned appropriately and we are ready to initialize SPI0. Let's init it as a master:
+
+.. code-block:: c
+
+    aery_spi_init_master(spi0);
+
+The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` and ``spi1`` global pointers by default. After this we have to setup chip select line zero (NPCS0) with the desired spi mode and shift register width
+
+.. code-block:: c
+
+    aery_spi_setup_npcs(spi0, 0, SPI_MODE0, 16);
+
+The shift register width 16 is the maximum, but you can still use arbitrary wide transmission (described later). The minum value for this is 8 bits.
+
+.. hint::
+
+    Chip select baudrate is hard coded to MCK/255. To make it faster you can bitbang the SCRB bit in the CSRX register, where X is the NPCS number:
+
+    .. code-block:: c
+
+         aery_spi_setup_npcs(spi0, 0, SPI_MODE0, 16);
+         spi0->CSR0.scbr = 32; // baudrate is now MCK/32
+
+Now we are ready to enable spi peripheral
+
+.. code-block:: c
+
+    aery_spi_enable(spi0);
+
+There's also function for disabling ``aery_spi_disable(spi0)``. To write data into SPI bus use the transmit function
+
+.. code-block:: c
+
+    uint16_t rd;
+    rd = aery_spi_transmit(spi0, 0x55, 0, true); // writes 0x55 to SPI0, NPCS0
+
+.. hint::
+    
+    ``aery_spi_transmit()`` writes and reads SPI bus simultaneusly. If you only want to read data, just ignore write data by sending dummy bits.
+
+Here is the above SPI initialization and transmission in complete example code:
+
+.. code-block:: c
+    :linenos:
+
+    #include <stdbool.h>
+    #include "aery32/gpio.h"
+    #include "aery32/spi.h"
+    #include "board.h"
+
+    #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
+
+    int main(void)
+    {
+        uint16_t rd; // received data
+
+        init_board();
+
+        aery_gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
+        aery_spi_init_master(spi0);
+        aery_spi_setup_npcs(spi0, 0, SPI_MODE0, 16);
+        aery_spi_enable(spi0);
+
+        for (;;) {
+            rd = aery_spi_transmit(spi0, 0x55, 0, true); // writes 0x55 to SPI0, NPCS0
+        }
+
+        return 0;
+    }
+
+Sending arbitrary wide spi data
+'''''''''''''''''''''''''''''''
+
+The last parameter of ``aery_spi_transmit()`` function indicates for the spi peripheral if the current transmission is the last on. If true, chip select line rises immediately when the last bit has been written. If it is defined false, CS ine is left low for the next chunk of the transmission. This feature allows to operate with spi buses with arbitrary wide shift registers. For example, to read and write 32 bit wide spi data you can do this:
+
+.. code-block:: c
+
+    uint32_t rd;
+    
+    aery_spi_setup_npcs(spi0, 0, SPI_MODE0, 8);
+
+    rd = aery_spi_transmit(spi0, 0x55, 0, false);
+    rd |= aery_spi_transmit(spi0, 0xf0, 0, false) << 8;
+    rd |= aery_spi_transmit(spi0, 0x0f, 0, true) << 16; // complete
