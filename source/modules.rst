@@ -1,5 +1,5 @@
 Modules
-=>=>=>=
+=======
 
 **Modules are library components that operate with the AVR32 internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file `aery32/pm.h`, ``#include "aery32/pm.h"``.
 
@@ -208,7 +208,7 @@ Here is the above SPI initialization and transmission in complete example code:
 Sending arbitrary wide spi data
 '''''''''''''''''''''''''''''''
 
-The last parameter of ``aery_spi_transmit()`` function indicates for the spi peripheral if the current transmission is the last on. If true, chip select line rises immediately when the last bit has been written. If it is defined false, CS ine is left low for the next chunk of the transmission. This feature allows to operate with spi buses with arbitrary wide shift registers. For example, to read and write 32 bit wide spi data you can do this:
+The last parameter of ``aery_spi_transmit()`` function indicates for the spi peripheral whether the current transmission is the last on. If true, chip select line rises immediately when the last bit has been written. If it is defined false, CS ine is left low for the next chunk of the transmission. This feature allows to operate with spi buses with arbitrary wide shift registers. For example, to read and write 32 bit wide spi data you can do this:
 
 .. code-block:: c
 
