@@ -218,22 +218,70 @@ Then init and enable USB generic clock
     );
     aery_pm_enable_gclk(PM_GCLK_USBB);
 
+To route generic clock to be at the output of GPIO pin, first init the desired GPIO pin appropriately and then a enable generic clock at this pin. You can do this, for example, to check that USB clock enabled above is correct
 
-Realtime Counter (rtc)
+.. code-block:: c
+
+    aery_gpio_init_pin(AVR32_PIN_PB19, GPIO_FUNCTION_B);
+    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 0);
+    aery_pm_enable_gclk(PM_GCLK0);
+
+.. hint::
+
+    Generic clock can be changed when its running by just initializing it again. You do not have to disable it before doing this and you do not have to enable it again.
+
+
+Real-time Counter (rtc)
 ----------------------
 
-Serial Periheral Bus (spi)
---------------------------
+Real-time counter is for accurate real-time measurements. It enables periodic interrupts at long intervals and the measurement of real-time sequences. RTC has to be init to start counting from the chosen value to the chosen top value. This can be done in this way
+
+.. code-block:: c
+
+    aery_rtc_init(
+        0,            /* value where to start counting */
+        0xffffffff,   /* top value where to count */
+        0,            /* prescaler for RTC clock */
+        RTC_SOURCE_RC /* source oscillator */
+    );
+
+The available source oscillators are:
+
+- RTC_SOURCE_RC (115 kHz RC oscillator within the AVR32)
+- RTC_SOURCE_OSC32 (external low-frequency xtal, not assembled in Aery32 Devboard)
+
+When initialized, remember to enable
+
+.. code-block:: c
+
+    aery_rtc_enable(false);
+
+The boolean parameter here, tells if the interrupts are enabled or not. Here the interrupts are not enabled so it is your job to poll RTC to check whether the top value has been reached or not.
+
+RTC can be used, for example, to provide delay function for the LED toggling application. This is done by initializing RTC to count into the high value and then counting *x* number of cycles forward from the current counter value
+
+.. code-block:: c
+
+    for(;;) {
+        aery_gpio_toggle_pin(LED);
+        aery_rtc_delay_cycle(57500 /* number of rtc clock cycles, ~1s */);
+    }
+
+Here the ``aery_rtc_delay_cycle()`` function is used to wait 57500 RTC cycles that with the initialization made above is approximately 1 second.
+
+
+Serial Peripheral Bus (spi)
+---------------------------
 
 AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
-- PA07 => NPCS3
-- PA08 => NPCS1
-- PA09 => NPCS2
-- PA10 => NPCS0
-- PA11 => MISO 
-- PA12 => MOSI 
-- PA13 => SCK
+- PA07  NPCS3
+- PA08  NPCS1
+- PA09  NPCS2
+- PA10  NPCS0
+- PA11  MISO 
+- PA12  MOSI 
+- PA13  SCK
 
 So let's define the pin mask for SPI0 with NPCS0 (Numeric Processor Chip Select, also known as slave select):
 
