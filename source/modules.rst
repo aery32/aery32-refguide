@@ -104,6 +104,45 @@ To disable local bus and go back to normal operation call
 
     aery_gpio_disable_localbus();
 
+Interrupt Controller (intc)
+---------------------------
+
+Before enabling interrupts define and register your interrupt service routine (ISR) functions. First write ISR function as you would do for any other functions
+
+.. code-block:: c
+
+    void myisr_for_group1(void) {
+        /* do something */
+    }
+
+Then register this function
+
+.. code-block:: c
+
+    aery_intc_register_isrhandler(&myisr_for_group1, 1, 0);
+
+Here the first parameter is a function pointer to your ``myisr_for_group1()`` function. The second parameter defines the which interrupt group calls this function and the last one tells the priority level.
+
+.. hint::
+
+    Refer Table 12-3 (Interrupt Request Signal Map) in datasheet page 41 to see what peripheral belongs to which group. For example, RTC belongs to group 1.
+
+When all the ISR functions have been declared it is time to initialize interrupts. Use the following init function to do all the magic
+
+.. code-block:: c
+
+    aery_intc_init();
+
+After initialization you can enable and disable interrupts globally by using these functions
+
+.. code-block:: c
+
+    aery_intc_enable_globally();
+
+.. code-block:: c
+
+    aery_intc_disable_globally();
+
 Power Manager (pm)
 ------------------
 
@@ -171,13 +210,13 @@ Then init and enable USB generic clock
 
 .. code-block:: c
 
-    pm_init_gclk(
+    aery_pm_init_gclk(
         PM_GCLK_USBB,        /* generic clock number, see the allocation
                               * table at datasheet p. 63 */
         PM_GCLK_SOURCE_PLL1, /* clock source for the generic clock */
         0                    /* divider, f_gclk = f_src/(2*(div+1)) */
     );
-    pm_enable_gclk(PM_GCLK_USBB);
+    aery_pm_enable_gclk(PM_GCLK_USBB);
 
 
 Realtime Counter (rtc)
