@@ -141,13 +141,22 @@ Now the GPIO pins have been assigned appropriately and we are ready to initializ
 
     aery_spi_init_master(spi0);
 
-The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` and ``spi1`` global pointers by default. After this we have to setup chip select line zero (NPCS0) with the desired spi mode and shift register width
+.. hint::
+
+    If the four SPI CS pins are not enough, you can use CS pins in multiplexed mode (of course you need an external multiplexer circuit then) and expand number of CS lines to 16. This can be done by bitbanging PCSDEC bit in SPI MR register after initialization:
+
+    .. code-block:: c
+ 
+        aery_spi_init_master(spi0);
+        spi0->MR.pcsdec = 1;
+
+The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` and ``spi1`` global pointers by default. After this we have to setup CS line 0 (NPCS0) with the desired SPI mode and shift register width, which are SPI_MODE0 and 16 bit in the example call below
 
 .. code-block:: c
 
     aery_spi_setup_npcs(spi0, 0, SPI_MODE0, 16);
 
-The shift register width 16 is the maximum, but you can still use arbitrary wide transmission (described later). The minum value for this is 8 bits.
+The minimum and maximum shift register widths are 8 and 16 bits, respectively, but you can still :ref:`use arbitrary wide transmission <sending-arbitrary-wide-spi-data>`.
 
 .. hint::
 
@@ -158,13 +167,17 @@ The shift register width 16 is the maximum, but you can still use arbitrary wide
          aery_spi_setup_npcs(spi0, 0, SPI_MODE0, 16);
          spi0->CSR0.scbr = 32; // baudrate is now MCK/32
 
+.. hint::
+
+    Different CS lines can have separate mode, baudrate and shift register width.
+
 Now we are ready to enable spi peripheral
 
 .. code-block:: c
 
     aery_spi_enable(spi0);
 
-There's also function for disabling ``aery_spi_disable(spi0)``. To write data into SPI bus use the transmit function
+There's also function for disabling the desired SPI peripheral ``aery_spi_disable(spi0)``. To write data into SPI bus use the transmit function
 
 .. code-block:: c
 
@@ -205,7 +218,9 @@ Here is the above SPI initialization and transmission in complete example code:
         return 0;
     }
 
-Sending arbitrary wide spi data
+.. _sending-arbitrary-wide-spi-data:
+
+Sending arbitrary wide SPI data
 '''''''''''''''''''''''''''''''
 
 The last parameter of ``aery_spi_transmit()`` function indicates for the spi peripheral whether the current transmission is the last on. If true, chip select line rises immediately when the last bit has been written. If it is defined false, CS ine is left low for the next chunk of the transmission. This feature allows to operate with spi buses with arbitrary wide shift registers. For example, to read and write 32 bit wide spi data you can do this:
