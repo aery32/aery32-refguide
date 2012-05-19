@@ -141,16 +141,18 @@ Now the GPIO pins have been assigned appropriately and we are ready to initializ
 
     aery_spi_init_master(spi0);
 
+The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` and ``spi1`` global pointers by default.
+
 .. hint::
 
-    If the four SPI CS pins are not enough, you can use CS pins in multiplexed mode (of course you need an external multiplexer circuit then) and expand number of CS lines to 16. This can be done by bitbanging PCSDEC bit in SPI MR register after initialization:
+    If the four SPI CS pins are not enough, you can use CS pins in multiplexed mode (of course you need an external multiplexer circuit then) and expand number of CS lines to 16. This can be done by bitbanging PCSDEC bit in SPI MR register after the initialization:
 
     .. code-block:: c
  
         aery_spi_init_master(spi0);
         spi0->MR.pcsdec = 1;
 
-The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` and ``spi1`` global pointers by default. After this we have to setup CS line 0 (NPCS0) with the desired SPI mode and shift register width, which are SPI_MODE0 and 16 bit in the example call below
+ When the SPI peripheral has been initialized as a master, we still have to setup CS line 0 (NPCS0) with the desired SPI mode and shift register width. To set these to SPI mode 0 and 16 bit call the npcs setup function with the following parameters
 
 .. code-block:: c
 
@@ -169,7 +171,7 @@ The minimum and maximum shift register widths are 8 and 16 bits, respectively, b
 
 .. hint::
 
-    Different CS lines can have separate mode, baudrate and shift register width.
+    Different CS lines can have separate SPI mode, baudrate and shift register width.
 
 Now we are ready to enable spi peripheral
 
