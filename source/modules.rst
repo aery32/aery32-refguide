@@ -133,10 +133,10 @@ Power Manager controls integrated oscillators and PLLs among other, well, power 
     // Enables PLL0 with divide by two block, f_pll0 = 132 MHz / 2
     aery_pm_enable_pll(pll0, true  /* divide by two */);
 
-    // Remember to wait PLL0 has been locked
+    // Remember to wait until PLL0 has been locked
     aery_pm_wait_pll_to_lock(pll0);
 
-    // Set main clock source to PLL0 that is 66 MHz
+    // Set the main clock source to PLL0 that is 66 MHz
     aery_pm_select_mck(PM_MCK_SOURCE_PLL0 /* master clock source */);
 
 .. important::
@@ -159,13 +159,13 @@ Power Manager controls integrated oscillators and PLLs among other, well, power 
 General clocks
 ''''''''''''''
 
-PM can generate dedicated general clocks. These can be assigned to GPIO pins or used for internal peripherals such as USB that needs 48 MHz clock to be functional. To offer this 48 MHz for USB peripheral you first have to initialize either of the PLLs to work on, for example, 96 MHz frequency:
+PM can generate dedicated general clocks. These clocks can be assigned to GPIO pins or used for internal peripherals such as USB that needs 48 MHz clock to be functional. To offer this 48 MHz for USB peripheral you first have to initialize either of the PLLs to work at, for example, 96 MHz frequency:
 
 .. code-block:: c
 
-    aery_pm_init_pllvco(pll1, PM_PLL_SOURCE_OSC0, 16, 1, false); // 192 MHz
+    aery_pm_init_pllvco(pll1, PM_PLL_SOURCE_OSC0, 16, 1, true); // 192 MHz
     aery_pm_enable_pll(pll1, true); // 96 MHz
-    aery_pm_wait_pll_to_lock(pll0);
+    aery_pm_wait_pll_to_lock(pll1);
 
 Then init and enable USB generic clock
 
