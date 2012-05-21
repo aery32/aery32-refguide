@@ -18,7 +18,7 @@ Installing Sphinx (in Windows 7)
 
 **- Yes, I have!**
 
-Then you likely have setuptools installed as well. In this case install Sphinx with easy_install. Fire your command prompt (Win+R cmd) and command::
+Then you likely have setuptools installed as well. In this case install Sphinx with easy_install. Fire your command prompt (Win+R cmd) and command
 
     easy_install -U Sphinx
 
@@ -28,7 +28,7 @@ Otherwise follow steps below to install Python first and then Sphinx.
 
 Note: We do not install setuptools here and thus do not use easy_install to install Sphinx. However you will get it installed along Sphinx installer and it is recommended to use it later when installing other Python packages.
 
-- Create temporary directory (e.g. myfoo) where to download the following things:
+- Create temporary directory where to download the following things:
 
   - Python 2.7.x from http://python.org/download/
   - Sphinx 1.1.2 from http://pypi.python.org/pypi/Sphinx
@@ -44,4 +44,4 @@ Note: We do not install setuptools here and thus do not use easy_install to inst
   - The exctarction process creates the ``Sphinx-1.1.2`` directory, change to that directory and double click setup to install Sphinx
   - Once the Sphinx installation is complete, you will find sphinx-xxx executables in your Python Scripts subdirectory, ``C:\Python27\Scripts``. Be sure to add this directory to your PATH environment variable. As you can see, this directory includes now also easy_install executable, which you should use later to install other Python packages.
 
-- You can now remove the temporary directory
+- You can now remove the temporary download directory
