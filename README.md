@@ -1,4 +1,4 @@
-Aery32 Rerefence Guide
+[Aery32 Rerefence Guide](http://aery32.readthedocs.org/)
 ======================
 
 The documentation is written in reStructuredText format to be constructed by Sphinx. Sphinx is a Python documentation generator but works fine for C as well. To build local html version of this documentation
