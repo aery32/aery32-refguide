@@ -7,6 +7,11 @@ Modules
 
     If you use C++, instead of .h file, include .hh.
 
+Naming convention and the calling order
+---------------------------------------
+
+TODO
+
 General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
 -------------------------------------------------------------------
 

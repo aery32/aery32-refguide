@@ -9,12 +9,10 @@ Welcome to Aery32's documentation!
 .. toctree::
    :maxdepth: 2
 
-   getting-started
-   software-framework
+   getting_started
+   project_structure
    delay_functions
    modules
-   development-board
-   use-with
    contribute
 
 
