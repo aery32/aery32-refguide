@@ -1,14 +1,18 @@
 Modules
 =======
 
-**Modules are library components that operate with the MCU's internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager include the file `aery32/pm.h`, ``#include "aery32/pm.h"``.
+**Modules are library components that operate with the MCU's internal peripherals.** Every module has its own namespace according to the module name. For example, Power Manager has module namespace of ``pm_``, Realtime Counter falls under the ``rtc_`` namespace, etc. To use the module just include its header file. These header files are also named after the module name. So, for example, to include and use functions that operate with the Power Manager 
+
+.. code-block:: c
+
+    #include <aery32/pm.h>
 
 .. hint::
 
     If you use C++, instead of .h file, include .hh.
 
-General Periheral Input/Output (gpio)
--------------------------------------
+General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
+-------------------------------------------------------------------
 
 To initialize any pin to output high, there is a oneliner which can be used
 
@@ -104,8 +108,8 @@ To disable local bus and go back to normal operation call
 
     aery_gpio_disable_localbus();
 
-Interrupt Controller (intc)
----------------------------
+Interrupt Controller (intc), ``#include <aery32/intc.h>``
+---------------------------------------------------------
 
 Before enabling interrupts define and register your interrupt service routine (ISR) functions. First write ISR function as you would do for any other functions
 
@@ -143,8 +147,8 @@ After initialization you can enable and disable interrupts globally by using the
 
     aery_intc_disable_globally();
 
-Power Manager (pm)
-------------------
+Power Manager (pm), ``#include <aery32/pm.h>``
+---------------------------------------------
 
 Power Manager controls integrated oscillators and PLLs among other, well, power related things. When the board has been powered up it runs on the internal RC oscillator that's 115 kHz. However, it's often preferred to use crystal oscillator and higher clock frequency for CPU. So one of the first things what to do after the board has been power up, is the initialization of oscillators. Aery32 development board has 12 MHz crystal oscillator connected to OSC0 that can be started as
 
@@ -259,8 +263,8 @@ There are five possible general clocks to be initialized:
     Generic clock can be changed when its running by just initializing it again. You do not have to disable it before doing this and you do not have to enable it again.
 
 
-Real-time Counter (rtc)
-----------------------
+Real-time Counter (rtc), ``#include <aery32/rtc.h>``
+----------------------------------------------------
 
 Real-time counter is for accurate real-time measurements. It enables periodic interrupts at long intervals and the measurement of real-time sequences. RTC has to be init to start counting from the chosen value to the chosen top value. This can be done in this way
 
@@ -286,8 +290,8 @@ When initialized, remember to enable it too
 
 The boolean parameter here, tells if the interrupts are enabled or not. Here the interrupts are not enabled so it is your job to poll RTC to check whether the top value has been reached or not.
 
-Serial Peripheral Bus (spi)
----------------------------
+Serial Peripheral Bus (spi), ``#include <aery32/spi.h>``
+--------------------------------------------------------
 
 AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
@@ -372,8 +376,8 @@ Here is the complete code for the above SPI initialization and transmission:
     :linenos:
 
     #include <stdbool.h>
-    #include "aery32/gpio.h"
-    #include "aery32/spi.h"
+    #include <aery32/gpio.h>
+    #include <aery32/spi.h>
     #include "board.h"
 
     #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))

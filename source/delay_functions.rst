@@ -1,5 +1,5 @@
-Delay functions
-===============
+Delay functions, ``#include <aery32/delay.h>``
+==============================================
 
 There are three convenience delay functions that are intented to be used for short delays, from microseconds to milliseconds.
 
