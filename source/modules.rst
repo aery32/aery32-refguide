@@ -187,7 +187,10 @@ Aery32 devboard can run 66 MHz at its fastest. To achieve these higher clock fre
         false               /* high frequency */
     );
 
-There are two PLLs available in UC3A1, which Aery32 framework provide quick access via `pll`0` and `pll1` global variables. Otherwise you should be more verbose and use `AVR32_PM.PLL[0]` and `AVR32_PM.PLL[1]`. When VCO has been intialized, PLL can be enabled
+- If ``div > 0`` then ``f_vco = f_src * mul / div``
+- If ``div = 0`` then ``f_vco = 2 * f_src``
+
+There are two PLLs available in UC3A1, which Aery32 framework provide quick access via ``pll0`` and ``pll1`` global variables. Otherwise you should be more verbose and use ``AVR32_PM.PLL[0]`` and ``AVR32_PM.PLL[1]``. When VCO has been intialized, PLL can be enabled
 
 .. code-block:: c
 
@@ -238,9 +241,12 @@ Then init and enable USB generic clock
     aery_pm_init_gclk(
         PM_GCLK_USBB,        /* generic clock number */
         PM_GCLK_SOURCE_PLL1, /* clock source for the generic clock */
-        1                    /* divider, f_gclk = f_src/(2*div) */
+        1                    /* divider */
     );
     aery_pm_enable_gclk(PM_GCLK_USBB);
+
+- If ``div > 0`` then ``f_gclk = f_src/(2*div)``
+- If ``div = 0`` then ``f_gclk = f_src``
 
 There are five possible general clocks to be initialized:
 
