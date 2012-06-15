@@ -146,19 +146,32 @@ After initialization you can enable and disable interrupts globally by using the
 Power Manager (pm)
 ------------------
 
-Power Manager controls integrated oscillators and PLLs among other, well, power related things. One of the first things what to do after the board has been power up is initialization of oscillators and setting the master clock. In Aery32 development board this can be done in this way
+Power Manager controls integrated oscillators and PLLs among other, well, power related things. When the board has been powered up it runs on the internal RC oscillator that's 115 kHz. However, it's often preferred to use crystal oscillator and higher clock frequency for CPU. So one of the first things what to do after the board has been power up, is the initialization of oscillators. Aery32 development board has 12 MHz crystal oscillator connected to OSC0 that can be started as
 
 .. code-block:: c
 
-    // Starts OSC0
     aery_pm_start_osc(
         0,                  /* oscillator number */
         PM_OSC_MODE_GAIN3,  /* oscillator mode, see datasheet p.74 */
         PM_OSC_STARTUP_36ms /* oscillator startup time */
     );
-
-    // Remember to wait OSC to stabilize
     aery_pm_wait_osc_to_stabilize(0);
+
+Remember to wait osc to stabilize after starting it. Now we can use set master clock to same as the OSC0 (12 MHz)
+
+.. code-block:: c
+
+    aery_pm_select_mck(PM_MCK_SOURCE_OSC0);
+
+The possible master clock selections are:
+
+- PM_MCK_SOURCE_OSC0
+- PM_MCK_SOURCE_PLL0
+- PM_MCK_SOURCE_PLL1
+
+Aery32 devboard can run 66 MHz at its fastest. To achieve these higher clock frequencies one must use PLL's of the power manager module. PLL has a voltage controlled oscillator (VCO) that has to be initialized first
+
+.. code-block:: c
 
     // Initialize f_vco0 of PLL0 to be 132 MHz.
     aery_pm_init_pllvco(
@@ -169,18 +182,25 @@ Power Manager controls integrated oscillators and PLLs among other, well, power 
         false               /* high frequency */
     );
 
+There are two PLLs available in UC3A1, which Aery32 framework provide quick access via `pll`0` and `pll1` global variables. Otherwise you should be more verbose and use `AVR32_PM.PLL[0]` and `AVR32_PM.PLL[1]`. When VCO has been intialized, PLL can be enabled
+
+.. code-block:: c
+
     // Enables PLL0 with divide by two block, f_pll0 = 132 MHz / 2
     aery_pm_enable_pll(pll0, true  /* divide by two */);
 
     // Remember to wait until PLL0 has been locked
     aery_pm_wait_pll_to_lock(pll0);
 
-    // Set the main clock source to PLL0 that is 66 MHz
-    aery_pm_select_mck(PM_MCK_SOURCE_PLL0 /* master clock source */);
+Now master clock can be set to PLL0 that's 66 MHz.
+
+.. code-block:: c
+
+    aery_pm_select_mck(PM_MCK_SOURCE_PLL0);
 
 .. important::
 
-    PLL VCO frequency, initialized by calling ``aery_pm_init_pllvco()`` has to be between 80--180 MHz or 160--240 MHz with high frequency enabled.
+    PLL VCO frequency, initialized by calling ``aery_pm_init_pllvco()`` has to be between 80--180 MHz or 160--240 MHz with high frequency disabled and enabled, respectively.
 
 .. hint::
 
@@ -198,7 +218,7 @@ Power Manager controls integrated oscillators and PLLs among other, well, power 
 General clocks
 ''''''''''''''
 
-PM can generate dedicated general clocks. These clocks can be assigned to GPIO pins or used for internal peripherals such as USB that needs 48 MHz clock to be functional. To offer this 48 MHz for USB peripheral you first have to initialize either of the PLLs to work at, for example, 96 MHz frequency:
+PM can generate dedicated general clocks. These clocks can be assigned to GPIO pins or used for internal peripherals such as USB that commonly needs 48 MHz clock to work. To offer this 48 MHz for USB peripheral you first have to initialize either of the PLLs to work at, for example, 96 MHz frequency:
 
 .. code-block:: c
 
@@ -211,19 +231,27 @@ Then init and enable USB generic clock
 .. code-block:: c
 
     aery_pm_init_gclk(
-        PM_GCLK_USBB,        /* generic clock number, see the allocation
-                              * table at datasheet p. 63 */
+        PM_GCLK_USBB,        /* generic clock number */
         PM_GCLK_SOURCE_PLL1, /* clock source for the generic clock */
-        0                    /* divider, f_gclk = f_src/(2*(div+1)) */
+        1                    /* divider, f_gclk = f_src/(2*div) */
     );
     aery_pm_enable_gclk(PM_GCLK_USBB);
 
-To route generic clock to be at the output of GPIO pin, first init the desired GPIO pin appropriately and then a enable generic clock at this pin. You can do this, for example, to check that USB clock enabled above is correct
+There are five possible general clocks to be initialized:
+
+- PM_GCLK0,
+- PM_GCLK1,
+- PM_GCLK2,
+- PM_GCLK3,
+- PM_GCLK_USBB,
+- PM_GCLK_ABDAC
+
+``PM_GCLK_ABDAC`` is for Audio Bitstream DAC, ``PM_GCLK0``, ``PM_GCLK1``, etc. can be attached to GPIO pin, so that you can easily clock external devices. For example, to set generic clock to be at the output of GPIO pin, first init the desired GPIO pin appropriately and then enable the generic clock at this pin. You can do this, for example, to check that USB clock enabled above is correct
 
 .. code-block:: c
 
     aery_gpio_init_pin(AVR32_PIN_PB19, GPIO_FUNCTION_B);
-    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 0);
+    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 1);
     aery_pm_enable_gclk(PM_GCLK0);
 
 .. hint::
@@ -250,7 +278,7 @@ The available source oscillators are:
 - RTC_SOURCE_RC (115 kHz RC oscillator within the AVR32)
 - RTC_SOURCE_OSC32 (external low-frequency xtal, not assembled in Aery32 Devboard)
 
-When initialized, remember to enable
+When initialized, remember to enable it too
 
 .. code-block:: c
 
@@ -258,22 +286,10 @@ When initialized, remember to enable
 
 The boolean parameter here, tells if the interrupts are enabled or not. Here the interrupts are not enabled so it is your job to poll RTC to check whether the top value has been reached or not.
 
-RTC can be used, for example, to provide delay function for the LED toggling application. This is done by initializing RTC to count into the high value and then counting *x* number of cycles forward from the current counter value
-
-.. code-block:: c
-
-    for(;;) {
-        aery_gpio_toggle_pin(LED);
-        aery_rtc_delay_cycle(57500 /* number of rtc clock cycles, ~1s */);
-    }
-
-Here the ``aery_rtc_delay_cycle()`` function is used to wait 57500 RTC cycles that with the initialization made above is approximately 1 second.
-
-
 Serial Peripheral Bus (spi)
 ---------------------------
 
-AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
+AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
 - PA07  NPCS3
 - PA08  NPCS1
@@ -283,13 +299,13 @@ AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus
 - PA12  MOSI 
 - PA13  SCK
 
-So let's define the pin mask for SPI0 with NPCS0 (Numeric Processor Chip Select, also known as slave select):
+So let's define the pin mask for SPI0 with NPCS0 (Numeric Processor Chip Select, also known as slave select or chip select):
 
 .. code-block:: c
 
     #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
 
-Next we have to initialize these pins to the right peripheral function that is FUNCTION A. To do that use pin initializer from gpio module:
+Next we have to assing these pins to the right peripheral function that is FUNCTION A. To do that use pin initializer from GPIO module:
 
 .. code-block:: c
 
@@ -312,7 +328,7 @@ The only parameter is a pointer to the SPI register. Aery32 declares ``spi0`` an
         aery_spi_init_master(spi0);
         spi0->MR.pcsdec = 1;
 
-When the SPI peripheral has been initialized as a master, we still have to setup CS line 0 (NPCS0) with the desired SPI mode and shift register width. To set these to SPI mode 0 and 16 bit, call the npcs setup function with the following parameters
+When the SPI peripheral has been initialized as a master, we still have to setup its CS line 0 (NPCS0) with the desired SPI mode and shift register width. To set these to SPI mode 0 and 16 bit, call the npcs setup function with the following parameters
 
 .. code-block:: c
 
@@ -333,7 +349,7 @@ The minimum and maximum shift register widths are 8 and 16 bits, respectively, b
 
     Different CS lines can have separate SPI mode, baudrate and shift register width.
 
-Now we are ready to enable spi peripheral
+Now we are ready to enable SPI peripheral
 
 .. code-block:: c
 
@@ -350,7 +366,7 @@ There's also function for disabling the desired SPI peripheral ``aery_spi_disabl
     
     ``aery_spi_transmit()`` writes and reads SPI bus simultaneusly. If you only want to read data, just ignore write data by sending dummy bits.
 
-Here is the above SPI initialization and transmission in complete example code:
+Here is the complete code for the above SPI initialization and transmission:
 
 .. code-block:: c
     :linenos:
@@ -385,7 +401,7 @@ Here is the above SPI initialization and transmission in complete example code:
 Sending arbitrary wide SPI data
 '''''''''''''''''''''''''''''''
 
-The last parameter of ``aery_spi_transmit()`` function indicates for the spi peripheral whether the current transmission is the last on. If true, chip select line rises immediately when the last bit has been written. If it is defined false, CS ine is left low for the next chunk of the transmission. This feature allows to operate with spi buses with arbitrary wide shift registers. For example, to read and write 32 bit wide spi data you can do this:
+The last parameter, ``islast``, of the ``aery_spi_transmit()`` function indicates for the SPI whether the current transmission was the last on. If true, chip select line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 32 bit wide SPI data you can do this:
 
 .. code-block:: c
 

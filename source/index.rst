@@ -11,6 +11,7 @@ Welcome to Aery32's documentation!
 
    getting-started
    software-framework
+   delay_functions
    modules
    development-board
    use-with
