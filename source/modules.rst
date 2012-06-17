@@ -10,7 +10,26 @@ Modules
 Naming convention and the calling order
 ---------------------------------------
 
-TODO
+The common calling order for modules is the following: 1) initialize, 2) do some extra setuping and after then 3) enable the module. In pseudo code it looks like this
+
+.. code-block:: c
+
+    module_init();
+    module_setup_something();
+    // bitbangin the module registers is also possible here
+    module_enable();
+
+The init function may also look like ``module_init_something()``, for example, the SPI can be initialized as a master or slave, so the naming convention declares two init functions for SPI module: ``spi_init_master()`` and ``spi_init_slave()``.
+
+If the module has been disabled, by using ``module_disable()`` function, it can be re-enabled without calling the init or setup functions. Most of the modules can also be reinitialized without disabling it before. For example, general clock frequencies can be changed by just calling the init function again -- this is also the quickest way to change this frequency
+
+.. code-block:: c
+
+    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 1);
+    aery_pm_enable_gclk(PM_GCLK0);
+
+    // Change the frequency divider
+    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 6);
 
 General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
 -------------------------------------------------------------------
