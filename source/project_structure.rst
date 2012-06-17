@@ -1,7 +1,7 @@
 Project structure -- where things go?
 =====================================
 
-Aery32 Software Framework provides a complete project structure to start AVR32 development right away. You just start coding and adding your files. The default project directory structure, if downloaded from GitHub, looks like this::
+Aery32 Software Framework provides a complete project structure to start AVR32 development right away. You just start coding and adding your files. The default project directory structure looks like this::
 
     projectname/
         aery32/
@@ -43,7 +43,7 @@ It is intended that you work under the root directory most of the time as that i
         return 0;
     }
 
-The ``main.c`` source file contains the default main function where to start. At the top of the file couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``"aery32/gpio.h"`` has been included.
+The ``main.c`` source file contains the default main function where to start. At the top of the file, couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``aery32/gpio.h`` has been included.
 
 **board.h**
 
@@ -51,11 +51,11 @@ This is a place for the board specific function prototypes and supportive ``#def
 
 **board.c**
 
-The default board initialization function can be found here. First it sets all GPIO pins to be inputs. Then it configures the board's power manager: starts the oscillator and clocks the master clock to 66 MHz. When you are changing the way how the board is initialized this is the place where to do it.
+The default board initialization function can be found here. First it sets all GPIO pins to be inputs. Then it configures the board's power manager. That's starting the oscillator and setting the master clock frequency to 66 MHz. When you are changing the way how the board is initialized this is the place where to do it.
 
 **aery32/**
 
-Contains the source files of Aery32 library. The archive of the library appers in this directory after the first compile process. The ``aery32/`` subdirectory contains the header files, where you can find plenty of documentation. You can also find the linker scripts here, which are essential files to define the MCU memory structure in liking process. However, you should not need to hassle with these files.
+Contains the source files of Aery32 library. The archive of the library appers in this directory after the first compile process. The ``aery32/`` subdirectory contains the header files, where you can find plenty of documentation too. You can also find the linker scripts here, which are essential files to define the MCU memory structure in liking process. However, you should not need to hassle with these files.
 
 **examples/**
 
@@ -96,7 +96,7 @@ or in shorter format::
 How to introduce new source files in the Makefile
 '''''''''''''''''''''''''''''''''''''''''''''''''
 
-Let's say I would like to separate my source code into a ``my/`` directory under the project root. After creating the directory I have to edit Makefile to get the source files under this directory compiled. So, open Makefile into your editory and find the line::
+Let's say I would like to separate my source code into a ``my/`` subdirectory under the project root. After creating the directory, I have to edit the Makefile. So, open the Makefile into your editory and find the line::
 
     SOURCES=$(wildcard *.c)
 
@@ -167,7 +167,7 @@ use
 
     #include <aery32/gpio.hh>
 
-At the moment Aery32 Software Framework uses only the C++ namespaces. The benefits of using namespace is that you can omit the *aery_* prefix in the function calls. This has been demonstrated below::
+At the moment Aery32 Software Framework uses only the C++ namespaces. The benefits of using namespace is that you can omit the "*aery_*"" prefix in the function calls. This has been demonstrated below
 
 .. code-block:: c
     :linenos:
