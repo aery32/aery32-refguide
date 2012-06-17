@@ -17,6 +17,8 @@ It is intended that you work under the root directory most of the time as that i
 
 **main.c**
 
+The ``main.c`` source file contains the default main function where to start. At the top of the file, couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``aery32/gpio.h`` has been included.
+
 .. code-block:: c
     :linenos:
 
@@ -42,8 +44,6 @@ It is intended that you work under the root directory most of the time as that i
 
         return 0;
     }
-
-The ``main.c`` source file contains the default main function where to start. At the top of the file, couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``aery32/gpio.h`` has been included.
 
 **board.h**
 
@@ -167,7 +167,7 @@ use
 
     #include <aery32/gpio.hh>
 
-At the moment Aery32 Software Framework uses only the C++ namespaces. The benefits of using namespace is that you can omit the "*aery_*"" prefix in the function calls. This has been demonstrated below
+At the moment Aery32 Software Framework uses only the C++ namespaces. The benefits of using namespace is that you can omit the "*aery_*" prefix in the function calls. This has been demonstrated below
 
 .. code-block:: c
     :linenos:
