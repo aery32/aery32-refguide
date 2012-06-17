@@ -1,22 +1,19 @@
 Contributor's guide
 ===================
 
-Contributing the code
-----
-
 The development of Aery32 Framework happens in GitHub, which is a web-based hosting service that use the Git revision control system. To contribute the code you have to have a GitHub account. After that you can `fork <http://help.github.com/fork-a-repo/>`_ Aery32 repository and start contribute by sending `pull request <http://help.github.com/send-pull-requests/>`_.
 
 GitHub has a good beginners guide about `how to set up Git in Windows <http://help.github.com/win-set-up-git/>`_.
 
 Sending a pull request (creating a patch)
-''''
+-----------------------------------------
 
 Fixes are sent as `pull requests <http://help.github.com/send-pull-requests/>`_. Before you start fixing the Aery32 library, create a new branch and code your patch in this new branch. If there is a reported issue you are fixing, name the branch according to the GitHub issue number, e.g. gh-02.
 
 The benefit of this approach is that you can have plenty of fixes which are isolated from each others, especially from the master branch.
 
-Coding standards:
-''''
+Coding standards
+----------------
 
 .. code-block:: c
 
@@ -87,19 +84,18 @@ Coding standards:
     }
 
 Writing the documentation
-----
+-------------------------
 
-The documentation is constructed by Sphinx. Sphinx is a Python documentation generator but works fine for C as well. To build html version of this documentation::
+The documentation is constructed by Sphinx. Sphinx is a Python documentation generator but works fine for C as well.
 
-    cd aery32
-    make refguide
+The source files of this documentation are located at the separate GitHub repository, https://github.com/aery32/aery32-refguide. To build local html version of this documentation use make::
 
-The following commands assume you have Sphinx installed -- if not, see the installation instructions below. 
+    make html
 
-The source files of this documentation are located in ``docs/refguide/source/`` directory. From this folder you can find, for example, file ``index.rst``, which is the master document serving as a welcome page and "table of contents tree". To edit these source files just open the file in your favorite editor and be sure to edit in UTF-8 mode. To understand reSt syntax start from http://sphinx.pocoo.org/rest.html.
+The following commands assume you have Sphinx installed -- if not, see the installation instructions below. Now browse to ``source/`` directory and open the ``index.rst``. This is the master document serving as a welcome page and "*table of contents tree*". To edit these source files just open the file in your favorite editor and be sure to edit in UTF-8 mode. To understand reSt syntax start from http://sphinx.pocoo.org/rest.html.
 
 Installing Sphinx
-''''
+'''''''''''''''''
 
 **In Windows**
 
