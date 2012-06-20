@@ -31,10 +31,19 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
     // Change the frequency divider
     aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 6);
 
+.. note::
+
+    Modules never take care of pin initialization, except GPIO module that's for this specific purpose. So, for example, when initializing SPI you have to take care of pin configuration:
+
+    .. code-block:: c
+
+        #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
+        aery_gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
+
 General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
 -------------------------------------------------------------------
 
-To initialize any pin to output high, there is a oneliner which can be used
+To initialize any pin to be output high, there is a oneliner which can be used
 
 .. code-block:: c
 
@@ -44,21 +53,24 @@ The first argument is the GPIO pin number and the second one is for options. For
 
 The available pin init options are:
 
-- GPIO_OUTPUT
-- GPIO_INPUT
-- GPIO_HIGH
-- GPIO_LOW
-- GPIO_FUNCTION_A
-- GPIO_FUNCTION_B
-- GPIO_FUNCTION_C
-- GPIO_FUNCTION_D
-- GPIO_INT_PIN_CHANGE
-- GPIO_INT_RAISING_EDGE
-- GPIO_INT_FALLING_EDGE
-- GPIO_PULLUP
-- GPIO_OPENDRAIN
-- GPIO_GLITCH_FILTER
-- GPIO_HIZ
+.. hlist::
+    :columns: 3
+
+    - ``GPIO_OUTPUT``
+    - ``GPIO_INPUT``
+    - ``GPIO_HIGH``
+    - ``GPIO_LOW``
+    - ``GPIO_FUNCTION_A``
+    - ``GPIO_FUNCTION_B``
+    - ``GPIO_FUNCTION_C``
+    - ``GPIO_FUNCTION_D``
+    - ``GPIO_INT_PIN_CHANGE``
+    - ``GPIO_INT_RAISING_EDGE``
+    - ``GPIO_INT_FALLING_EDGE``
+    - ``GPIO_PULLUP``
+    - ``GPIO_OPENDRAIN``
+    - ``GPIO_GLITCH_FILTER``
+    - ``GPIO_HIZ``
 
 These options can be combined with the pipe operator (boolean OR) to carry out several commands at once. Without this feature the above oneliner should be written with two lines of code:
 
@@ -168,7 +180,7 @@ After initialization you can enable and disable interrupts globally by using the
     aery_intc_disable_globally();
 
 Power Manager (pm), ``#include <aery32/pm.h>``
----------------------------------------------
+----------------------------------------------
 
 Power Manager controls integrated oscillators and PLLs among other, well, power related things. When the board has been powered up it runs on the internal RC oscillator that's 115 kHz. However, it's often preferred to use crystal oscillator and higher clock frequency for CPU. So one of the first things what to do after the board has been power up, is the initialization of oscillators. Aery32 development board has 12 MHz crystal oscillator connected to OSC0 that can be started as
 
@@ -189,9 +201,9 @@ Remember to wait osc to stabilize after starting it. Now we can use set master c
 
 The possible master clock selections are:
 
-- PM_MCK_SOURCE_OSC0
-- PM_MCK_SOURCE_PLL0
-- PM_MCK_SOURCE_PLL1
+- ``PM_MCK_SOURCE_OSC0``
+- ``PM_MCK_SOURCE_PLL0``
+- ``PM_MCK_SOURCE_PLL1``
 
 Aery32 devboard can run 66 MHz at its fastest. To achieve these higher clock frequencies one must use PLL's of the power manager module. PLL has a voltage controlled oscillator (VCO) that has to be initialized first
 
@@ -269,12 +281,15 @@ Then init and enable USB generic clock
 
 There are five possible general clocks to be initialized:
 
-- PM_GCLK0,
-- PM_GCLK1,
-- PM_GCLK2,
-- PM_GCLK3,
-- PM_GCLK_USBB,
-- PM_GCLK_ABDAC
+.. hlist::
+    :columns: 2
+
+    - ``PM_GCLK0``
+    - ``PM_GCLK1``
+    - ``PM_GCLK2``
+    - ``PM_GCLK3``
+    - ``PM_GCLK_USBB``
+    - ``PM_GCLK_ABDAC``
 
 ``PM_GCLK_ABDAC`` is for Audio Bitstream DAC, ``PM_GCLK0``, ``PM_GCLK1``, etc. can be attached to GPIO pin, so that you can easily clock external devices. For example, to set generic clock to be at the output of GPIO pin, first init the desired GPIO pin appropriately and then enable the generic clock at this pin. You can do this, for example, to check that USB clock enabled above is correct
 
@@ -305,8 +320,8 @@ Real-time counter is for accurate real-time measurements. It enables periodic in
 
 The available source oscillators are:
 
-- RTC_SOURCE_RC (115 kHz RC oscillator within the AVR32)
-- RTC_SOURCE_OSC32 (external low-frequency xtal, not assembled in Aery32 Devboard)
+- ``RTC_SOURCE_RC`` (115 kHz RC oscillator within the AVR32)
+- ``RTC_SOURCE_OSC32`` (external low-frequency xtal, not assembled in Aery32 Devboard)
 
 When initialized, remember to enable it too
 
@@ -321,13 +336,13 @@ Serial Peripheral Bus (spi), ``#include <aery32/spi.h>``
 
 AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
-- PA07  NPCS3
-- PA08  NPCS1
-- PA09  NPCS2
-- PA10  NPCS0
-- PA11  MISO 
-- PA12  MOSI 
-- PA13  SCK
+- PA07, NPCS3
+- PA08, NPCS1
+- PA09, NPCS2
+- PA10, NPCS0
+- PA11, MISO 
+- PA12, MOSI 
+- PA13, SCK
 
 So let's define the pin mask for SPI0 with NPCS0 (Numeric Processor Chip Select, also known as slave select or chip select):
 
