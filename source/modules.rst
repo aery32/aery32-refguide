@@ -182,7 +182,7 @@ After initialization you can enable and disable interrupts globally by using the
 Power Manager (pm), ``#include <aery32/pm.h>``
 ----------------------------------------------
 
-Power Manager controls integrated oscillators and PLLs among other, well, power related things. When the board has been powered up it runs on the internal RC oscillator that's 115 kHz. However, it's often preferred to use crystal oscillator and higher clock frequency for CPU. So one of the first things what to do after the board has been power up, is the initialization of oscillators. Aery32 development board has 12 MHz crystal oscillator connected to OSC0 that can be started as
+Power Manager controls integrated oscillators and PLLs among other power related things. By default the MCU runs on the internal RC oscillator (115 kHz). However, it's often preferred to switch to the higher CPU clock frequency, so one of the first things what to do after the power up, is the initialization of oscillators. Aery32 Development Board has 12 MHz crystal oscillator connected to the OSC0. This can be started as
 
 .. code-block:: c
 
@@ -193,23 +193,29 @@ Power Manager controls integrated oscillators and PLLs among other, well, power 
     );
     aery_pm_wait_osc_to_stabilize(0);
 
-Remember to wait osc to stabilize after starting it. Now we can use set master clock to same as the OSC0 (12 MHz)
+When the oscillator has been stabilized it can be used for the master/main clock
 
 .. code-block:: c
 
     aery_pm_select_mck(PM_MCK_SOURCE_OSC0);
 
-The possible master clock selections are:
+Now the CPU runs at 12 MHz frequency. The other possible source selections for the master clock are:
 
 - ``PM_MCK_SOURCE_OSC0``
 - ``PM_MCK_SOURCE_PLL0``
 - ``PM_MCK_SOURCE_PLL1``
 
-Aery32 devboard can run 66 MHz at its fastest. To achieve these higher clock frequencies one must use PLL's of the power manager module. PLL has a voltage controlled oscillator (VCO) that has to be initialized first
+Use PLLs to achieve higher clock frequencies
+''''''''''''''''''''''''''''''''''''''''''''
+
+Aery32 devboard can run at 66 MHz its fastest. To achieve these higher clock frequencies one must use PLLs. PLL has a voltage controlled oscillator (VCO) that has to be initialized first. After then the PLL itself can be enabled.
+
+.. important::
+
+    PLL VCO frequency has to fall between 80--180 MHz or 160--240 MHz with high frequency disabled or enabled, respectively. From these rules, one can realize that the smallest available PLL frequency is 40 MHz (the VCO frequency can be divided by two afterwards).
 
 .. code-block:: c
 
-    // Initialize f_vco0 of PLL0 to be 132 MHz.
     aery_pm_init_pllvco(
         pll0,               /* pointer to pll address */
         PM_PLL_SOURCE_OSC0, /* source clock */
@@ -219,45 +225,58 @@ Aery32 devboard can run 66 MHz at its fastest. To achieve these higher clock fre
     );
 
 - If ``div > 0`` then ``f_vco = f_src * mul / div``
-- If ``div = 0`` then ``f_vco = 2 * f_src``
+- If ``div = 0`` then ``f_vco = 2 * mul * f_src``
 
-There are two PLLs available in UC3A1, which Aery32 framework provide quick access via ``pll0`` and ``pll1`` global variables. Otherwise you should be more verbose and use ``AVR32_PM.PLL[0]`` and ``AVR32_PM.PLL[1]``. When VCO has been intialized, PLL can be enabled
+The above initialization sets PLL VCO frequency of PLL0 to 132 MHz -- that's ``12 MHz * 11 / 1 = 132 MHz``. After then PLL can be enabled and the VCO frequency appears on the PLL output. Remember that you can now also divide VCO frequency by two.
 
 .. code-block:: c
 
-    // Enables PLL0 with divide by two block, f_pll0 = 132 MHz / 2
-    aery_pm_enable_pll(pll0, true  /* divide by two */);
-
-    // Remember to wait until PLL0 has been locked
+    aery_pm_enable_pll(pll0, true  /* divide by two */); // 132MHz / 2 = 66MHz
     aery_pm_wait_pll_to_lock(pll0);
 
-Now master clock can be set to PLL0 that's 66 MHz.
+Finally one can change the master clock (or main clock) to be clocked from the PLL0 that's 66 MHz.
 
 .. code-block:: c
 
     aery_pm_select_mck(PM_MCK_SOURCE_PLL0);
 
+.. hint::
+
+    There are two PLLs available in UC3A1, which Aery32 Framework provide quick access via ``pll0`` and ``pll1`` global variables. Otherwise you should be more verbose and use ``AVR32_PM.PLL[0]`` and ``AVR32_PM.PLL[1]``.
+
+Fine tune the CPU and Periheral BUS frequencies
+'''''''''''''''''''''''''''''''''''''''''''''''
+
+By default the clock domains, that are CPU and the Peripheral Busses (PBA and PBB) equal to the master clock. To fine tune these clock domains, the PM has a 3-bit prescaler, which can be used to divide the master clock, before it has been used for the specific domain. Using the prescaler you can choose the CPU clock between the OSC0 frequency and 40 MHz, that was the lower limit of the PLL. Assuming that the master clock was 66 MHz, the following function call changes the CPU and the bus frequencies to 33 MHz:
+
+.. code-block:: c
+
+    aery_pm_setup_clkdomain(1, PM_CLKDOMAIN_ALL);
+
+The first parameter defines the prescaler value and the second one selects the clock domain which to set up. Here all the domains are set to equal. The formula is ``f_mck / (2^prescaler)``. With the prescaler selection 0, the prescaler block will be disabled and the selected clock domain equals to the master clock that was the default setting.
+
+The possible clock domain selections are
+
+.. hlist::
+    :columns: 2
+
+    - ``PM_CLKDOMAIN_CPU``
+    - ``PM_CLKDOMAIN_PBA``
+    - ``PM_CLKDOMAIN_PBB``
+    - ``PM_CLKDOMAIN_ALL``
+
 .. important::
 
-    PLL VCO frequency, initialized by calling ``aery_pm_init_pllvco()`` has to be between 80--180 MHz or 160--240 MHz with high frequency disabled and enabled, respectively.
+    PBA and PBB clocks have to be less or equal to CPU clock.
 
 .. hint::
 
-    For your convenience Aery32 PM module declares three global pointers by default, ``pm``, ``pll0`` and ``pll1``.
-
-.. hint::
-
-    To save power disable modules that you do not need, see datasheet page 70. This can be done by changing the peripheral clock masking. The following example disables clocks from the TWI, PWM, SSC, TC, ABDAC and all the USART modules
-
-    .. code-block:: c
-
-        #define PBAMASK_DEFAULT 0x0F
-        pm->pbamask = PBAMASK_DEFAULT;
+    You can combine the clock domain selections with the pipe operator, like this ``PM_CLKDOMAIN_CPU|PM_CLKDOMAIN_PBB``.With this selection the PBA clock frequency won't be changed, but the CPU and PBB will be set up accordingly.
 
 General clocks
 ''''''''''''''
 
-PM can generate dedicated general clocks. These clocks can be assigned to GPIO pins or used for internal peripherals such as USB that commonly needs 48 MHz clock to work. To offer this 48 MHz for USB peripheral you first have to initialize either of the PLLs to work at, for example, 96 MHz frequency:
+PM can generate dedicated general clocks. These clocks can be assigned to GPIO pins or used for internal peripherals such as USB that needs 48 MHz clock to work. To offer this 48 MHz for the USB peripheral, you have to initialize either of the PLLs to work at 96 MHz frequency. As the PLL0 is commonly used for the master clock, PLL1 has been dedicated for general clocks. First initialize the VCO frequency and then enable the PLL
 
 .. code-block:: c
 
@@ -265,7 +284,7 @@ PM can generate dedicated general clocks. These clocks can be assigned to GPIO p
     aery_pm_enable_pll(pll1, true); // 96 MHz
     aery_pm_wait_pll_to_lock(pll1);
 
-Then init and enable USB generic clock
+After then init and enable the USB generic clock
 
 .. code-block:: c
 
@@ -302,6 +321,24 @@ There are five possible general clocks to be initialized:
 .. hint::
 
     Generic clock can be changed when its running by just initializing it again. You do not have to disable it before doing this and you do not have to enable it again.
+
+Save power and use only the peripherals that you need
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+By default all modules are enabled. You might be interested in to disable modules you are not using. This can done via the peripheral clock masking. The following example disables clocks from the TWI, PWM, SSC, TC, ABDAC and all the USART modules
+
+.. code-block:: c
+
+    #define PBAMASK_DEFAULT 0x0F
+    pm->pbamask = PBAMASK_DEFAULT;
+
+Remember to wait when the change has been completed
+
+.. code-block:: c
+
+    while (!(pm->isr & AVR32_PM_ISR_MSKRDY_MASK));
+        /* Clocks are now masked according to (CPU/HSB/PBA/PBB)_MASK
+         * registers. */
 
 
 Real-time Counter (rtc), ``#include <aery32/rtc.h>``
