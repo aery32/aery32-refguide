@@ -271,7 +271,7 @@ The possible clock domain selections are
 
 .. hint::
 
-    You can combine the clock domain selections with the pipe operator, like this ``PM_CLKDOMAIN_CPU|PM_CLKDOMAIN_PBB``.With this selection the PBA clock frequency won't be changed, but the CPU and PBB will be set up accordingly.
+    You can combine the clock domain selections with the pipe operator, like this ``PM_CLKDOMAIN_CPU|PM_CLKDOMAIN_PBB``. With this selection the PBA clock frequency won't be changed, but the CPU and PBB will be set up accordingly.
 
 General clocks
 ''''''''''''''
@@ -340,6 +340,24 @@ Remember to wait when the change has been completed
         /* Clocks are now masked according to (CPU/HSB/PBA/PBB)_MASK
          * registers. */
 
+How much is the clock?
+''''''''''''''''''''''
+
+Sometimes the current clock frequencies has to be checked programmatically. To get the main clock use the ``aery_pm_get_mck()`` function
+
+.. code-block:: c
+
+    main_hz = aery_pm_get_mck();
+
+Respectively, the clock domains can be fetched like this
+
+.. code-block:: c
+
+    cpu_hz = aery_pm_get_clkdomain_freq(PM_CLKDOMAIN_CPU);
+    pba_hz = aery_pm_get_clkdomain_freq(PM_CLKDOMAIN_PBA);
+    pbb_hz = aery_pm_get_clkdomain_freq(PM_CLKDOMAIN_PBB);
+
+These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, make sure to put the new value in CFLAGS manually or via Makefile, like ``CFLAGS+=-DF_OSC0=8000000UL``.
 
 Real-time Counter (rtc), ``#include <aery32/rtc.h>``
 ----------------------------------------------------
