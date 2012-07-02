@@ -145,21 +145,17 @@ and replace it with::
 
     CC=avr32-g++
 
-Also change the line below::
+Also change the C standard, that's the line below, to::
 
-    CSTD=gnu99
+    CSTANDARD=gnu++98
 
-to::
-
-    CSTD=gnu++98
-
-Or if you feel more experimental, you can chooce one of these: c++0x or gnu++0x.
+Or if you feel more experimental, you can chooce one of these: `c++0x` or `gnu++0x`.
 
 Now you can use C++ in your project. Remember to use the ``.hh`` header files instead of ``.h`` files. For example, instead of using
 
 .. code-block:: c
 
-    #include >aery32/gpio.h>
+    #include <aery32/gpio.h>
 
 use
 
