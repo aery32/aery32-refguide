@@ -17,14 +17,14 @@ It is intended that you work under the root directory most of the time as that i
 
 **main.c**
 
-The ``main.c`` source file contains the default main function where to start. At the top of the file, couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``aery32/gpio.h`` has been included.
+The ``main.c`` source file contains the default main function where to start. At the top of the file, couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``aery32/gpio.h`` has been included. If you will use most part of the framework, instead of including every part separately you may like to include all the headers at once by including ``aery32/all.h``.
 
 .. code-block:: c
     :linenos:
 
     #include <stdbool.h>
-    #include <aery32/gpio.h>
     #include "board.h"
+    #include <aery32/gpio.h>
 
     #define LED AVR32_PIN_PC04
 
@@ -47,7 +47,7 @@ The ``main.c`` source file contains the default main function where to start. At
 
 **board.h**
 
-This is a place for the board specific function prototypes and supportive ``#define`` macros, which provide a way to do configuration. The board initialization functions has been already implemented and can be located inside of ``board.c``.
+This is a place for the board specific function prototypes and supportive ``#define`` macros, which provide a way to do configuration. The basic board initialization function, `init_board()``, has been already implemented to start the oscillators and setup the main frequency.
 
 **board.c**
 
