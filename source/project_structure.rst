@@ -47,15 +47,15 @@ The ``main.c`` source file contains the default main function where to start. At
 
 **board.h**
 
-This is a place for the board specific function prototypes and supportive ``#define`` macros, which provide a way to do configuration. The basic board initialization function, `init_board()``, has been already implemented to start the oscillators and setup the main frequency.
+This is a place for the board specific function prototypes and supportive ``#define`` macros. These macros provide a way to do configuration, for example.
 
 **board.c**
 
-The default board initialization function can be found here. First it sets all GPIO pins to be inputs. Then it configures the board's power manager. That's starting the oscillator and setting the master clock frequency to 66 MHz. When you are changing the way how the board is initialized this is the place where to do it.
+The default board initialization function, ``init_board()``, can be found here. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basicly the external oscillator ``OCS0`` is started and the master clock frequency will be set to 66 MHz. When you are changing the way how the board is initialized this is the place where to do it.
 
 **aery32/**
 
-Contains the source files of Aery32 library. The archive of the library appers in this directory after the first compile process. The ``aery32/`` subdirectory contains the header files, where you can find plenty of documentation too. You can also find the linker scripts here, which are essential files to define the MCU memory structure in liking process. However, you should not need to hassle with these files.
+This directory contains the source files of Aery32 library. The archive of the library (.a file) appears in this directory after the first compile process. The ``aery32/`` subdirectory contains the header files of the library. Linker scripts, which are essential files to define the MCU memory structure are placed under the ``ldscripts/`` directory. However, you should not need to hassle with those files.
 
 **examples/**
 
