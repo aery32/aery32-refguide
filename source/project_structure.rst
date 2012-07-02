@@ -51,7 +51,7 @@ This is a place for the board specific function prototypes and supportive ``#def
 
 **board.c**
 
-The default board initialization function, ``init_board()``, can be found here. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basicly the external oscillator ``OCS0`` is started and the master clock frequency will be set to 66 MHz. When you are changing the way how the board is initialized this is the place where to do it.
+The default board initialization function, ``init_board()``, can be found here. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basicly the external oscillator ``OCS0`` is started and the master clock frequency is set to 66 MHz. If you like to change the master clock frequency or want to change the way how the board is initialized, this is the place where to do it.
 
 **aery32/**
 
