@@ -15,6 +15,8 @@ The benefit of this approach is that you can have plenty of fixes which are isol
 Coding standards
 ----------------
 
+Follow [Linux kernel coding style](https://github.com/torvalds/linux/blob/master/Documentation/CodingStyle)
+
 .. code-block:: c
 
     #include <stdbool.h>
@@ -32,38 +34,15 @@ Coding standards
     };
 
     /**
-     * Initialize I/O pins
+     * Initializes io pins (define the function briefly at the first line)
+     * \param allinput If true all pins initialized as inputs
      *  
-     * This is a docblock to describe the function. Do not use parameter
-     * names in function prototypes.
-     *
-     * \param allinput If true all pins are init as inputs
+     * More detailed description comes here. Remember to use param names in
+     * within the function prototypes too.
      */  
-    void init_io(bool);
+    void init_io(bool allinput);
 
-    int
-    main(void)
-    {
-        char *c;     /* char *c, not char* c */
-        Foo foo;
-        Bar bar;
-
-        bar.foo = &foo;
-        /* Do not use compound literals with structs in Aery32 library,
-         * because avr32-g++ does not support those.
-         *
-         * bar = (Bar) {.foo = &foo}; // This is compound literal
-         */
-
-        init_io(false);
-        for (;;) {      /* This is how infinite loops are written */
-        }
-
-        return 0;
-    }
-
-    void
-    init_io(bool allinput)      /* Layout the functions like this */
+    void init_io(bool allinput)      /* Layout the functions like this */
     {
         int i;
 
@@ -71,17 +50,34 @@ Coding standards
         for (i = 0; i < 2; i++) {
             AVR32_GPIO.port[i].gpers = 0xffffffff;
 
-            /*
-             * Excplicitly show the comparison with zero and always
-             * use curly braces
-             */
-            if (allinput == 0) {
+            if (allinput == 0)      /* Do not use curly braces if those aren't needed */
                 AVR32_GPIO.port[i].oders = 0xffffffff;
-            } else {
+            else
                 AVR32_GPIO.port[i].oderc = 0xffffffff;
-            }
         }
     }
+
+    int main(void)
+    {
+        char *c;     /* char *c, not char* c */
+        Foo foo;
+        Bar bar;
+
+        bar.foo = &foo;
+        /*
+         * This is multiline comment that reminds you not to use compound literals
+         * in Aery32 library, because avr32-g++ does not support those.
+         *
+         * Example of the use of compound literal:
+         * bar = (Bar) {.foo = &foo};
+         */
+
+        for (;;) {      /* This is how infinite loops are written */
+        }
+
+        return 0;
+    }
+
 
 Writing the documentation
 -------------------------
