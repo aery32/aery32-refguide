@@ -16,7 +16,7 @@ The common calling order for modules is the following: 1) initialize, 2) do some
 
     module_init();
     module_setup_something();
-    // bitbangin the module registers is also possible here
+    /* Bitbangin the module registers is also possible at this stage */
     module_enable();
 
 The init function may also look like ``module_init_something()``, for example, the SPI can be initialized as a master or slave, so the naming convention declares two init functions for SPI module: ``spi_init_master()`` and ``spi_init_slave()``.
@@ -28,7 +28,7 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
     aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 1);
     aery_pm_enable_gclk(PM_GCLK0);
 
-    // Change the frequency divider
+    /* Change the frequency divider */
     aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 6);
 
 .. note::
@@ -343,19 +343,19 @@ Remember to wait when the change has been completed
 How much is the clock?
 ''''''''''''''''''''''
 
-Sometimes the current clock frequencies has to be checked programmatically. To get the main clock use the ``aery_pm_get_mck()`` function
+Sometimes the current clock frequencies has to be checked programmatically. To get the main clock use the ``aery_pm_get_fmck()`` function
 
 .. code-block:: c
 
-    main_hz = aery_pm_get_mck();
+    main_hz = aery_pm_get_fmck();
 
 Respectively, the clock domains can be fetched like this
 
 .. code-block:: c
 
-    cpu_hz = aery_pm_get_clkdomain_freq(PM_CLKDOMAIN_CPU);
-    pba_hz = aery_pm_get_clkdomain_freq(PM_CLKDOMAIN_PBA);
-    pbb_hz = aery_pm_get_clkdomain_freq(PM_CLKDOMAIN_PBB);
+    cpu_hz = aery_pm_get_fclkdomain(PM_CLKDOMAIN_CPU);
+    pba_hz = aery_pm_get_fclkdomain(PM_CLKDOMAIN_PBA);
+    pbb_hz = aery_pm_get_fclkdomain(PM_CLKDOMAIN_PBB);
 
 These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, make sure to put the new value in CFLAGS manually or via Makefile, like ``CFLAGS+=-DF_OSC0=8000000UL``.
 

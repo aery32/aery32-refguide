@@ -8,7 +8,7 @@ There are three convenience delay functions that are intented to be used for sho
     aery_delay_us(10); // wait 10 microseconds
     aery_delay_ms(500); // wait half a second
 
-These functions are dependent on the master clock frequency that has to be provided via ``F_CPU`` definition before the ``delay.h`` header file has been included, like this
+These functions are dependent on the CPU clock frequency that has to be provided via ``F_CPU`` definition before the ``delay.h`` header file has been included, like this
 
 .. code-block:: c
 
