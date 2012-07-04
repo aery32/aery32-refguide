@@ -15,7 +15,7 @@ The benefit of this approach is that you can have plenty of fixes which are isol
 Coding standards
 ----------------
 
-Follow [Linux kernel coding style](https://github.com/torvalds/linux/blob/master/Documentation/CodingStyle)
+Follow `Linux kernel coding style <https://github.com/torvalds/linux/blob/master/Documentation/CodingStyle>`_.
 
 .. code-block:: c
 
