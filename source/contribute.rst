@@ -37,12 +37,12 @@ Follow `Linux kernel coding style <https://github.com/torvalds/linux/blob/master
      * Initializes io pins (define the function briefly at the first line)
      * \param allinput If true all pins initialized as inputs
      *  
-     * More detailed description comes here. Remember to use param names in
+     * More detailed description comes here. Remember to use param names
      * within the function prototypes too.
      */  
     void init_io(bool allinput);
 
-    void init_io(bool allinput)      /* Layout the functions like this */
+    void init_io(bool allinput)      /* Layout functions like this */
     {
         int i;
 
@@ -50,7 +50,7 @@ Follow `Linux kernel coding style <https://github.com/torvalds/linux/blob/master
         for (i = 0; i < 2; i++) {
             AVR32_GPIO.port[i].gpers = 0xffffffff;
 
-            if (allinput == 0)      /* Do not use curly braces if those aren't needed */
+            if (allinput == 0)      /* Do not use curly braces if not needed */
                 AVR32_GPIO.port[i].oders = 0xffffffff;
             else
                 AVR32_GPIO.port[i].oderc = 0xffffffff;
@@ -59,7 +59,7 @@ Follow `Linux kernel coding style <https://github.com/torvalds/linux/blob/master
 
     int main(void)
     {
-        char *c;     /* char *c, not char* c */
+        char *c;     /* not char* c */
         Foo foo;
         Bar bar;
 
