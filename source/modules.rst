@@ -16,7 +16,6 @@ The common calling order for modules is the following: 1) initialize, 2) do some
 
     module_init();
     module_setup_something();
-    /* Bitbangin the module registers is also possible at this stage */
     module_enable();
 
 The init function may also look like ``module_init_something()``, for example, the SPI can be initialized as a master or slave, so the naming convention declares two init functions for SPI module: ``spi_init_master()`` and ``spi_init_slave()``.
@@ -25,11 +24,11 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
 
 .. code-block:: c
 
-    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 1);
-    aery_pm_enable_gclk(PM_GCLK0);
+    aery_pm_init_gclk(GCLK0, GCLK_SOURCE_PLL1, 1);
+    aery_pm_enable_gclk(GCLK0);
 
     /* Change the frequency divider */
-    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 6);
+    aery_pm_init_gclk(GCLK0, GCLK_SOURCE_PLL1, 6);
 
 .. note::
 
@@ -39,6 +38,14 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
 
         #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
         aery_gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
+
+Initialization and setup functions set sane default values for those properties that cannot be given via function parameters. These default values should work for 80-90% of use cases. However, sometimes you may have to fine tune these properties to match your needs. This can be done by bitbanging the module registers after you have called the init or setup function. For example, by default the SPI chip select baudrate is hard coded to MCK/255. To make it faster you can bitbang the SCRB bit in CSRX register, where X is the NPCS number. For register names you have to consult with the datasheet.
+
+.. code-block:: c
+
+    aery_spi_setup_npcs(spi0, 0, SPI_MODE1, 16);
+    spi0->CSR0.scbr = 32; /* SPI baudrate of the CS0 line is now MCK/32 */
+
 
 General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
 -------------------------------------------------------------------
@@ -107,7 +114,7 @@ Usually you want to init several pins at once -- not only one pin. This can be d
 
 .. code-block:: c
 
-    aery_gpio_init_pins(porta, 0xffffffff, GPIO_INPUT); // initializes all pins input
+    aery_gpio_init_pins(porta, 0xffffffff, GPIO_INPUT); /* initializes all pins input */
 
 The first argument is a pointer to the port register and the second one is the pin mask. Aery32 GPIO module declares these ``porta``, ``b`` and ``c`` global pointers to the ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively.
 
@@ -187,9 +194,9 @@ Power Manager controls integrated oscillators and PLLs among other power related
 .. code-block:: c
 
     aery_pm_start_osc(
-        0,                  /* oscillator number */
-        PM_OSC_MODE_GAIN3,  /* oscillator mode, see datasheet p.74 */
-        PM_OSC_STARTUP_36ms /* oscillator startup time */
+        0,               /* oscillator number */
+        OSC_MODE_GAIN3,  /* oscillator mode, see datasheet p.74 */
+        OSC_STARTUP_36ms /* oscillator startup time */
     );
     aery_pm_wait_osc_to_stabilize(0);
 
@@ -197,13 +204,13 @@ When the oscillator has been stabilized it can be used for the master/main clock
 
 .. code-block:: c
 
-    aery_pm_select_mck(PM_MCK_SOURCE_OSC0);
+    aery_pm_select_mck(MCK_SOURCE_OSC0);
 
 Now the CPU runs at 12 MHz frequency. The other possible source selections for the master clock are:
 
-- ``PM_MCK_SOURCE_OSC0``
-- ``PM_MCK_SOURCE_PLL0``
-- ``PM_MCK_SOURCE_PLL1``
+- ``MCK_SOURCE_OSC0``
+- ``MCK_SOURCE_PLL0``
+- ``MCK_SOURCE_PLL1``
 
 Use PLLs to achieve higher clock frequencies
 ''''''''''''''''''''''''''''''''''''''''''''
@@ -217,11 +224,11 @@ Aery32 devboard can run at 66 MHz its fastest. To achieve these higher clock fre
 .. code-block:: c
 
     aery_pm_init_pllvco(
-        pll0,               /* pointer to pll address */
-        PM_PLL_SOURCE_OSC0, /* source clock */
-        11,                 /* multiplier */
-        1,                  /* divider */
-        false               /* high frequency */
+        pll0,            /* pointer to pll address */
+        PLL_SOURCE_OSC0, /* source clock */
+        11,              /* multiplier */
+        1,               /* divider */
+        false            /* high frequency */
     );
 
 - If ``div > 0`` then ``f_vco = f_src * mul / div``
@@ -231,14 +238,14 @@ The above initialization sets PLL VCO frequency of PLL0 to 132 MHz -- that's ``1
 
 .. code-block:: c
 
-    aery_pm_enable_pll(pll0, true  /* divide by two */); // 132MHz / 2 = 66MHz
+    aery_pm_enable_pll(pll0, true  /* divide by two */); /* 132 MHz / 2 = 66 MHz */
     aery_pm_wait_pll_to_lock(pll0);
 
 Finally one can change the master clock (or main clock) to be clocked from the PLL0 that's 66 MHz.
 
 .. code-block:: c
 
-    aery_pm_select_mck(PM_MCK_SOURCE_PLL0);
+    aery_pm_select_mck(MCK_SOURCE_PLL0);
 
 .. hint::
 
@@ -251,7 +258,7 @@ By default the clock domains, that are CPU and the Peripheral Busses (PBA and PB
 
 .. code-block:: c
 
-    aery_pm_setup_clkdomain(1, PM_CLKDOMAIN_ALL);
+    aery_pm_setup_clkdomain(1, CLKDOMAIN_ALL);
 
 The first parameter defines the prescaler value and the second one selects the clock domain which to set up. Here all the domains are set to equal. The formula is ``f_mck / (2^prescaler)``. With the prescaler selection 0, the prescaler block will be disabled and the selected clock domain equals to the master clock that was the default setting.
 
@@ -260,10 +267,10 @@ The possible clock domain selections are
 .. hlist::
     :columns: 2
 
-    - ``PM_CLKDOMAIN_CPU``
-    - ``PM_CLKDOMAIN_PBA``
-    - ``PM_CLKDOMAIN_PBB``
-    - ``PM_CLKDOMAIN_ALL``
+    - ``CLKDOMAIN_CPU``
+    - ``CLKDOMAIN_PBA``
+    - ``CLKDOMAIN_PBB``
+    - ``CLKDOMAIN_ALL``
 
 .. important::
 
@@ -271,7 +278,7 @@ The possible clock domain selections are
 
 .. hint::
 
-    You can combine the clock domain selections with the pipe operator, like this ``PM_CLKDOMAIN_CPU|PM_CLKDOMAIN_PBB``. With this selection the PBA clock frequency won't be changed, but the CPU and PBB will be set up accordingly.
+    You can combine the clock domain selections with the pipe operator, like this ``CLKDOMAIN_CPU|CLKDOMAIN_PBB``. With this selection the PBA clock frequency won't be changed, but the CPU and PBB will be set up accordingly.
 
 General clocks
 ''''''''''''''
@@ -280,8 +287,8 @@ PM can generate dedicated general clocks. These clocks can be assigned to GPIO p
 
 .. code-block:: c
 
-    aery_pm_init_pllvco(pll1, PM_PLL_SOURCE_OSC0, 16, 1, true); // 192 MHz
-    aery_pm_enable_pll(pll1, true); // 96 MHz
+    aery_pm_init_pllvco(pll1, PLL_SOURCE_OSC0, 16, 1, true); /* f_pll1_vco = 192 MHz */
+    aery_pm_enable_pll(pll1, true); /* f_pll1 = 96 MHz */
     aery_pm_wait_pll_to_lock(pll1);
 
 After then init and enable the USB generic clock
@@ -289,11 +296,11 @@ After then init and enable the USB generic clock
 .. code-block:: c
 
     aery_pm_init_gclk(
-        PM_GCLK_USBB,        /* generic clock number */
-        PM_GCLK_SOURCE_PLL1, /* clock source for the generic clock */
-        1                    /* divider */
+        GCLK_USBB,        /* generic clock number */
+        GCLK_SOURCE_PLL1, /* clock source for the generic clock */
+        1                 /* divider */
     );
-    aery_pm_enable_gclk(PM_GCLK_USBB);
+    aery_pm_enable_gclk(GCLK_USBB);
 
 - If ``div > 0`` then ``f_gclk = f_src/(2*div)``
 - If ``div = 0`` then ``f_gclk = f_src``
@@ -303,20 +310,20 @@ There are five possible general clocks to be initialized:
 .. hlist::
     :columns: 2
 
-    - ``PM_GCLK0``
-    - ``PM_GCLK1``
-    - ``PM_GCLK2``
-    - ``PM_GCLK3``
-    - ``PM_GCLK_USBB``
-    - ``PM_GCLK_ABDAC``
+    - ``GCLK0``
+    - ``GCLK1``
+    - ``GCLK2``
+    - ``GCLK3``
+    - ``GCLK_USBB``
+    - ``GCLK_ABDAC``
 
-``PM_GCLK_ABDAC`` is for Audio Bitstream DAC, ``PM_GCLK0``, ``PM_GCLK1``, etc. can be attached to GPIO pin, so that you can easily clock external devices. For example, to set generic clock to be at the output of GPIO pin, first init the desired GPIO pin appropriately and then enable the generic clock at this pin. You can do this, for example, to check that USB clock enabled above is correct
+``GCLK_ABDAC`` is for Audio Bitstream DAC, ``GCLK0``, ``GCLK1``, etc. can be attached to GPIO pin, so that you can easily clock external devices. For example, to set generic clock to be at the output of GPIO pin, first init the desired GPIO pin appropriately and then enable the generic clock at this pin. You can do this, for example, to check that USB clock enabled above is correct
 
 .. code-block:: c
 
     aery_gpio_init_pin(AVR32_PIN_PB19, GPIO_FUNCTION_B);
-    aery_pm_init_gclk(PM_GCLK0, PM_GCLK_SOURCE_PLL1, 1);
-    aery_pm_enable_gclk(PM_GCLK0);
+    aery_pm_init_gclk(GCLK0, GCLK_SOURCE_PLL1, 1);
+    aery_pm_enable_gclk(GCLK0);
 
 .. hint::
 
@@ -353,9 +360,9 @@ Respectively, the clock domains can be fetched like this
 
 .. code-block:: c
 
-    cpu_hz = aery_pm_get_fclkdomain(PM_CLKDOMAIN_CPU);
-    pba_hz = aery_pm_get_fclkdomain(PM_CLKDOMAIN_PBA);
-    pbb_hz = aery_pm_get_fclkdomain(PM_CLKDOMAIN_PBB);
+    cpu_hz = aery_pm_get_fclkdomain(CLKDOMAIN_CPU);
+    pba_hz = aery_pm_get_fclkdomain(CLKDOMAIN_PBA);
+    pbb_hz = aery_pm_get_fclkdomain(CLKDOMAIN_PBB);
 
 These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, make sure to put the new value in CFLAGS manually or via Makefile, like ``CFLAGS+=-DF_OSC0=8000000UL``.
 
@@ -501,7 +508,7 @@ Here is the complete code for the above SPI initialization and transmission:
 Sending arbitrary wide SPI data
 '''''''''''''''''''''''''''''''
 
-The last parameter, ``islast``, of the ``aery_spi_transmit()`` function indicates for the SPI whether the current transmission was the last on. If true, chip select line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 32 bit wide SPI data you can do this:
+The last parameter, ``islast``, of the ``aery_spi_transmit()`` function indicates for the SPI whether the current transmission was the last one. If true, chip select line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 32 bit wide SPI data you can do this:
 
 .. code-block:: c
 
