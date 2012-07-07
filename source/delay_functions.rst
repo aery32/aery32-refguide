@@ -29,7 +29,7 @@ If ``F_CPU`` is not defined, you can still use a low level delay function that t
 Use RTC for long delays
 -----------------------
 
-Realtime counter (RTC) is better for long time delays that last minutes, hours, days or even months or years. However, it is also better to use RTC for one second delays too. For example, to toggle the LED every second one can use ``aery_rtc_delay_cycles()`` function.
+Realtime counter (RTC) is better for long time delays or countdowns that last minutes, hours, days or even months or years. For example, to toggle the LED every second one can use ``aery_rtc_delay_cycles()`` function.
 
 .. code-block:: c
     :linenos:
@@ -55,9 +55,9 @@ Realtime counter (RTC) is better for long time delays that last minutes, hours, 
         return 0;
     }
 
-The application above first initialize the RTC to start counting from zero to 4 294 967 295, which is ``0xffffffff`` in hexadecimal. The third parameter is a prescaler for the RTC clock, which was set to in-built RC clock, ``RTC_SOURCE_RC``. The RC clock within the AVR32 UC3A1 works at 115 kHz frequency, but it's frequency is always divided by two. This means that the counter will be incremented every 1/(115000/2) second (approx. every 17.4 us).
+The application above first initialize the RTC to start counting from zero to 4 294 967 295, which is ``0xffffffff`` in hexadecimal. The third parameter is a prescaler for the RTC clock, which was set to be the in-built RC clock. The RC clock within the AVR32 UC3A1 works at 115 kHz frequency, but it's frequency is always divided by two when used for RTC. This means that the counter will be incremented every 1/(115000/2) second (approx. every 17.4 us).
 
-When initialized, the RTC has to be still enabled before it starts counting. This has been done right after the ``aery_rtc_init()`` function by calling ``aery_rtc_enable()`` function. The first parameter indicates whether the interrupts are enabled too. Here we did not use those and thus false was passed as a parameter. However, when much longer delays are desired, interrupts should be used. Below is an example program that toggles the LED every minute through RTC interrupt event function, ``isrhandler_rtc()``.
+When initialized, the RTC has to be enabled before it starts counting. This has been done by calling the ``aery_rtc_enable()`` function. The first parameter indicates whether the interrupts are enabled too. Here we did not use those and thus false was passed as a parameter. However, when much longer delays or time calculations are desired, interrupts should be used. Below is an example program that toggles the LED every minute through the RTC interrupt event function, ``isrhandler_rtc()``.
 
 .. code-block:: c
     :linenos:
@@ -73,7 +73,7 @@ When initialized, the RTC has to be still enabled before it starts counting. Thi
     void isrhandler_rtc(void)
     {
         aery_gpio_toggle_pin(LED);
-        aery_rtc_clear_interrupt(); // Remember to clear RTC interrupt
+        aery_rtc_clear_interrupt(); /* Remember to clear RTC interrupt */
     }
 
     int main(void)

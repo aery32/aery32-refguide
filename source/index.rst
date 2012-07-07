@@ -12,6 +12,7 @@ Welcome to Aery32's documentation!
    getting_started
    project_structure
    delay_functions
+   system_clocks
    modules
    contribute
 
