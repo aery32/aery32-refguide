@@ -30,6 +30,13 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
     /* Change the frequency divider */
     aery_pm_init_gclk(GCLK0, GCLK_SOURCE_PLL1, 6);
 
+Initialization and setup functions set sane default values for those properties that cannot be given via function parameters. These default values should work for 80-90% of use cases. However, sometimes you may have to fine tune these properties to match your needs. This can be done by bitbanging the module registers after you have called the init or setup function. For example, the SPI chip select baudrate is hard coded to `MCK / 255` within the `aery_spi_setup_npcs()` function. To make SPI bus faster you can bitbang the SCRB bit in CSRX register, where X is the NPCS number. For register names you have to consult to the datasheet.
+
+.. code-block:: c
+
+    aery_spi_setup_npcs(spi0, 0, SPI_MODE1, 16);
+    spi0->CSR0.scbr = 32; /* SPI baudrate of the CS0 is now MCK/32 */
+
 .. note::
 
     Modules never take care of pin initialization, except GPIO module that's for this specific purpose. So, for example, when initializing SPI you have to take care of pin configuration:
@@ -38,14 +45,6 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
 
         #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
         aery_gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
-
-Initialization and setup functions set sane default values for those properties that cannot be given via function parameters. These default values should work for 80-90% of use cases. However, sometimes you may have to fine tune these properties to match your needs. This can be done by bitbanging the module registers after you have called the init or setup function. For example, by default the SPI chip select baudrate is hard coded to MCK/255. To make it faster you can bitbang the SCRB bit in CSRX register, where X is the NPCS number. For register names you have to consult with the datasheet.
-
-.. code-block:: c
-
-    aery_spi_setup_npcs(spi0, 0, SPI_MODE1, 16);
-    spi0->CSR0.scbr = 32; /* SPI baudrate of the CS0 line is now MCK/32 */
-
 
 General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
 -------------------------------------------------------------------
