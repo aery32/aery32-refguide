@@ -46,6 +46,43 @@ Initialization and setup functions set sane default values for those properties 
         #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
         aery_gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
 
+Analog-to-digital conversion (adc), ``#include <aery32/adc.h>``
+---------------------------------------------------------------
+
+UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The maximum ADC clock frequency for the 10-bit precision is 5 MHz. For 8-bit precision it is 8 MHz. This frequency is related to the frequency of the Peripheral Bus A (PBA). When initialized a correct prescaler value has to be used. ``aery_adc_init()`` will check this for you and will return -1 if this clock requirement was not fullfilled.
+
+.. code-block:: c
+
+    int errno;
+
+    errno = aery_adc_init(
+        7,    /* prescal, adclk = pba_clk / (2 * (prescal+1)) */
+        true, /* hires, 10-bit (false would be 8-bit) */
+        0,    /* shtim, sample and hold time = (shtim + 1) / adclk */
+        0     /* startup, startup time = (startup + 1) * 8 / adclk */
+    );
+
+The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. When initialized, you have to enable the channels that you like to use for the conversion. This done through masking, so there is use for the good old ``<<`` bitwise shift operator.
+
+.. code-block:: c
+
+    if (errno != -1)
+        aery_adc_enable(1 << 3); /* enables the channel 3 */
+
+Now you can start the conversion. Be sure to wait that the conversion is ready before reading the conversion value.
+
+.. code-block:: c
+
+    uint16_t result;
+
+    aery_adc_start_cnv();
+    while (!aery_adc_cnv_isrdy(1 << 3));
+    result = aery_adc_get_cnv(3);
+
+.. note::
+
+    You always have to call ``aery_adc_start_cnv()`` individually for every started conversion.
+
 General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
 -------------------------------------------------------------------
 
