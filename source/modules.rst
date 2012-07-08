@@ -62,7 +62,7 @@ UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The max
         0     /* startup, startup time = (startup + 1) * 8 / adclk */
     );
 
-The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. When initialized, you have to enable the channels that you like to use for the conversion. This done through masking, so there is use for the good old ``<<`` bitwise shift operator.
+The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. When initialized, you have to enable the channels that you like to use for the conversion. This is done through masking, so there is use for the good old ``<<`` bitwise shift operator.
 
 .. code-block:: c
 
