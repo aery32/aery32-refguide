@@ -8,34 +8,33 @@ Aery32 Software Framework provides a complete project structure to start AVR32 d
             ...
         examples/
             ...
-        board.c
+        board.cpp
         board.h
-        main.c
+        main.cpp
         Makefile
 
 It is intended that you work under the root directory most of the time as that is the place where you keep adding your .c source files and .h header files.
 
-**main.c**
+**main.cpp**
 
-The ``main.c`` source file contains the default main function where to start. At the top of the file, couple of header files are also included in advance. For example, you most probably are going to use general peripheral input and output pins so ``aery32/gpio.h`` has been included. If you will use most part of the framework, instead of including every part separately you may like to include all the headers at once by including ``aery32/all.h``.
+The ``main.cpp`` source file contains the default main function where to start.
 
-.. code-block:: c
+.. code-block:: c++
     :linenos:
 
-    #include <stdbool.h>
     #include "board.h"
-    #include <aery32/gpio.h>
+    #include <aery32/all.h>
 
-    #define LED AVR32_PIN_PC04
+    using namespace aery;
 
     int main(void)
     {
         /* Put your application initialization sequence here */
         init_board();
-        aery_gpio_init_pin(LED, GPIO_OUTPUT);
+        gpio_init_pin(LED, GPIO_OUTPUT);
 
         /* All done, turn the LED on */
-        aery_gpio_set_pin_high(LED);
+        gpio_set_pin_high(LED);
 
         for(;;) {
             /* Put your application code here */
@@ -49,7 +48,7 @@ The ``main.c`` source file contains the default main function where to start. At
 
 This is a place for the board specific function prototypes and supportive ``#define`` macros. These macros provide a way to do configuration, for example.
 
-**board.c**
+**board.cpp**
 
 The default board initialization function, ``init_board()``, can be found here. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basicly the external oscillator ``OCS0`` is started and the master clock frequency is set to 66 MHz. If you like to change the master clock frequency or want to change the way how the board is initialized, this is the place where to do it.
 
@@ -98,11 +97,11 @@ How to introduce new source files in the Makefile
 
 Let's say I would like to separate my source code into a ``my/`` subdirectory under the project root. After creating the directory, I have to edit the Makefile. So, open the Makefile into your editory and find the line::
 
-    SOURCES=$(wildcard *.c)
+    SOURCES=$(wildcard *.cpp)
 
 Edit this line so that it looks like this::
 
-    SOURCES=$(wildcard *.c) $(wildcard my/*.c)
+    SOURCES=$(wildcard *.cpp) $(wildcard my/*.cpp)
 
 You can also add single .c files at the end of this list.
 
@@ -115,7 +114,7 @@ Aery32 Framework comes with plenty of example programs, which **work out of box*
 
 Open Command Prompt and command::
 
-    cp examples\toggle_led.c main.c
+    cp examples\toggle_led.cpp main.cpp
     make programs
 
 The quickest way to access Command Prompt is to press Windows-key and R (Win+R) at the same time, and type cmd.
@@ -124,67 +123,11 @@ The quickest way to access Command Prompt is to press Windows-key and R (Win+R) 
 
 Open terminal and::
 
-    cp examples/toggle_led.c main.c
+    cp examples/toggle_led.cpp main.cpp
     make programs
 
-The following lines of commands overwrite the present ``main.c`` with the example and the uploads (or programs) it into the development board. The program starts running immediately.
+The following lines of commands overwrite the present ``main.cpp`` with the example and the uploads (or programs) it into the development board. The program starts running immediately.
 
 .. note::
 
   Every example program consists from a single file and can be found from ``examples/`` directory.
-
-
-Where is my C++?
-----------------
-
-To use C++ you have to change the `avr32-gcc` compiler to `avr32-g++`. This can be done by editing the Makefile. Find the following line under `Standard user variables` section::
-
-    CC=avr32-gcc
-
-and replace it with::
-
-    CC=avr32-g++
-
-Also change the C standard, that's the line below, to::
-
-    CSTANDARD=gnu++98
-
-Or if you feel more experimental, you can chooce one of these: `c++0x` or `gnu++0x`.
-
-Now you can use C++ in your project. Remember to use the ``.hh`` header files instead of ``.h`` files. For example, instead of using
-
-.. code-block:: c
-
-    #include <aery32/gpio.h>
-
-use
-
-.. code-block:: c
-
-    #include <aery32/gpio.hh>
-
-At the moment Aery32 Software Framework uses only the C++ namespaces. The benefits of using namespace is that you can omit the "*aery_*" prefix in the function calls. This has been demonstrated below
-
-.. code-block:: c
-    :linenos:
-
-    #include <stdbool.h>
-    #include <aery32/gpio.hh>
-    #include "board.h"
-
-    #define LED AVR32_PIN_PC04
-
-    using namespace aery;   // enable aery namespace
-
-    int main(void)
-    {
-        init_board();
-        gpio_init_pin(LED, GPIO_OUTPUT|GPIO_HIGH); // yay! no "aery_" prefix
-
-        for(;;) {
-            /* Put your application code here */
-
-        }
-
-        return 0;
-    }

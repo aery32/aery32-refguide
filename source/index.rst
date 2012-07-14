@@ -13,7 +13,7 @@ Welcome to Aery32's documentation!
    project_structure
    delay_functions
    system_clocks
-   modules
+   module_functions
    contribute
 
 
