@@ -42,6 +42,15 @@ Initialization and setup functions set sane default values for those properties 
         #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
         gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
 
+Global variables
+----------------
+
+Every module declares global shortcut variables to the main registers of the module. For example, the GPIO module declares ``porta``, ``b`` and ``c`` global pointers to the MCU ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively. Similarly, ``pll0`` and ``pll1`` declared in PM module provide quick access to PLLs. Otherwise you should have used ``AVR32_PM.PLL[0]`` and ``AVR32_PM.PLL[1]``.
+
+.. hint::
+
+    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``gpio_toggle_pin(AVR32_PIN_PC04)`` you could write ``portc->ovrt = (1 << 4);`` Refer to datasheet pages 175--177 for GPIO Register Map.
+
 Analog-to-digital conversion (adc), ``#include <aery32/adc.h>``
 ---------------------------------------------------------------
 
@@ -73,7 +82,31 @@ Now you can start the conversion. Be sure to wait that the conversion is ready b
 
     adc_start_cnv();
     while (!adc_cnv_isrdy(1 << 3));
-    result = adc_get_cnv(3);
+    result = adc_read_cnv(3);
+
+If  you only want to know the latest conversion, you can use these functions
+
+.. code-block:: c++
+
+    while (!adc_nextcnv_isrdy());
+    result = adc_read_lastcnv(3);
+
+To setup the ADC hardware trigger call ``adc_setup_trigger()`` after init
+
+.. code-block:: c++
+
+    adc_setup_trigger(EXTERNAL_TRG);
+
+Other possible trigger sources, that can be used for example with the Timer/Counter module, are
+
+.. hlist::
+    :columns: 3
+
+    - ``INTERNAL_TRG0``
+    - ``INTERNAL_TRG1``
+    - ``INTERNAL_TRG3``
+    - ``INTERNAL_TRG4``
+    - ``INTERNAL_TRG5``
 
 .. note::
 
@@ -138,21 +171,17 @@ and finally it should not be surprise that there is a read function too
 
 But before going any further, let's quickly go through those pin init options. ``FUNCTION_A``, ``B``, ``C`` and ``D`` assing the pin to the specific peripheral function, see datasheet pages 45--48. ``INT_PIN_CHANGE``, ``RAISING_EDGE`` and ``FALLING_EDGE`` enables interrupt events on the pin. Interrupts are trigged on pin change, at the rising edge or at falling edge, respectively. ``GPIO_PULLUP`` connects pin to the internal pull up resistor. ``GPIO_OPENDRAIN`` in turn makes the pin operate as an open drain mode. This mode is gererally used with pull up resistors to guarantee a high level on line when no driver is active. Lastly ``GPIO_GLITCH_FILTER`` activates the glitch filter and ``GPIO_HIZ`` makes the pin high impedance.
 
-.. note::
-
-    Most of the combinations of GPIO init pin options do not make sense and have unknown consecuences.
-
 Usually you want to init several pins at once -- not only one pin. This can be done for the pins that have the same port.
 
 .. code-block:: c++
 
     gpio_init_pins(porta, 0xffffffff, GPIO_INPUT); /* initializes all pins input */
 
-The first argument is a pointer to the port register and the second one is the pin mask. Aery32 GPIO module declares these ``porta``, ``b`` and ``c`` global pointers to the ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively.
+The first argument is a pointer to the port register and the second one is the pin mask.
 
-.. hint::
+.. note::
 
-    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``gpio_toggle_pin(AVR32_PIN_PC04)`` you could write ``portc->ovrt = (1 << 4);`` Refer to datasheet pages 175--177 for GPIO Register Map.
+    Most of the combinations of GPIO init pin options do not make sense and have unknown consecuences.
 
 Local GPIO bus
 ''''''''''''''
@@ -278,10 +307,6 @@ Finally one can change the master clock (or main clock) to be clocked from the P
 .. code-block:: c++
 
     pm_select_mck(MCK_SOURCE_PLL0);
-
-.. hint::
-
-    There are two PLLs available in UC3A1, which Aery32 Framework provide quick access via ``pll0`` and ``pll1`` global variables. Otherwise you should be more verbose and use ``AVR32_PM.PLL[0]`` and ``AVR32_PM.PLL[1]``.
 
 Fine tune the CPU and Periheral BUS frequencies
 '''''''''''''''''''''''''''''''''''''''''''''''
