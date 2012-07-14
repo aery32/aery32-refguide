@@ -539,9 +539,9 @@ Here is the complete code for the above SPI initialization and transmission:
     #include <aery32/spi.h>
     #include "board.h"
 
-    #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
-
     using namespace aery;
+
+    #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
 
     int main(void)
     {
