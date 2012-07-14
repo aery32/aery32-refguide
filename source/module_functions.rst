@@ -421,7 +421,7 @@ Respectively, the clock domains can be fetched like this
     pba_hz = pm_get_fclkdomain(CLKDOMAIN_PBA);
     pbb_hz = pm_get_fclkdomain(CLKDOMAIN_PBB);
 
-These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, make sure to put the new value in CFLAGS manually or via Makefile, like ``CFLAGS+=-DF_OSC0=8000000UL``.
+These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, change the default values by editing ``CPPFLAGS`` in ``aery32/Makefile``.
 
 Real-time Counter (rtc), ``#include <aery32/rtc.h>``
 ----------------------------------------------------
@@ -540,6 +540,8 @@ Here is the complete code for the above SPI initialization and transmission:
     #include "board.h"
 
     #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
+
+    using namespace aery;
 
     int main(void)
     {
