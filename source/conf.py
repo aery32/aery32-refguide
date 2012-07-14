@@ -48,7 +48,7 @@ copyright = u'2012, Muiku Oy'
 # built documents.
 #
 # The short X.Y version.
-version = ''
+version = 'master branch'
 # The full version, including alpha/beta/rc tags.
 release = ''
 
