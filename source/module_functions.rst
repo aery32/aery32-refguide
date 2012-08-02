@@ -144,7 +144,7 @@ Flash is accessed via pages that are 512 bytes long. So read and write operation
 
     char buf[512];
     flashc_read_page(1, buf); /* Read page 1 to page buffer */
-    strcpy(buf, "foo");        /* Save string "foo" to page buffer */
+    strcpy(buf, "foo");       /* Save string "foo" to page buffer */
     flashc_save_page(1, buf); /* Write page buffer into page 1 */
 
 You can also read and write other type values as long as the page buffer size is 512 bytes long.
