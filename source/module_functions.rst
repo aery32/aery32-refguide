@@ -158,15 +158,19 @@ After saving the page it can be locked to prevent write or erase sequences.
 
 .. code-block:: c++
 
-    flashc_lock_page(1);
+    flashc_lock_page(0); /* Locks the first page, number 0 */
 
-Locking is performed on a per-region basis, so the above statement does not lock only page one, but all pages inside the region (16 pages per region). To unlock the page call
+Locking is performed on a per-region basis, so the above statement does not lock only page zero, but all pages inside the region (16 pages per region). To unlock the page call
 
 .. code-block:: c++
 
-    flashc_unlock_page(1);
+    flashc_unlock_page(0);
 
-There are also functions that takes the region as an input param, ``flashc_lock_preg()`` and ``flashc_unlock_preg()``.
+There are also functions that takes the region as an input param, ``flashc_lock_preg()`` and ``flashc_unlock_preg()``. Furthermore, there is a function to check if the page is empty
+
+.. code-block:: c++
+
+    flashc_isempty(0);
 
 .. warning::
 
