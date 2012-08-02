@@ -97,13 +97,13 @@ How to introduce new source files in the Makefile
 
 Let's say I would like to separate my source code into a ``my/`` subdirectory under the project root. After creating the directory, I have to edit the Makefile. So, open the Makefile into your editory and find the line::
 
-    SOURCES=$(wildcard *.cpp)
+    SOURCES=$(wildcard *.cpp) $(wildcard *.c)
 
 Edit this line so that it looks like this::
 
-    SOURCES=$(wildcard *.cpp) $(wildcard my/*.cpp)
+    SOURCES=$(wildcard *.cpp) $(wildcard *.c) $(wildcard my/*.cpp)
 
-You can also add single .c files at the end of this list.
+You can also add single ``.c`` or ``.cpp`` files at the end of this list.
 
 Example programs
 ----------------
