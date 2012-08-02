@@ -1,10 +1,10 @@
 UC3A0/1 system clocks described
 ===============================
 
-.. figure:: ../images/uc3_clocks.png
-    :width: 100 %
+.. image:: ../images/uc3_clocks.png
+    :width: 8 cm
     :align: right
-    :figwidth: 50 %
+    :target: _images/uc3_clocks.png
     :alt: UC3A0/1 system clocks described
 
 UC3A0/1 chips have quite a complex clock system as it can be seen from the figure. At start-up the UC3 runs at its internal RC oscillator that's 115 kHz. This means that the Main clock has been clocked from this RC oscillator and that the CPU frequency equals to 115 kHz. That's because by default the clock domain prescaler has been disabled. This also means that all the other clock domains, that are HSB, PBA and PBB, runs at 115 kHz frequency as well.

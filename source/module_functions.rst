@@ -16,7 +16,7 @@ The common calling order for modules is the following: 1) initialize, 2) do some
 
 The init function may also look like ``module_init_something()``, for example, the SPI can be initialized as a master or slave, so the naming convention declares two init functions for SPI module: ``spi_init_master()`` and ``spi_init_slave()``.
 
-If the module has been disabled, by using ``module_disable()`` function, it can be re-enabled without calling the init or setup functions. Most of the modules can also be reinitialized without disabling it before. For example, general clock frequencies can be changed by just calling the init function again -- this is also the quickest way to change this frequency
+If the module has been disabled, by using ``module_disable()`` function, it can be re-enabled without calling the init or setup functions. Most of the modules can also be reinitialized without disabling it before. For example, general clock frequencies can be changed by just calling the init function again -- this is also the quickest way to change the frequency
 
 .. code-block:: c++
 
@@ -26,40 +26,44 @@ If the module has been disabled, by using ``module_disable()`` function, it can 
     /* Change the frequency divider */
     pm_init_gclk(GCLK0, GCLK_SOURCE_PLL1, 6);
 
-Initialization and setup functions set sane default values for those properties that cannot be given via function parameters. These default values should work for 80-90% of use cases. However, sometimes you may have to fine tune these properties to match your needs. This can be done by bitbanging the module registers after you have called the init or setup function. For example, the SPI chip select baudrate is hard coded to `MCK/255` within the ``spi_setup_npcs()`` function. To make SPI bus faster you can bitbang the `SCRB bit` in `CSRX register`, where `X` is the NPCS number. For the register names you have to consult to the datasheet.
+If you have read through the MCU datasheet, you may wonder why you cannot set all the possible settings with the initialization and setup functions. This is because these functions set sane default values for those properties. These default values should work for 80-90% of use cases. However, sometimes you may have to fine tune these properties to match your needs. This can be done by bitbanging the module registers after you have called the init or setup function. For example, the SPI chip select baudrate is hard coded to `MCK/255` within the ``spi_setup_npcs()`` function. To make SPI bus faster you can bitbang the `SCRB bit` within `CSRn register`, where `n` is the NPCS number.
 
 .. code-block:: c++
 
     spi_setup_npcs(spi0, 0, SPI_MODE1, 16);
-    spi0->CSR0.scbr = 32; /* SPI baudrate of the CS0 is now MCK/32 */
+    spi0->CSR0.scbr = 32; /* SPI baudrate for the CS0 is now MCK/32 */
 
 .. note::
 
-    Modules never take care of pin initialization, except GPIO module that's for this specific purpose. So, for example, when initializing SPI you have to take care of pin configuration:
+    Modules never take care of pin initialization, except GPIO module that's for this specific purpose. So, for example, when initializing SPI you have to take care of pin configuration!
 
     .. code-block:: c++
 
         #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
         gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
 
-Global variables
-----------------
+Global variables and error handling
+-----------------------------------
 
-Every module declares global shortcut variables to the main registers of the module. For example, the GPIO module declares ``porta``, ``b`` and ``c`` global pointers to the MCU ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively. Similarly, ``pll0`` and ``pll1`` declared in PM module provide quick access to PLLs. Otherwise you should have used ``AVR32_PM.PLL[0]`` and ``AVR32_PM.PLL[1]``.
+Every module declares global shortcut variables to the main registers of the module. For example, the GPIO module declares ``porta``, ``b`` and ``c`` global pointers to the MCU ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively. Similarly, ``pll0`` and ``pll1`` declared in PM module provide quick access to MCU PLL registers etc.
 
 .. hint::
 
-    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``gpio_toggle_pin(AVR32_PIN_PC04)`` you could write ``portc->ovrt = (1 << 4);`` Refer to datasheet pages 175--177 for GPIO Register Map.
+    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``gpio_toggle_pin(AVR32_PIN_PC04)`` you could have written ``portc->ovrt = (1 << 4);`` This is also way how you can set/unset/toggle multiple pins at once. Refer to the UC3A0/1 datasheet pages 175--177 for GPIO Register Map.
 
-Analog-to-digital conversion (adc), ``#include <aery32/adc.h>``
----------------------------------------------------------------
+Error handling
+''''''''''''''
 
-UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The maximum ADC clock frequency for the 10-bit precision is 5 MHz. For 8-bit precision it is 8 MHz. This frequency is related to the frequency of the Peripheral Bus A (PBA). When initialized a correct prescaler value has to be used. ``adc_init()`` will check this for you and will return -1 if this clock requirement was not fullfilled.
+All module functions will return -1 on general error. This will happen most probably because of invalid parameter values. Greater nagative return values have a specific meaning and a macro definition in the module's header file. For example, ``flashc_save_page()`` of Flash Controller may return -2 and -3, which are named with ``E`` prefixed names ``EFLASH_PAGE_LOCKED`` and ``EFLASH_PROG_ERR``, respectively.
+
+Analog-to-digital conversion, ``#include <aery32/adc.h>``
+---------------------------------------------------------
+
+UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The maximum ADC clock frequency for the 10-bit precision is 5 MHz. For 8-bit precision it is 8 MHz. This frequency is related to the frequency of the Peripheral Bus A (PBA). When initialized a correct prescaler value has to be used. ``adc_init()`` will check this for you. -1 will be returned, if the clock requirement was not fullfilled.
 
 .. code-block:: c++
 
     int errno;
-
     errno = adc_init(
         7,    /* prescal, adclk = pba_clk / (2 * (prescal+1)) */
         true, /* hires, 10-bit (false would be 8-bit) */
@@ -67,7 +71,7 @@ UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The max
         0     /* startup, startup time = (startup + 1) * 8 / adclk */
     );
 
-The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. When initialized, you have to enable the channels that you like to use for the conversion. This is done through masking, so there is use for the good old ``<<`` bitwise shift operator.
+The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. After initialization, you have to enable the channels that you like to use for the conversion. This can be done through the masking, so there is use for the good old ``<<`` bitwise shift operator.
 
 .. code-block:: c++
 
@@ -81,17 +85,17 @@ Now you can start the conversion. Be sure to wait that the conversion is ready b
     uint16_t result;
 
     adc_start_cnv();
-    while (!adc_cnv_isrdy(1 << 3));
+    while (adc_isbusy(1 << 3));
     result = adc_read_cnv(3);
 
-If  you only want to know the latest conversion, you can use these functions
+If you only want to read the latest conversion, whatever was the channel, you can omit the channel mask for busy function and read the conversion with another function like this
 
 .. code-block:: c++
 
-    while (!adc_nextcnv_isrdy());
-    result = adc_read_lastcnv(3);
+    while (adc_isbusy());
+    result = adc_read_lastcnv();
 
-To setup the ADC hardware trigger call ``adc_setup_trigger()`` after init
+To setup the ADC hardware trigger, call ``adc_setup_trigger()`` after init
 
 .. code-block:: c++
 
@@ -110,10 +114,75 @@ Other possible trigger sources, that can be used for example with the Timer/Coun
 
 .. note::
 
-    You always have to call ``adc_start_cnv()`` individually for every started conversion.
+    You always have to call ``adc_start_cnv()`` individually for every started conversion. If you suspect that your conversions may have overrun, you can check this with the ``adc_hasoverrun(chamask)`` function. If you omit the channel mask input param, all the channels will be checked, being essentially the same than calling ``adc_hasoverrun(0xff)``.
 
-General Periheral Input/Output (gpio), ``#include <aery32/gpio.h>``
--------------------------------------------------------------------
+Flash Controller, ``#include <aery32/flashc.h>``
+------------------------------------------------
+
+.. image:: ../images/avr32_flash_structure.png
+    :width: 8 cm
+    :align: right
+    :target: _images/avr32_flash_structure.png
+    :alt: AVR32 UC3A1/0 Flash Structure
+
+Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the right hand side figure. The init function will set the flash wait state and sense amplifier state (enabled or disabled)
+
+.. code-block:: c++
+
+    flashc_init(FLASH_1WS, true); /* one wait state, sense amp enabled */
+
+If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state.
+
+Read and write operations
+'''''''''''''''''''''''''
+
+Flash is accessed via pages that are 512 bytes long. So read and write operations must be 512 bytes, like this
+
+.. code-block:: c++
+
+    char pbuf[512];
+    flashc_read_page(1, pbuf); /* Read page 1 to page buffer */
+    strcpy(buf, "foo");        /* Save string "foo" to page buffer */
+    flashc_save_page(1, pbuf); /* Write page buffer into page 1 */
+
+You can also read and write other type values as long as the page buffer size is 512 bytes long.
+
+.. code-block:: c++
+
+    uint16_t buf16[256];
+    uint32_t buf32[128];
+
+After saving the page it can be locked to prevent write or erase sequences.
+
+.. code-block:: c++
+
+    flashc_lock_page(1);
+
+Locking is performed on a per-region basis, so the above statement does not lock only page one, but all pages inside the region (16 pages per region). To unlock the page call
+
+.. code-block:: c++
+
+    flashc_unlock_page(1);
+
+There are also functions that takes the region as an input param, ``flashc_lock_preg()`` and ``flashc_unlock_preg()``.
+
+.. warning::
+
+    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255. If you want to lock the flash region for the uploaded program, you can use this function to do that
+
+    .. code-block:: c++
+
+        void lock_flash_programspace(void)
+        {
+            int i = FLASH_LAST_PAGE;
+            for (; flashc_page_isempty(i); i--);
+            for (; i >= 0; i--) {
+                flashc_lock_page(i);
+            }
+        }
+
+General Periheral Input/Output, ``#include <aery32/gpio.h>``
+------------------------------------------------------------
 
 To initialize any pin to be output high, there is a oneliner which can be used
 
@@ -208,8 +277,8 @@ To disable local bus and go back to normal operation call
 
     gpio_disable_localbus();
 
-Interrupt Controller (intc), ``#include <aery32/intc.h>``
----------------------------------------------------------
+Interrupt Controller, ``#include <aery32/intc.h>``
+--------------------------------------------------
 
 Before enabling interrupts define and register your interrupt service routine (ISR) functions. First write ISR function as you would do for any other functions
 
@@ -247,8 +316,8 @@ After initialization you can enable and disable interrupts globally by using the
 
     intc_disable_globally();
 
-Power Manager (pm), ``#include <aery32/pm.h>``
-----------------------------------------------
+Power Manager, ``#include <aery32/pm.h>``
+-----------------------------------------
 
 Power Manager controls integrated oscillators and PLLs among other power related things. By default the MCU runs on the internal RC oscillator (115 kHz). However, it's often preferred to switch to the higher CPU clock frequency, so one of the first things what to do after the power up, is the initialization of oscillators. Aery32 Development Board has 12 MHz crystal oscillator connected to the OSC0. This can be started as
 
@@ -331,7 +400,7 @@ The possible clock domain selections are
 
 .. important::
 
-    PBA and PBB clocks have to be less or equal to CPU clock.
+    PBA and PBB clocks have to be less or equal to CPU clock. Morever, the flash wait state has to been taken into account at this point. If the CPU clock is over 33 MHz, the Flash controller has to be initialized with one wait state, like this ``flashc_init(FLASH_1WS, true)``. If the CPU clock speed is less or equal than 33 MHz, zero wait state is the correct setting for the flash.
 
 .. hint::
 
@@ -423,18 +492,18 @@ Respectively, the clock domains can be fetched like this
 
 These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, change the default values by editing ``CPPFLAGS`` in ``aery32/Makefile``.
 
-Real-time Counter (rtc), ``#include <aery32/rtc.h>``
-----------------------------------------------------
+Real-time Counter, ``#include <aery32/rtc.h>``
+----------------------------------------------
 
 Real-time counter is for accurate real-time measurements. It enables periodic interrupts at long intervals and the measurement of real-time sequences. RTC has to be init to start counting from the chosen value to the chosen top value. This can be done in this way
 
 .. code-block:: c++
 
     rtc_init(
-        0,            /* value where to start counting */
-        0xffffffff,   /* top value where to count */
-        0,            /* prescaler for RTC clock */
-        RTC_SOURCE_RC /* source oscillator */
+        RTC_SOURCE_RC, /* source oscillator */
+        0,             /* prescaler for RTC clock */
+        0,             /* value where to start counting */
+        0xffffffff     /* top value where to count */
     );
 
 The available source oscillators are:
@@ -450,8 +519,8 @@ When initialized, remember to enable it too
 
 The boolean parameter here, tells if the interrupts are enabled or not. Here the interrupts are not enabled so it is your job to poll RTC to check whether the top value has been reached or not.
 
-Serial Peripheral Bus (spi), ``#include <aery32/spi.h>``
---------------------------------------------------------
+Serial Peripheral Bus, ``#include <aery32/spi.h>``
+--------------------------------------------------
 
 AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
