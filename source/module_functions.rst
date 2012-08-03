@@ -136,7 +136,7 @@ If CPU clock speed is higher than 33 MHz you have to use one wait state for flas
 Read and write operations
 '''''''''''''''''''''''''
 
-Flash is accessed via pages that are 512 bytes long, and only 512 bytes. So read and write operations must be 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
+Flash is accessed via pages that are 512 bytes long, and only 512 bytes. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
 .. code-block:: c++
 
@@ -147,9 +147,11 @@ Flash is accessed via pages that are 512 bytes long, and only 512 bytes. So read
     strcpy(buf, "foo");                     /* Save string "foo" to page buffer */
     flashc_save_page(FLASH_LAST_PAGE, buf); /* Write page buffer back to flash */
 
-You can also read and write values with different types as long as the page buffer size is 512 bytes long.
+You can also read and write values with different types as long as the page buffer size is that 512 bytes--Yes, 512 bytes per page.
 
 .. code-block:: c++
+
+    extern "C" #include <inttypes.h>
 
     uint16_t buf16[256];
     uint32_t buf32[128];
