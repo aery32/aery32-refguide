@@ -174,18 +174,7 @@ There are also functions that takes the region as an input param, ``flashc_lock_
 
 .. warning::
 
-    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255. If you want to lock the flash region for the uploaded program, you can use this function to do that
-
-    .. code-block:: c++
-
-        void lock_flash_programspace(void)
-        {
-            int i = FLASH_LAST_PAGE;
-            for (; flashc_page_isempty(i); i--);
-            for (; i >= 0; i--) {
-                flashc_lock_page(i);
-            }
-        }
+    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255.
 
 General Periheral Input/Output, ``#include <aery32/gpio.h>``
 ------------------------------------------------------------
