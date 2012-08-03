@@ -131,12 +131,12 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 
     flashc_init(FLASH_1WS, true); /* one wait state, sense amp enabled */
 
-If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state.
+If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state, ``FLASH_0WS``.
 
 Read and write operations
 '''''''''''''''''''''''''
 
-Flash is accessed via pages that are 512 bytes long. So read and write operations must be 512 bytes, like this
+Flash is accessed via pages that are 512 bytes long, and only 512 bytes. So read and write operations must be 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
 .. code-block:: c++
 
@@ -147,7 +147,7 @@ Flash is accessed via pages that are 512 bytes long. So read and write operation
     strcpy(buf, "foo");                     /* Save string "foo" to page buffer */
     flashc_save_page(FLASH_LAST_PAGE, buf); /* Write page buffer back to flash */
 
-You can also read and write other type values as long as the page buffer size is 512 bytes long.
+You can also read and write values with different types as long as the page buffer size is 512 bytes long.
 
 .. code-block:: c++
 
@@ -160,7 +160,7 @@ After saving the page it can be locked to prevent write or erase sequences.
 
     flashc_lock_page(0); /* Locks the first page, number 0 */
 
-Locking is performed on a per-region basis, so the above statement does not lock only page zero, but all pages inside the region (16 pages per region). To unlock the page call
+Locking is performed on a per-region basis, so the above statement does not lock only page zero, but all pages within the region (16 pages per region). To unlock the page call
 
 .. code-block:: c++
 
