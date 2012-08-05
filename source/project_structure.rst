@@ -15,6 +15,14 @@ Aery32 Software Framework provides a complete project structure to start AVR32 d
 
 It is intended that you work under the root directory most of the time as that is the place where you keep adding your ``.c``, ``.cpp`` and ``.h`` source files. Notice that Aery32 Framework is a C/C++ framework and thus you can write .c and .cpp files.
 
+**aery32/**
+
+This directory contains the source files of Aery32 library. The archive of the library (.a file) appears in this directory after the first compile process. The ``aery32/`` subdirectory contains the header files of the library. Linker scripts, which are essential files to define the MCU memory structure are placed under the ``ldscripts/`` directory. However, you should not need to hassle with those files.
+
+**examples/**
+
+All the example programs are placed under this directory. Every program is completely independent. Read more below.
+
 **main.cpp**
 
 The ``main.cpp`` source file contains the default main function where to start.
@@ -134,14 +142,6 @@ The default board initialization function, ``init_board()``, can be found here. 
              */
 
     }
-
-**aery32/**
-
-This directory contains the source files of Aery32 library. The archive of the library (.a file) appears in this directory after the first compile process. The ``aery32/`` subdirectory contains the header files of the library. Linker scripts, which are essential files to define the MCU memory structure are placed under the ``ldscripts/`` directory. However, you should not need to hassle with those files.
-
-**examples/**
-
-All the example programs are placed under this directory. Every program is completely independent. Read more below.
 
 Makefile
 --------
