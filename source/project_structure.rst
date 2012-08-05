@@ -13,7 +13,7 @@ Aery32 Software Framework provides a complete project structure to start AVR32 d
         main.cpp
         Makefile
 
-It is intended that you work under the root directory most of the time as that is the place where you keep adding your .c source files and .h header files.
+It is intended that you work under the root directory most of the time as that is the place where you keep adding your ``.c``, ``.cpp`` and ``.h`` source files. Notice that Aery32 Framework is a C/C++ framework and thus you can write .c and .cpp files.
 
 **main.cpp**
 
@@ -48,9 +48,92 @@ The ``main.cpp`` source file contains the default main function where to start.
 
 This is a place for the board specific function prototypes and supportive ``#define`` macros. These macros provide a way to do configuration, for example.
 
+.. code-block:: c++
+    :linenos:
+
+    #ifndef __BOARD_H
+    #define __BOARD_H
+
+    extern "C" {
+        #include <inttypes.h>
+    }
+
+    // ----------------------------------------------------------------------
+    // Board specific settings
+    // ----------------------------------------------------------------------
+    #define F_CPU 66000000UL
+
+    #define LED AVR32_PIN_PC04
+
+    #define ADC_VREF 3.0
+    #define ADC_BITS 10
+
+    #define HSBMASK_DEFAULT 0xFFFFFFFF
+    #define PBAMASK_DEFAULT 0xFFFFFFFF
+    #define PBBMASK_DEFAULT 0xFFFFFFFF
+
+
+    // ----------------------------------------------------------------------
+    // Board functions
+    // ----------------------------------------------------------------------
+    void init_board(void);
+
+    static inline double cnv2volt(uint32_t cnv)
+    {
+        return cnv * (ADC_VREF / (1UL << ADC_BITS));
+    }
+
+    #endif
+
+
 **board.cpp**
 
 The default board initialization function, ``init_board()``, can be found here. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basicly the external oscillator ``OCS0`` is started and the master clock frequency is set to 66 MHz. If you like to change the master clock frequency or want to change the way how the board is initialized, this is the place where to do it.
+
+.. code-block:: c++
+    :linenos:
+
+    #include "board.h"
+    #include <aery32/pm.h>
+    #include <aery32/gpio.h>
+    #include <aery32/flashc.h>
+
+    using namespace aery;
+
+    void init_board(void)
+    {
+        gpio_init_pins(porta, 0xffffffff, GPIO_INPUT);
+        gpio_init_pins(portb, 0xffffffff, GPIO_INPUT);
+        gpio_init_pins(portc, 0x0000003f, GPIO_INPUT);
+
+        pm_start_osc(0, OSC_MODE_GAIN3, OSC_STARTUP_36ms);
+        pm_wait_osc_to_stabilize(0);
+
+        pm_init_pllvco(pll0, PLL_SOURCE_OSC0, 11, 1, false); // VCO0 = 132 MHz
+        pm_enable_pll(pll0, true); // PLL0 = 66 MHz
+        pm_wait_pll_to_lock(pll0);
+
+        pm_init_pllvco(pll1, PLL_SOURCE_OSC0, 16, 1, true); // VCO1 = 192 MHz
+        pm_enable_pll(pll1, true); // PLL1 = 96 MHz
+        pm_wait_pll_to_lock(pll1);
+
+        flashc_init(FLASH_1WS, true); // One wait state for flash
+        pm_select_mck(MCK_SOURCE_PLL0); // Main clock speed is now 66 MHz
+
+        /*
+         * Peripheral clock masking. By default all modules are enabled.
+         * You might be interested in to disable modules you are not using. */
+        pm->hsbmask = HSBMASK_DEFAULT;
+        pm->pbamask = PBAMASK_DEFAULT;
+        pm->pbbmask = PBBMASK_DEFAULT;
+
+        while (!(pm->isr & AVR32_PM_ISR_MSKRDY_MASK));
+            /*
+             * Clocks are now masked according to (CPU/HSB/PBA/PBB)_MASK
+             * registers.
+             */
+
+    }
 
 **aery32/**
 
@@ -58,8 +141,7 @@ This directory contains the source files of Aery32 library. The archive of the l
 
 **examples/**
 
-All the example programs are placed under this directory. Every program is completely independent. To test one you can just replace the ``main.c`` with one of the example programs and it works out of box when uploaded into the board. Otherwise if you do not need these files you can remove this folder.
-
+All the example programs are placed under this directory. Every program is completely independent. Read more below.
 
 Makefile
 --------
