@@ -498,13 +498,13 @@ Start by initializing the PWM channel which you want to use
 
     pwm_init_channel(2, MCK);
 
-The above initializer sets channel's two PWM frequency to equal to Main clock and omits the duration and period. You could have defined those too like this
+The above initializer sets channel's two PWM frequency to be equal to the main clock and omits the duration and period. You could have defined those too like this
 
 .. code-block:: c++
 
     pwm_init_channel(2, MCK, 50, 100);
 
-This gives you duty cycle of 50%. The default values for the duration and period are 0 and 0xFFFFF, respectively. The maximum value for the duration and period are 0xFFFFF. When the period is in its maximum value the duty cycle can be set most accurately. The other possible frequency selections in addtion to ``MCK`` are
+This gives you duty cycle of 50%. The default values for the duration and period are 0 and 0xFFFFF, respectively. The maximum value for the duration and period are 0xFFFFF. When the period is in its maximum value the duty cycle can be set most accurately. The other possible frequency selections, in addtion to ``MCK``, are
 
 .. hlist::
     :columns: 3
@@ -522,13 +522,13 @@ This gives you duty cycle of 50%. The default values for the duration and period
     - ``PWM_CLKA``
     - ``PWM_CLKB``
 
-``PWM_CLKA`` and ``PWM_CLKB`` are two extra PWM clock sources that can be used for any channel. The difference to other sources is an additional linear divider block that comes after the MCK prescaler. To initialize the divider block for the ``PWM_CLKA`` and ``PWM_CLKB`` call
+``PWM_CLKA`` and ``PWM_CLKB`` are two extra PWM clock sources. The difference to other sources is an additional linear divider block that comes after the MCK prescaler. To initialize the divider block for the ``PWM_CLKA`` and ``PWM_CLKB`` call
 
 .. code-block:: c++
 
-    pwm_init_divab(MCK, 10, MCK_DIVIDEd_BY_2, 10);
+    pwm_init_divab(MCK, 10, MCK_DIVIDED_BY_2, 10);
 
-Now ``PWM_CLKA`` has the frequency of *MCK / 10* Hz and ``PWM_CLKB`` is *MCK / 2 / 10* Hz. If don't care about ``CLKB``, you can omit the last two of the parameters like this
+Now ``PWM_CLKA`` has the frequency of *MCK / 10* Hz and ``PWM_CLKB`` is *MCK / 2 / 10* Hz. If you don't care about ``CLKB``, you can omit the last two of the parameters like this
 
 .. code-block:: c++
 
@@ -536,7 +536,10 @@ Now ``PWM_CLKA`` has the frequency of *MCK / 10* Hz and ``PWM_CLKB`` is *MCK / 2
 
 .. note::
 
-If the divider of ``PWM_CLKA`` or ``B`` has been set to zero, then the ``PWM_CLK`` will equal to the prescaler selection. So it does not make sense to define it zero.
+If the divider of ``PWM_CLKA`` or ``B`` has been set zero, then the ``PWM_CLK`` will equal to the prescaler selection. However, it does not make sense to define the extra divider zero.
+
+Setting up PWM mode
+'''''''''''''''''''
 
 Before enabling the initialized PWM channel or channels, you may like to setup the channel mode to set PWM alignment and polarity
 
@@ -557,7 +560,7 @@ The only parameter of the enable function is a bitmask of the channels to be ena
 Modulating the PWM output waveform
 ''''''''''''''''''''''''''''''''''
 
-You can modulate the PWM output waveform when it is active by changing its duty cycle
+You can modulate the PWM output waveform when it is active by changing its duty cycle like this
 
 .. code-block:: c++
 
