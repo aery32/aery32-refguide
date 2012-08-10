@@ -549,13 +549,28 @@ Before enabling the initialized PWM channel or channels, you may like to setup t
 
 The alignment (left or center, ``LEFT_ALIGNED`` and ``CENTER_ALIGNED``, respectively) defines the shape of PWM function, see datasheet page 680. The polarity defines the polarity of the duty cycle. With ``START_HIGH``, the duty cycle is 100% when *duration / period* of the PWM function gives 1. With ``START_LOW`` you would get 100% duty cycle when the *duration / period* is 0.
 
-Now it's time to enable the PWM. Several channels can be initialized at once to get synchronized output
+Enabling and disabling the PWM
+''''''''''''''''''''''''''''''
+
+PWM is enabled and disabled by channels. Several channels can be enabled at once to get synchronized output. To enable channels two and four call
 
 .. code-block:: c++
 
-    pwm_enable(1 << 2); /* Enables channel two */
+    pwm_enable((1 << 2)|(1 << 4));
 
-The only parameter of the enable function is a bitmask of the channels to be enabled.
+Same goes for the disabling the channels. The following call will disable the channel two
+
+.. code-block:: c++
+
+    pwm_disable(1 << 2);
+
+The parameter of the enable and disable functions is a bitmask of the channels to be enabled or disabled. There is also function to check if the channel has been enabled already. The following snippet will do something if the channel two is enabled
+
+.. code-block:: c++
+
+    if(pwm_isenabled(1 << 2)) {
+        /* do something */
+    }
 
 Modulating the PWM output waveform
 ''''''''''''''''''''''''''''''''''
