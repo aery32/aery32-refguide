@@ -121,11 +121,10 @@ Flash Controller, ``#include <aery32/flashc.h>``
 
 .. image:: ../images/avr32_flash_structure.png
     :width: 8 cm
-    :align: right
     :target: _images/avr32_flash_structure.png
     :alt: AVR32 UC3A1/0 Flash Structure
 
-Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the right hand side figure. The init function will set the flash wait state and sense amplifier state.
+Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the figure above. The init function of the Flash Controller sets the flash wait state and the state of the sense amplifiers. 
 
 .. code-block:: c++
 
@@ -133,12 +132,12 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 
 .. warning::
 
-    If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state, ``FLASH_0WS``.
+    Setting up the correct flash wait state is extremely important! If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state, ``FLASH_0WS``. Note that this has to be set correctly even if the flash read and write operations, described below, are not used.
 
 Read and write operations
 '''''''''''''''''''''''''
 
-Flash is accessed via pages that are 512 bytes long, and only 512 bytes. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
+Flash memory is accessed via pages that are 512 bytes long, and only 512 bytes. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
 .. code-block:: c++
 
@@ -590,13 +589,13 @@ In case you want to specify completely new values for the period and duration us
     pwm_update_period(2, 0x1000); /* Updates channel's two period */
     pwm_update_duration(2, 0x10); /* Updates channel's two duration */
 
-To keep PWM output at the desired duty cycle for the amount of periods, before changing its value again, use the wait function. For example, to wait 100 PWM periods on channel two call
+To keep PWM output at the desired state for the amount of periods, before changing its state again, use the wait function. For example, to wait 100 PWM periods for channel two, call
 
 .. code-block:: c++
     
     pwm_wait_periods(2, 100);
 
-With the combination of update functions and wait function, you can make a smoohtly blinking LED
+With the combination of the update functions and the wait function, you can make a smoohtly blinking LED, just like this
 
 .. code-block:: c++
 
