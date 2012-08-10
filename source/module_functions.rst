@@ -499,13 +499,15 @@ Start by initializing the PWM channel which you want to use
 
     pwm_init_channel(2, MCK);
 
-The above initializer sets channel's two PWM frequency to be equal to the main clock and omits the duration and period. You could have defined those too like this
+The above initializer sets channel's two PWM frequency equal to the main clock and omits the duration and period for default values. The default values for the duration and period are 0 and 0xFFFFF, respectively. If you like to start the channel with different values, you could have defined those too like this
 
 .. code-block:: c++
 
     pwm_init_channel(2, MCK, 50, 100);
 
-This gives you duty cycle of 50%. The default values for the duration and period are 0 and 0xFFFFF, respectively. The maximum value for the duration and period are 0xFFFFF. When the period is in its maximum value the duty cycle can be set most accurately. The other possible frequency selections, in addtion to ``MCK``, are
+This gives you duty cycle of 50% from start. The maximum value for the duration and period are 0xFFFFF. It is also worth noting that when the period is in its maximum value, channel's the duty cycle can be set most accurately.
+
+The above initializers set the channel's frequency equal to the main clock. The other possible frequency selections, in addtion to ``MCK``, are
 
 .. hlist::
     :columns: 3
