@@ -588,6 +588,31 @@ In case you want to specify completely new values for the period and duration us
     pwm_update_period(2, 0x1000); /* Updates channel's two period */
     pwm_update_duration(2, 0x10); /* Updates channel's two duration */
 
+To keep PWM output at the desired duty cycle for the amount of periods, before changing its value again, use the wait function. For example, to wait 100 PWM periods on channel two call
+
+.. code-block:: c++
+    
+    pwm_wait_periods(2, 100);
+
+With the combination of update functions and wait function, you can make a smoohtly blinking LED
+
+.. code-block:: c++
+
+    uint8_t channel = 2;
+    uint32_t duration = 0;
+    uint32_t period = 0x1000;
+
+    for (;;) {
+        for (; duration < period; duration++) {
+            pwm_update_duration(channel, duration);
+            pwm_wait_periods(channel, 500);
+        }
+        for (; duration > 0; duration--) {
+            pwm_update_duration(channel, duration);
+            pwm_wait_periods(channel, 500);
+        }
+    }
+
 .. note::
 
     Duration has to be smaller or equal to period.
