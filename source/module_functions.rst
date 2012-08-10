@@ -125,13 +125,15 @@ Flash Controller, ``#include <aery32/flashc.h>``
     :target: _images/avr32_flash_structure.png
     :alt: AVR32 UC3A1/0 Flash Structure
 
-Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the right hand side figure. The init function will set the flash wait state and sense amplifier state (enabled or disabled)
+Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the right hand side figure. The init function will set the flash wait state and sense amplifier state.
 
 .. code-block:: c++
 
-    flashc_init(FLASH_1WS, true); /* one wait state, sense amp enabled */
+    flashc_init(FLASH_1WS, true);
 
-If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state, ``FLASH_0WS``.
+.. warning::
+
+    If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state, ``FLASH_0WS``.
 
 Read and write operations
 '''''''''''''''''''''''''
@@ -568,8 +570,8 @@ The parameter of the enable and disable functions is a bitmask of the channels t
 
 .. code-block:: c++
 
-    if(pwm_isenabled(1 << 2)) {
-        /* do something */
+    if (pwm_isenabled(1 << 2)) {
+        /* Do something */
     }
 
 Modulating the PWM output waveform
