@@ -489,6 +489,91 @@ Respectively, the clock domains can be fetched like this
 
 These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, change the default values by editing ``CPPFLAGS`` in ``aery32/Makefile``.
 
+Pulse Width Modulation, ``#include <aery32/pwm.h>``
+---------------------------------------------------
+
+Start by initializing the PWM channel which you want to use
+
+.. code-block:: c++
+
+    pwm_init_channel(2, MCK); /* Init channel two with PWM frequency that equals to Main clock */
+
+You could also define the duration and period like this
+
+.. code-block:: c++
+
+    pwm_init_channel(2, MCK, 50, 100);
+
+This gives you duty cycle of 50%. The default values for the duration and period are 0 and 0xFFFFF, respectively. This gives the duty cycle of 0%. The maximum value for the duration and period are 0xFFFFF. When the period is in its maximum value the duty cycle can be set most accurately. The other possible frequency selections in addtion to ``MCK`` are
+
+.. hlist::
+    :columns: 3
+
+    - ``MCK_DIVIDED_BY_2``
+    - ``MCK_DIVIDED_BY_4``
+    - ``MCK_DIVIDED_BY_8``
+    - ``MCK_DIVIDED_BY_16``
+    - ``MCK_DIVIDED_BY_32``
+    - ``MCK_DIVIDED_BY_64``
+    - ``MCK_DIVIDED_BY_128``
+    - ``MCK_DIVIDED_BY_256``
+    - ``MCK_DIVIDED_BY_512``
+    - ``MCK_DIVIDED_BY_1024``
+    - ``PWM_CLKA``
+    - ``PWM_CLKB``
+
+``PWM_CLKA`` and ``PWM_CLKB`` are two extra PWM clock sources that can be used for any channel. The difference to other sources is an additional linear divider block that comes after the MCK prescaler. To initialize the divider block for the ``PWM_CLKA`` and ``PWM_CLKB`` call
+
+.. code-block:: c++
+
+    pwm_init_divab(MCK, 10, MCK_DIVIDEd_BY_2, 10);
+
+Now ``PWM_CLKA`` has the frequency of *MCK / 10* Hz and ``PWM_CLKB`` is *MCK / 2 / 10* Hz. If don't care about ``CLKB``, you can omit the last two of the parameters like this
+
+.. code-block:: c++
+
+    pwm_init_divab(MCK, 10);
+
+.. note::
+
+If the divider of ``PWM_CLKA`` or ``B`` has been set to zero, then the ``PWM_CLK`` will equal to the prescaler selection. So it does not make sense to define it zero.
+
+Before enabling the initialized PWM channel or channels, you may like to setup the channel mode to set PWM alignment and polarity
+
+.. code-block:: c++
+
+    pwm_setup_chamode(2, LEFT_ALIGNED, START_HIGH);
+
+The alignment (left or center, ``LEFT_ALIGNED`` and ``CENTER_ALIGNED``, respectively) defines the shape of PWM function, see datasheet page 680. The polarity defines the polarity of the duty cycle. With ``START_HIGH``, the duty cycle is 100% when *duration / period* of the PWM function gives 1. With ``START_LOW`` you would get 100% duty cycle when the *duration / period* is 0.
+
+Now it's time to enable the PWM. Several channels can be initialized at once to get synchronized output
+
+.. code-block:: c++
+
+    pwm_enable(1 << 2); /* Enables channel two */
+
+The only parameter of the enable function is a bitmask of the channels to be enabled.
+
+Modulating the PWM output waveform
+''''''''''''''''''''''''''''''''''
+
+You can modulate the PWM output waveform when it is active by changing its duty cycle
+
+.. code-block:: c++
+
+    pwm_update_dutycl(2, 0.5); /* Updates channel's two duty cycle to 50% */
+
+In case you want to specify completely new values for the period and duration use these two functions
+
+.. code-block:: c++
+    
+    pwm_update_period(2, 0x1000); /* Updates channel's two period */
+    pwm_update_duration(2, 0x10); /* Updates channel's two duration */
+
+.. note::
+
+    Duration has to be smaller or equal to period.
+
 Real-time Counter, ``#include <aery32/rtc.h>``
 ----------------------------------------------
 
