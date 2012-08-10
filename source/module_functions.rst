@@ -507,7 +507,7 @@ The above initializer sets channel's two PWM frequency equal to the main clock a
 
 This gives you duty cycle of 50% from start. The maximum value for both the duration and the period is 0xFFFFF. It is also worth noting that when the period is set to its maximum value, the channel's duty cycle can be set most accurately.
 
-The above initializers set the channel's frequency equal to the main clock. The other possible frequency selections, in addtion to ``MCK``, are
+The above initializers set the channel's frequency equal to the main clock. The other possible frequency selections are
 
 .. hlist::
     :columns: 3
@@ -567,7 +567,7 @@ Same goes for the disabling the channels. The following call will disable the ch
 
     pwm_disable(1 << 2);
 
-The parameter of the enable and disable functions is a bitmask of the channels to be enabled or disabled. There is also function to check if the channel has been enabled already. The following snippet will do something if the channel two is enabled
+The parameter of the enable and disable functions is a bitmask of the channels to be enabled or disabled. There is also function to check if the channel has been enabled already. The following snippet will do something if the channel two was already enabled
 
 .. code-block:: c++
 
@@ -582,16 +582,16 @@ You can modulate the PWM output waveform when it is active by changing its duty 
 
 .. code-block:: c++
 
-    pwm_update_dutycl(2, 0.5); /* Updates channel's two duty cycle to 50% */
+    pwm_update_dutycl(2, 0.5);
 
-In case you want to specify completely new values for the period and duration use these two functions
+ The above function call will update the channel's two duty cycle to 50% from the beginning of the next period. This prevents an unexpected waveform at the output of the channel. In case you want to specify completely new values for the period and duration use these two functions
 
 .. code-block:: c++
     
-    pwm_update_period(2, 0x1000); /* Updates channel's two period */
-    pwm_update_duration(2, 0x10); /* Updates channel's two duration */
+    pwm_update_period(2, 0x1000);
+    pwm_update_duration(2, 0x10);
 
-To keep PWM output at the desired state for the amount of periods, before changing its state again, use the wait function. For example, to wait 100 PWM periods for channel two, call
+Furthermore, to keep PWM output at the desired state for the amount of periods, before changing its state again, use the wait function. For example, to wait 100 periods on channel two call
 
 .. code-block:: c++
     
