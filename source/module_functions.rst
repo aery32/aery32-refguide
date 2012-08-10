@@ -505,7 +505,7 @@ The above initializer sets channel's two PWM frequency equal to the main clock a
 
     pwm_init_channel(2, MCK, 50, 100);
 
-This gives you duty cycle of 50% from start. The maximum value for both the duration and the period is 0xFFFFF. It is also worth noting that when the period is set its maximum value, channel's the duty cycle can be set most accurately.
+This gives you duty cycle of 50% from start. The maximum value for both the duration and the period is 0xFFFFF. It is also worth noting that when the period is set to its maximum value, the channel's duty cycle can be set most accurately.
 
 The above initializers set the channel's frequency equal to the main clock. The other possible frequency selections, in addtion to ``MCK``, are
 
