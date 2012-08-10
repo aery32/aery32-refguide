@@ -505,7 +505,7 @@ The above initializer sets channel's two PWM frequency equal to the main clock a
 
     pwm_init_channel(2, MCK, 50, 100);
 
-This gives you duty cycle of 50% from start. The maximum value for the duration and period are 0xFFFFF. It is also worth noting that when the period is in its maximum value, channel's the duty cycle can be set most accurately.
+This gives you duty cycle of 50% from start. The maximum value for both the duration and the period is 0xFFFFF. It is also worth noting that when the period is set its maximum value, channel's the duty cycle can be set most accurately.
 
 The above initializers set the channel's frequency equal to the main clock. The other possible frequency selections, in addtion to ``MCK``, are
 
@@ -539,7 +539,7 @@ Now ``PWM_CLKA`` has the frequency of *MCK / 10* Hz and ``PWM_CLKB`` is *MCK / 2
 
 .. note::
 
-If the divider of ``PWM_CLKA`` or ``B`` has been set zero, then the ``PWM_CLK`` will equal to the prescaler selection. However, it does not make sense to define the extra divider zero.
+If the divider of ``PWM_CLKA`` or ``PWM_CLKB`` has been set zero, then the PWM clock will equal to the ``MCK``, ``MCK_DIVIDED_BY_2``, etc. Whatever was the chosen prescaler. So it does not make sense to set the divider of the extra PWM clock zero, because then you don't have any extra clock selection.
 
 Setting up PWM mode
 '''''''''''''''''''
