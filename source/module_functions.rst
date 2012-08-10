@@ -584,14 +584,14 @@ You can modulate the PWM output waveform when it is active by changing its duty 
 
     pwm_update_dutycl(2, 0.5);
 
- The above function call will update the channel's two duty cycle to 50% from the beginning of the next period. This prevents an unexpected waveform at the output of the channel. In case you want to specify completely new values for the period and duration use these two functions
+The above function call will update the channel's two duty cycle to 50%. In case you want to specify completely new values for the period and duration use these two functions
 
 .. code-block:: c++
     
     pwm_update_period(2, 0x1000);
     pwm_update_duration(2, 0x10);
 
-Furthermore, to keep PWM output at the desired state for the amount of periods, before changing its state again, use the wait function. For example, to wait 100 periods on channel two call
+Furthermore, to keep PWM output at the desired state for the amount of periods, before changing its state again, use the wait function. This also allows you to do updates from the beginning of the next period and thus avoiding to overwrite the value too soon. For example, to wait 100 periods on channel two call
 
 .. code-block:: c++
     
