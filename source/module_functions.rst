@@ -487,7 +487,7 @@ Respectively, the clock domains can be fetched like this
     pba_hz = pm_get_fclkdomain(CLKDOMAIN_PBA);
     pbb_hz = pm_get_fclkdomain(CLKDOMAIN_PBB);
 
-These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, change the default values by editing ``CPPFLAGS`` in ``aery32/Makefile``.
+These functions assume that OSC0 and OSC1 frequencies are 12 MHz and 16 MHz, respectively. If other oscillator frequencies are used, change the default values by editing ``CXXFLAGS`` in ``aery32/Makefile``.
 
 Pulse Width Modulation, ``#include <aery32/pwm.h>``
 ---------------------------------------------------
