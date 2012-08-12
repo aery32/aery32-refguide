@@ -48,7 +48,7 @@ The ``main.cpp`` source file contains the default main function where to start b
 Board specific functions, ``board.h`` and ``board.cpp``
 -------------------------------------------------------
 
-The default board initialization function, ``init_board()``, can be found from the ``board.cpp``. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basicly by starting the external oscillator ``OCS0`` and setting the master clock frequency is its maximum which is 66 MHz. If you like to change the master clock frequency or want to change the way how the board is initialized, this is the place where to do it. In ``board.h`` you define the board specific function prototypes and supportive ``#define`` macros. These macros provide a way to do configuration. For example, the LED pin has been defined to be PC04 board header file.
+The default board initialization function, ``init_board()``, can be found from the ``board.cpp`` source file. First it sets all the GPIO pins to inputs. Then it configures the board's power manager. Basically by starting the external oscillator ``OCS0`` and setting the chip's master (or main) clock frequency to its maximum, which is 66 MHz. If you like to change the master clock frequency or want to change the way how the board is initialized, ``init_board()`` is the place where to do it. In ``board.h`` you define the board specific function prototypes and supportive ``#define`` macros. These macros enables a way to do configuration. For example, the LED pin has been defined to be connected to the pin PC04. However, keep your #definitions sane.
 
 Aery32 library
 --------------
