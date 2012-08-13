@@ -7,17 +7,9 @@ To compile the project just command::
 
     make
 
-To clean the project folder from binaries call::
+When compiled you few new files will appear under the project root, ``aery32.hex`` and ``aery32.elf``. These two files are the binaries used in chip programming. Other terms used are chip uploading or chip flashing.
 
-    make clean
-
-and to recompile all the files::
-
-    make re
-
-The above command recompiles only the files from the project root. It does not recompile the Aery32 library, because that would be ridiculous. If you also want to recompile the Aery32 library use ``make reall``.
-
-When you are ready to upload the program into the board type::
+To program the chip with the compiled binary type::
 
     make program
 
@@ -29,7 +21,15 @@ or in shorter format::
 
     make programs
 
-Additional targets are ``make debug`` that compiles the project with the debug statements. Use this when you need to do in-system debugging. There's also target for quality assurance check. That's ``make qa`` which compiles the project with more pedantic compiler options. It's good to use this every now and then. Particularly when there are problems in your program. This target can also tell you, if your inline functions are not inlined for some reason.
+If you want to clean the project folder from the binaries call::
+
+    make clean
+
+To recompile all the project files::
+
+    make re
+
+The above command recompiles only the files from the project root. It does not recompile the Aery32 library, because that would be ridiculous. If you also want to recompile the Aery32 library use ``make reall``.
 
 .. note::
 
@@ -49,3 +49,20 @@ New sources files (.c, .cpp and .h) can be added straight into the project's roo
 Edit this line so that it looks like this::
 
     SOURCES=$(wildcard *.cpp) $(wildcard *.c) $(wildcard my/*.c) $(wildcard my/*.cpp)
+
+Debugging
+---------
+
+There are two additional make targets that helps you in debugging, ``make debug`` and ``make qa``. The most important is::
+
+    make debug
+
+This compiles the project with the debug statements. Use this when you need to do in-system debugging.
+
+For quality assurance check use::
+
+    make qa
+
+This target compiles the project with more pedantic compiler options. It's good to use this every now and then. Particularly when there are problems in your program. This target can also tell you, if your inline functions are not inlined for some reason.
+
+Morever, assembly listing and file mapping files, ``aery32.lst`` and ``aery32.map`` respectively, are created after successful compile.
