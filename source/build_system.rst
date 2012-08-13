@@ -7,7 +7,7 @@ To compile the project just command::
 
     make
 
-When compiled you few new files will appear under the project root, ``aery32.hex`` and ``aery32.elf``. These two files are the binaries used in chip programming. Other terms used are chip uploading or chip flashing.
+When compiled you few new files will appear under the project root, ``aery32.hex`` and ``aery32.elf``. These two files are the binaries used in chip programming. Other terms used are chip uploading or chip flashing. Morever, assembly listing and file mapping files, ``aery32.lst`` and ``aery32.map``, are created after the successful compile.
 
 To program the chip with the compiled binary type::
 
@@ -50,8 +50,8 @@ Edit this line so that it looks like this::
 
     SOURCES=$(wildcard *.cpp) $(wildcard *.c) $(wildcard my/*.c) $(wildcard my/*.cpp)
 
-Debugging
----------
+Compile with debug statements
+-----------------------------
 
 There are two additional make targets that helps you in debugging, ``make debug`` and ``make qa``. The most important is::
 
@@ -64,5 +64,3 @@ For quality assurance check use::
     make qa
 
 This target compiles the project with more pedantic compiler options. It's good to use this every now and then. Particularly when there are problems in your program. This target can also tell you, if your inline functions are not inlined for some reason.
-
-Morever, assembly listing and file mapping files, ``aery32.lst`` and ``aery32.map`` respectively, are created after successful compile.
