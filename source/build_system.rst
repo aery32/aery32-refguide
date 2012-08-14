@@ -7,7 +7,7 @@ To compile the project just command::
 
     make
 
-When compiled binaries will appear under the project's root, ``aery32.hex`` and ``aery32.elf``. These two files are used in chip programming (program uploading or chip flashing whatever you like to call it). In addition to the binaries, assembly listing and file mapping files, have been created. ``aery32.lst`` and ``aery32.map``, respectively.
+When compiled binaries will appear under the project's root, ``aery32.hex`` and ``aery32.elf``. These two files are used in chip programming or program uploading, or chip flashing. Whatever you like to call it. In addition to the binaries, assembly listing and file mapping files, have been created. ``aery32.lst`` and ``aery32.map``, respectively.
 
 The program size is also showed at the end of the compile, like this::
 
