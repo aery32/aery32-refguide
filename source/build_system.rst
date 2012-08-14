@@ -7,16 +7,16 @@ To compile the project just command::
 
     make
 
-When compiled you binaries will appear under the project root, ``aery32.hex`` and ``aery32.elf``. These two files are used in chip programming (program uploading or chip flashing). In addition to the binaries, assembly listing and file mapping files, have been created. ``aery32.lst`` and ``aery32.map``, respectively.
+When compiled binaries will appear under the project's root, ``aery32.hex`` and ``aery32.elf``. These two files are used in chip programming (program uploading or chip flashing whatever you like to call it). In addition to the binaries, assembly listing and file mapping files, have been created. ``aery32.lst`` and ``aery32.map``, respectively.
 
-The program size is also showed at the end of compile, like this::
+The program size is also showed at the end of the compile, like this::
 
     Program size:
        text    data     bss     dec     hex filename
        3724    1344    4176    9244    241c aery32.elf
           0    5068       0    5068    13cc aery32.hex
 
-``.text`` correspond the FLASH usage and ``.data + .bss`` is the total amount of RAM (32 kB in UC3A1128 chip) allocation. Note that you have to take the size of the stack (and possibly heap) into account as well.
+``.text`` correspond the FLASH usage and ``.data + .bss`` is the total amount of RAM allocation. Note that you have to take the size of the stack (and possibly heap) into account as well.
 
 At runtime, the initialized data is copied to ``.bss`` during the startup.
 
