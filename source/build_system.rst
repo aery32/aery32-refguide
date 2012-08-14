@@ -20,6 +20,14 @@ The program size is also showed at the end of the compile, like this::
 
 At runtime, the initialized data is copied to ``.bss`` during the startup.
 
+.. note::
+
+    By default the project is compiled with -O2 optimization. If you run into troubles and your program behaves unpredictly on the chip, first try some other level of optimization
+
+    .. code-block:: shell
+
+        make reall COPT="-O0 -fdata-sections -ffunction-sections"
+
 Chip programming
 ----------------
 
@@ -44,14 +52,6 @@ To recompile all the project files::
     make re
 
 The above command recompiles only the files from the project root. It does not recompile the Aery32 library, because that would be ridiculous. If you also want to recompile the Aery32 library use ``make reall``. There's also ``cleanall`` that cleans the Aery32 folder in addition to the project's root.
-
-.. note::
-
-	By default the project is compiled with -O2 optimization. If you run into troubles and your program behaves unpredictly on the chip, first try some other level of optimization
-
-	.. code-block:: shell
-
-		make reall COPT="-O0 -fdata-sections -ffunction-sections"
 
 How to add new source files to the project
 ------------------------------------------
