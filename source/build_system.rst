@@ -1,7 +1,7 @@
 The build system
 ================
 
-Aery32 Framework comes with a powerful Makefile that provides a convenient way to compile the project. It also has targets for chip programming. At this point the Makefile attempts to use batchisp in Windows and dfu-programmer in Linux, so make sure you have those installed.
+Aery32 Framework comes with a powerful Makefile that provides a convenient way to compile the project. It also has targets for chip programming.
 
 To compile the project just command::
 
@@ -35,7 +35,7 @@ To program the chip with the compiled binary type::
 
     make program
 
-If you also want to start the program immediately type::
+ At this point the Makefile attempts to use batchisp in Windows and dfu-programmer in Linux, so make sure you have those installed. If you also want to start the program immediately type::
 
     make program start
 
