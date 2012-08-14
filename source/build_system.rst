@@ -7,7 +7,19 @@ To compile the project just command::
 
     make
 
-When compiled you few new files will appear under the project root, ``aery32.hex`` and ``aery32.elf``. These two files are the binaries used in chip programming. Other terms used are chip uploading or chip flashing. Moreover, assembly listing and file mapping files, ``aery32.lst`` and ``aery32.map``, are created after the successful compile.
+When compiled you few new files will appear under the project root, ``aery32.hex`` and ``aery32.elf``. These two files are the binaries used in chip programming. Other terms used are chip uploading or chip flashing. Moreover, assembly listing and file mapping files, ``aery32.lst`` and ``aery32.map``, are created after the successful compile. The program size is also showed at the end of compile, like this::
+
+    Program size:
+       text    data     bss     dec     hex filename
+       3724    1344    4176    9244    241c aery32.elf
+          0    5068       0    5068    13cc aery32.hex
+
+``.text`` correspond the FLASH usage and ``.data + .bss`` is the total amount of RAM (32 kB in UC3A1128 chip) allocation. Note that you have to take the size of the stack (and possibly heap) into account as well.
+
+At runtime, the initialized data is copied to ``.bss`` during the startup.
+
+Chip programming
+----------------
 
 To program the chip with the compiled binary type::
 
@@ -29,7 +41,7 @@ To recompile all the project files::
 
     make re
 
-The above command recompiles only the files from the project root. It does not recompile the Aery32 library, because that would be ridiculous. If you also want to recompile the Aery32 library use ``make reall``.
+The above command recompiles only the files from the project root. It does not recompile the Aery32 library, because that would be ridiculous. If you also want to recompile the Aery32 library use ``make reall``. There's also ``cleanall`` that cleans the Aery32 folder in addition to the project's root.
 
 .. note::
 
