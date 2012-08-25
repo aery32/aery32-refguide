@@ -35,7 +35,9 @@ Autocompletion with SublimeClang
     :target: _images/st2_autocompletion.png
     :alt: Example of ST2 autocompletion with SublimeClang
 
-So first install SublimeClang as instructed in its README. Then open ``aery32.sublime-project`` and add the following in settings::
+So first install SublimeClang as instructed in its README. Then open ``aery32.sublime-project`` and add the following in settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
+
+.. code-block:: none
 
 	"sublimeclang_enabled": true,
 	"sublimeclang_options": [
@@ -57,4 +59,7 @@ So first install SublimeClang as instructed in its README. Then open ``aery32.su
 	"sublimeclang_show_status": false,
 	"sublimeclang_show_visual_error_marks": true
 
-If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
+.. image:: ../images/st2_sublimeclang_settings_for_avr32.png
+    :width: 8 cm
+    :target: _images/st2_sublimeclang_settings_for_avr32.png
+    :alt: ST2 SublimeClang settings for AVR32 Toolchain
