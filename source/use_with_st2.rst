@@ -26,7 +26,7 @@ If you want to open a file, let's say ``aery32/aery32/gpio.h``, press **Ctrl+P**
 Autocompletion with SublimeClang
 --------------------------------
 
-`SublimeClang <https://github.com/quarnster/SublimeClang>`_ provides a neat autocompletion for the Aery32 project. With this plugin you don't have to remember all the functions completely. Just write the beginning of the function, for example, *gpio_t* and the plugin shows you a list of functions. Press *Ctrl+Space* to move on the list and *Tab* to select the function. When you have set the first param, you can press *Tab* again to jump to the next one.
+`SublimeClang <https://github.com/quarnster/SublimeClang>`_ provides a neat autocompletion for the Aery32 project. With this plugin you don't have to remember all the functions completely. Just write the beginning of the function, for example, *gpio_t* and the plugin shows you a list of functions. Press **Ctrl+Space** to move on the list and **Tab** to select the function. When you have set the first param, you can press **Tab** again to jump to the next one.
 
 .. image:: ../images/st2_autocompletion.png
     :target: _images/st2_autocompletion.png
