@@ -784,7 +784,7 @@ First initialize the bus. Only master mode has supported.
 
     twi_init_master();
 
-The default TWI initializer sets the SLK frequency to 400 kHz and clears the internal device address. If you want to change TWI clockwave use ``twi_setup_clkwaveform()`` after calling the init(). For example, to set SLK to 100 kHz with 50% dutycycle
+The default TWI initializer sets the SLK frequency to 400 kHz and clears the internal device address. If you want to change TWI clockwave use ``twi_setup_clkwaveform()`` after calling the init(). For example, to set SLK to 100 kHz with 50% dutycycle, call
 
 .. code-block:: c++
 
@@ -795,7 +795,7 @@ The first parameter is clock divider, the second and third params defines the di
 Read and write operations
 '''''''''''''''''''''''''
 
-To read and write a single byte works like this
+The read and write operations for a single byte works like this
 
 .. code-block:: c++
 
@@ -804,7 +804,7 @@ To read and write a single byte works like this
     twi_write_byte(0x04);
     twi_read_byte(&rd);
 
-Both functions return the number of written bytes. So on error the return value would be 0 and on success 1.
+Both functions return the number of written or read bytes. So on error the return value would be 0 and on success 1.
 
 To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
 
