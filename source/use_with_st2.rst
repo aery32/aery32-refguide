@@ -4,14 +4,12 @@ Sublime Text 2
 Aery32 Framework comes with the default Sublime Text 2 project file which you can use straight away. The quickest way to start the Aery32 project is to browse to the project directory and open ``aery32.sublime-project`` file using the right click and then select *Open with Sublime Text 2*.
 
 .. image:: ../images/st2_open_project_file.png
-    :width: 8 cm
     :target: _images/st2_open_project_file.png
     :alt: Open ST2 project file with right click
 
 After then change the default build system to *Aery32* from *Tools / Build System*.
 
 .. image:: ../images/st2_select_build_system.png
-    :width: 8 cm
     :target: _images/st2_select_build_system.png
     :alt: Change ST2 build system to Aery32
 
@@ -31,7 +29,6 @@ Autocompletion with SublimeClang
 `SublimeClang <https://github.com/quarnster/SublimeClang>`_ provides a neat autocompletion for the Aery32 project. With this plugin you don't have to remember all the functions completely. Just write the beginning of the function, for example, *gpio_t* and the plugin shows you a list of functions.
 
 .. image:: ../images/st2_autocompletion.png
-    :width: 8 cm
     :target: _images/st2_autocompletion.png
     :alt: Example of ST2 autocompletion with SublimeClang
 
@@ -60,6 +57,5 @@ So first install SublimeClang as instructed in its README. Then open ``aery32.su
 	"sublimeclang_show_visual_error_marks": true
 
 .. image:: ../images/st2_sublimeclang_settings_for_avr32.png
-    :width: 8 cm
     :target: _images/st2_sublimeclang_settings_for_avr32.png
     :alt: ST2 SublimeClang settings for AVR32 Toolchain
