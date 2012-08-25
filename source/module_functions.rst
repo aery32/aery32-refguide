@@ -790,21 +790,21 @@ The default TWI initializer sets the SLK frequency to 400 kHz and clears the int
 
     twi_setup_clkwaveform(4, 0x3f, 0x3f);
 
+The first parameter is clock divider, the second and third params defines the dividers for clock low and high states, respectively. Refer to datasheet to learn how to set different waveforms for SLK.
+
 Read and write operations
 '''''''''''''''''''''''''
 
-The first parameter is clock divider, the second and third params defines the dividers for clock low and high states, respectively. Refer to datasheet to learn how to set different waveforms for SLK.
-
-Reading and write a single byte is just as easy as calling ``twi_read/write_byte()``.
+To read and write a single byte works like this
 
 .. code-block:: c++
 
-    uint8_t rd = 0;
+    uint8_t rd;
 
     twi_write_byte(0x04);
     twi_read_byte(&rd);
 
-Both functions returns the number of written bytes. So on error the return value would be 0 and on success 1.
+Both functions return the number of written bytes. So on error the return value would be 0 and on success 1.
 
 To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
 
@@ -827,7 +827,7 @@ Both read and write functions can take an optional 8-bit internal device address
 
     twi_write_byte(0x04, iadr);
 
-When optional address has been given then it will be used by every read and write operations that follows the previous read/write operation, if not reset. To clear this behaviour call ``twi_clear_internal_address()``.
+When optional address has been given the same address is used in every read and write operations that follows the previous operation, if not changed by giving a different address. To clear this behaviour, call ``twi_clear_internal_address()``.
 
 Wider than 8-bit internal device addresses can be set with ``twi_use_internal_address()`` function. The largest supported internal device address is 3 bytes long.
 
