@@ -12,11 +12,20 @@ Welcome to Aery32's documentation!
    getting_started
    project_structure
    build_system
-   delay_functions
    system_clocks
    module_functions
+   delay_functions
+   string_functions
    contribute
 
+Using Aery32 Framework with your favourite editor
+=================================================
+
+.. toctree::
+  :maxdepth: 2
+
+  use_with_eclipse
+  use_with_st2
 
 Indices and tables
 ==================
