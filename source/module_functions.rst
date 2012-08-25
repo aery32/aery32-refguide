@@ -813,8 +813,8 @@ To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
     uint8_t wd[3] = { 0x02, 0x04, 0x06 };
     uint8_t rd[3];
 
-    twi_write_byte(wd, 3);
-    twi_read_byte_nbytes(rd, 3);
+    twi_write_nbytes(wd, 3);
+    twi_read_nbytes(rd, 3);
 
 Using internal device address
 '''''''''''''''''''''''''''''
