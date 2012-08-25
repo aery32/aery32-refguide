@@ -18,8 +18,8 @@ Welcome to Aery32's documentation!
    string_functions
    contribute
 
-Using Aery32 Framework with your favourite editor
-=================================================
+Aery32 Framework in your favourite editor
+=========================================
 
 .. toctree::
   :maxdepth: 2

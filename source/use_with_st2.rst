@@ -1,13 +1,13 @@
 Sublime Text 2
 ==============
 
-Aery32 Framework comes with the default `Sublime Text 2 <http://www.sublimetext.com/2>`_ project file which you can use straight away. The quickest way to start the Aery32 project is to browse to the project directory and open ``aery32.sublime-project`` file using the right click and then select *Open with Sublime Text 2*.
+Aery32 Framework comes with the default `Sublime Text 2 <http://www.sublimetext.com/2>`_ project file which you can use straight away. The quickest way to start the Aery32 project is to browse to the project directory and open ``aery32.sublime-project`` file using the right click and selecting *Open with Sublime Text 2*.
 
 .. image:: ../images/st2_open_project_file.png
     :target: _images/st2_open_project_file.png
     :alt: Open ST2 project file with right click
 
-After then change the default build system to *Aery32* from *Tools / Build System*.
+After then change the default build system to *Aery32* from *Tools/Build System*.
 
 .. image:: ../images/st2_select_build_system.png
     :target: _images/st2_select_build_system.png
