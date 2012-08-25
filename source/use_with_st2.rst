@@ -18,7 +18,7 @@ After then change the default build system to *Aery32* from *Tools / Build Syste
 Shortcut keys for compile and board programming
 -----------------------------------------------
 
-Use **Ctrl+B** and **Ctrl+Shift+B** shortcut keys to compile and board programming, respectively. To select a different make targets press **Ctrl+Shift+P** and write *build*.
+Use **Ctrl+B** and **Ctrl+Shift+B** shortcut keys to compile the project and to program the board, respectively. For other make targets press **Ctrl+Shift+P** and write *build*. Then select the desired target from the list.
 
 Open files quickly
 ------------------
