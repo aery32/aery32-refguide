@@ -775,8 +775,8 @@ The last parameter, ``islast``, of the ``spi_transmit()`` function indicates for
     rd |= spi_transmit(spi0, 0, 0xf0, false) << 8;
     rd |= spi_transmit(spi0, 0, 0x0f, true) << 16; /* Complete. Asserts the chip select */
 
-Two-wire (I2C) Interface Bus ``#include <aery32/twi.h>``
---------------------------------------------------------
+Two-wire (I2C) Interface Bus, ``#include <aery32/twi.h>``
+---------------------------------------------------------
 
 First initialize the bus. Only master mode has supported.
 
@@ -833,6 +833,6 @@ Wider than 8-bit internal device addresses can be set with ``twi_use_internal_ad
 
 .. code-block:: c++
 
-    twi_use_internal_address(0xffgg, 2); /* 2 bytes long address */
+    twi_use_internal_address(0xffee, 2); /* 2 bytes long address */
     twi_use_internal_address(0xaabbcc, 3); /* 3 bytes long address */
 
