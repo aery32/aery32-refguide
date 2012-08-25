@@ -16,7 +16,7 @@ Aery32 Software Framework provides a complete project structure to start AVR32 d
 It is intended that you work under the root directory most of the time as that is the place where you keep adding your .c, .cpp and .h source files. Notice that Aery32 Framework is a C/C++ framework and thus you can write your code in both C and C++. Just put the C code in .c files and C++ code in .cpp files.
 
 Main source file, ``main.cpp``
------------------------------
+------------------------------
 
 The ``main.cpp`` source file contains the default main function where to start building your project.
 

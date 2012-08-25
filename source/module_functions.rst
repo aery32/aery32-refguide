@@ -539,7 +539,7 @@ Now ``PWM_CLKA`` has the frequency of *MCK / 10* Hz and ``PWM_CLKB`` is *MCK / 2
 
 .. note::
 
-If the divider of ``PWM_CLKA`` or ``PWM_CLKB`` has been set zero, then the PWM clock will equal to the ``MCK``, ``MCK_DIVIDED_BY_2``, etc. Whatever was the chosen prescaler. So it does not make sense to set the divider of the extra PWM clock zero, because then you don't have any extra clock selection.
+    If the divider of ``PWM_CLKA`` or ``PWM_CLKB`` has been set zero, then the PWM clock will equal to the ``MCK``, ``MCK_DIVIDED_BY_2``, etc. Whatever was the chosen prescaler. So it does not make sense to set the divider of the extra PWM clock zero, because then you don't have any extra clock selection.
 
 Setting up PWM mode
 '''''''''''''''''''
@@ -774,3 +774,65 @@ The last parameter, ``islast``, of the ``spi_transmit()`` function indicates for
     rd = spi_transmit(spi0, 0, 0x55, false);
     rd |= spi_transmit(spi0, 0, 0xf0, false) << 8;
     rd |= spi_transmit(spi0, 0, 0x0f, true) << 16; /* Complete. Asserts the chip select */
+
+Two-wire (I2C) Interface Bus ``#include <aery32/twi.h>``
+--------------------------------------------------------
+
+First initialize the bus. Only master mode has supported.
+
+.. code-block:: c++
+
+    twi_init_master();
+
+The default TWI initializer sets the SLK frequency to 400 kHz and clears the internal device address. If you want to change TWI clockwave use ``twi_setup_clkwaveform()`` after calling the init(). For example, to set SLK to 100 kHz with 50% dutycycle
+
+.. code-block:: c++
+
+    twi_setup_clkwaveform(4, 0x3f, 0x3f);
+
+Read and write operations
+'''''''''''''''''''''''''
+
+The first parameter is clock divider, the second and third params defines the dividers for clock low and high states, respectively. Refer to datasheet to learn how to set different waveforms for SLK.
+
+Reading and write a single byte is just as easy as calling ``twi_read/write_byte()``.
+
+.. code-block:: c++
+
+    uint8_t rd = 0;
+
+    twi_write_byte(0x04);
+    twi_read_byte(&rd);
+
+Both functions returns the number of written bytes. So on error the return value would be 0 and on success 1.
+
+To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
+
+.. code-block:: c++
+
+    uint8_t wd[3] = { 0x02, 0x04, 0x06 };
+    uint8_t rd[3];
+
+    twi_write_byte(wd, 3);
+    twi_read_byte_nbytes(rd, 3);
+
+Using internal device address
+'''''''''''''''''''''''''''''
+
+Both read and write functions can take an optional 8-bit internal device address in their last param. Internal device address is the slave's internal register address where to write the given byte. For example, the following snippet writes a byte to slave's register ``0x80``.
+
+.. code-block:: c++
+
+    uint8_t iadr = 0x80;
+
+    twi_write_byte(0x04, iadr);
+
+When optional address has been given then it will be used by every read and write operations that follows the previous read/write operation, if not reset. To clear this behaviour call ``twi_clear_internal_address()``.
+
+Wider than 8-bit internal device addresses can be set with ``twi_use_internal_address()`` function. The largest supported internal device address is 3 bytes long.
+
+.. code-block:: c++
+
+    twi_use_internal_address(0xffgg, 2); /* 2 bytes long address */
+    twi_use_internal_address(0xaabbcc, 3); /* 3 bytes long address */
+

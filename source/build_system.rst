@@ -24,7 +24,7 @@ At runtime, the initialized data is copied to ``.bss`` during the startup.
 
     By default the project is compiled with -O2 optimization. If you run into troubles and your program behaves unpredictly on the chip, first try some other level of optimization
 
-    .. code-block:: shell
+    .. code-block:: none
 
         make reall COPT="-O0 -fdata-sections -ffunction-sections"
 
