@@ -1,7 +1,11 @@
 Sublime Text 2
 ==============
 
-Aery32 Framework comes with the default `Sublime Text 2 <http://www.sublimetext.com/2>`_ project file which you can use straight away. The quickest way to start the Aery32 project is to browse to the project directory and open ``aery32.sublime-project`` file using the right click and selecting *Open with Sublime Text 2*.
+.. note::
+
+	These instructions are written for Windows, but should work similarly in Linux and Mac OS X
+
+Aery32 Framework comes with the default `Sublime Text 2 <http://www.sublimetext.com/2>`_ project file which you can use straight away. The quickest way to start the project is to browse to the project directory and open ``aery32.sublime-project`` file using the right click and selecting *Open with Sublime Text 2*.
 
 .. image:: ../images/st2_open_project_file.png
     :target: _images/st2_open_project_file.png
@@ -26,13 +30,17 @@ If you want to open a file, let's say ``aery32/aery32/gpio.h``, press **Ctrl+P**
 Autocompletion with SublimeClang
 --------------------------------
 
-`SublimeClang <https://github.com/quarnster/SublimeClang>`_ provides a neat autocompletion for the Aery32 project. With this plugin you don't have to remember all the functions completely. Just write the beginning of the function, for example, *gpio_t* and the plugin shows you a list of functions. Press **Ctrl+Space** to move on the list and **Tab** to select the function. When you have set the first param, you can press **Tab** again to jump to the next one.
+`SublimeClang <https://github.com/quarnster/SublimeClang>`_ provides a neat autocompletion for Aery32 project. With this plugin you don't have to remember all the function names and their parameters completely. Just write the beginning of the function, for example *gpio_t*, and you get a list of functions. Press **Ctrl+Space** to move on the list and **Tab** to select the function. When you have set the first param, you can press **Tab** again to jump to the next one.
 
 .. image:: ../images/st2_autocompletion.png
     :target: _images/st2_autocompletion.png
     :alt: Example of ST2 autocompletion with SublimeClang
 
-So first install SublimeClang as instructed in its README. Then open ``aery32.sublime-project`` and add the following in settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
+.. note::
+
+	SublimeClang prerequisites to use the clang static analyzer is to have clang installed and set in your path. The other functionality should work without having the clang binaries installed. Here we do use only the "other functionalities" and thus do not need clang.
+
+So just install SublimeClang as instructed in its README without clang. In Linux you can also skip the additional prerequisities. Then open ``aery32.sublime-project`` and add the following in settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
 
 .. code-block:: none
 
