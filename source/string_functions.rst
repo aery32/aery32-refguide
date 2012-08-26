@@ -10,25 +10,25 @@ Use this snippet to convert integer number to string
 
 .. code-block:: c++
 
-	char str[10] = "";
+    char str[10] = "";
     itoa(100, str);
 
-``itoa()`` returns the pointer to the str so you can use it with print functions. If you like to know how many characters were written in conversion, you can save the number to extra variable, like this
+``itoa()`` returns the pointer to the ``str`` so you can use it with print functions. If you like to know how many characters were written in conversion, you can save the number into additional variable, like this
 
 .. code-block:: c++
 
-	int n;
-	char str[10] = "";
+    int n;
+    char str[10] = "";
     itoa(100, str, &n);
 
-``utoa()`` works similarly with ``itoa()`` but converts only unsigned integers.
+``utoa()`` works similarly with ``itoa()`` but only for unsigned integers.
 
 Double to string
 ----------------
 
+This example converts pi to string with 8 decimal numbers.
+
 .. code-block:: c++
 
-	char str[10] = "";
+    char str[10] = "";
     dtoa(3.14159265, 8, str);
-
-This code converts pi to string with 8 decimal numbers.
