@@ -3,7 +3,7 @@ Sublime Text 2
 
 .. note::
 
-	These instructions are written for Windows, but should work similarly in Linux and Mac OS X
+	These instructions are written for Windows but should work similarly in Linux and Mac OS X
 
 Aery32 Framework comes with the default `Sublime Text 2 <http://www.sublimetext.com/2>`_ project file which you can use straight away. The quickest way to start the project is to browse to the project directory and open ``aery32.sublime-project`` file using the right click and selecting *Open with Sublime Text 2*.
 
@@ -36,11 +36,7 @@ Autocompletion with SublimeClang
     :target: _images/st2_autocompletion.png
     :alt: Example of ST2 autocompletion with SublimeClang
 
-.. note::
-
-	SublimeClang prerequisites to use the clang static analyzer is to have clang installed and set in your path. The other functionality should work without having the clang binaries installed. Here we do use only the "other functionalities" and thus do not need clang.
-
-So just install SublimeClang as instructed in its README without clang. In Linux you can also skip the additional prerequisities. Then open ``aery32.sublime-project`` and add the following in settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
+SublimeClang prerequisites for the clang static analyzer is to have clang installed and set in your path. The other functionality works without having the clang binaries installed. Here we only use the "other functionalities" and thus do not need clang. So install SublimeClang as instructed in its README without clang. In Linux you can also skip the additional prerequisities. Then open ``aery32.sublime-project`` and add the following in settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
 
 .. code-block:: none
 
