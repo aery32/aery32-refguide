@@ -47,7 +47,7 @@ If you want to clean the project folder from the binaries call::
 
     make clean
 
-To recompile all the project files::
+To recompile all the project files call::
 
     make re
 
@@ -56,7 +56,7 @@ The above command recompiles only the files from the project root. It does not r
 How to add new source files to the project
 ------------------------------------------
 
-New sources files (.c, .cpp and .h) can be added straight into the project's root and the build system will take care of those. You can take it easy so far. However, if you like to separate your source code into folders, for example, into subdirectory called ``my/`` then you have to edit the Makefile slightly. After creating the directory, open the Makefile and find the line::
+New sources files (.c, .cpp and .h) can be added straight into the project's root and the build system will take care of those. If you like to separate your source code into folders, for example, into subdirectory called ``my/`` then you have to edit the Makefile slightly. After creating the directory, open the Makefile and find the line::
 
     SOURCES=$(wildcard *.cpp) $(wildcard *.c)
 
