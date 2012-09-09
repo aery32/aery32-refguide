@@ -823,17 +823,18 @@ To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
 Using internal device address
 '''''''''''''''''''''''''''''
 
-Both read and write functions can take an optional 8-bit internal device address in their last param. Internal device address is the slave's internal register address where to write the given byte. For example, the following snippet writes a byte to slave's register ``0x80``.
+Both read and write functions can take an optional internal device address in their last param. Internal device address is the slave's internal register where to write the given byte. For example, the following snippet writes a byte ``0x04`` to slave register ``0x80``.
 
 .. code-block:: c++
 
+    uint8_t byte = 0x04;
     uint8_t iadr = 0x80;
 
-    twi_write_byte(0x04, iadr);
+    twi_write_byte(byte, iadr);
 
-When optional address has been given the same address is used in every read and write operations that follows the previous operation, if not changed by giving a different address. To clear this behaviour, call ``twi_clear_internal_address()``.
+When optional address has been given the same address is used in every read and write operations that follows the previous operation even if the address is omitted in function call. To clear this behaviour, call ``twi_clear_internal_address()``.
 
-If you want to use wider than 8-bit internal device addresses pass the additional param for the TWI read/write function, for example like this
+If you want to use a wider than 8-bit internal device addresses, you have to indicate the address lenght via additional third parameter. For example to use 2 bytes long address, you may call the write function like this
 
 .. code-block:: c++
     
@@ -842,4 +843,4 @@ If you want to use wider than 8-bit internal device addresses pass the additiona
 
     twi_write_byte(byte, iadr, 2);
 
-The largest supported internal device address is 3 bytes long.
+The largest supported internal device address length is 3 bytes long.
