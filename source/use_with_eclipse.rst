@@ -25,7 +25,7 @@ When Eclipse has been started, change the perspective from Java to C/C++ by clic
     :target: _images/eclipse_juno_open_cdt_perspective.png
     :alt: Open perspective in Eclipse Juno
 
-It is also good idea to use **UTF-8** text file encoding and Unix style new text file line delimiter (Aery32 Framework uses these settings). You can change these preferences globally for the workspace you are working from **Window / Preferences**. From the left side list select **General / Workspace**.
+It is also good idea to use **UTF-8** text file encoding and Unix style new text file line delimiter (Aery32 Framework uses these settings). You can change these preferences globally for the workspace you are working from **Window / Preferences**. From the left-hand side list select **General / Workspace**.
 
 .. image:: ../images/eclipse_juno_utf8_by_default.png
     :target: _images/eclipse_juno_utf8_by_default.png
@@ -52,7 +52,7 @@ Browse to the location of Aery32 Framework by using **Browse...** button. Eclips
     :target: _images/eclipse_juno_import_existing_code.png
     :alt: Import existing code in Eclipse Juno
 
-Now you have a project created and you can open e.g. the ``main.cpp`` from the **Project Explorer**. Right handside you have panels for the source file **Outline** and the project **Make Targets**.
+Now you have a project created and you can open e.g. the ``main.cpp`` from the **Project Explorer**. Right-hand side you have panels for the source file **Outline** and the project **Make Targets**.
 
 .. image:: ../images/eclipse_juno_makefile_project_created.png
     :target: _images/eclipse_juno_makefile_project_created.png
