@@ -181,7 +181,7 @@ There are also functions that takes the region as an input param, ``flashc_lock_
 
 .. warning::
 
-    UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot and destroy your chip in a second. So be careful!
+    According to Atmel UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot of flash and destroy your chip in a second. So be careful!
 
 General Periheral Input/Output, ``#include <aery32/gpio.h>``
 ------------------------------------------------------------
