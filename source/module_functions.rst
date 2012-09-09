@@ -119,7 +119,12 @@ Other possible trigger sources, that can be used for example with the Timer/Coun
 Flash Controller, ``#include <aery32/flashc.h>``
 ------------------------------------------------
 
-Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the figure below. The init function of the Flash Controller sets the flash wait state (zero or one, ``FLASH_0WS`` or ``FLASH_1WS``, respectively). The last param of the init function enables/disables the sense amplifiers of flash controller.
+.. image:: ../images/avr32_flash_structure.png
+    :width: 8 cm
+    :target: _images/avr32_flash_structure.png
+    :alt: AVR32 UC3A1/0 Flash Structure
+
+Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the figure above. The init function of the Flash Controller sets the flash wait state (zero or one, ``FLASH_0WS`` or ``FLASH_1WS``, respectively). The last param of the init function enables/disables the sense amplifiers of flash controller.
 
 .. code-block:: c++
 
@@ -129,18 +134,8 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 
     Setting up the correct flash wait state is extremely important! Note that this has to be set correctly even if the flash read and write operations, described below, are not used. If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state.
 
-.. image:: ../images/avr32_flash_structure.png
-    :width: 8 cm
-    :target: _images/avr32_flash_structure.png
-    :alt: AVR32 UC3A1/0 Flash Structure
-
 Read and write operations
 '''''''''''''''''''''''''
-
-.. warning::
-
-    UC3A1's internal flash supports 100,000 write cycles and 15-year Data Retention. However, you can easily make a for-loop with 100,000 writes to the same
-    spot and destroy your chip in a second. So be careful!
 
 Flash memory is accessed via pages that are 512 bytes and only 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
@@ -183,6 +178,10 @@ There are also functions that takes the region as an input param, ``flashc_lock_
 .. warning::
 
     The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255.
+
+.. warning::
+
+    UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot and destroy your chip in a second. So be careful!
 
 General Periheral Input/Output, ``#include <aery32/gpio.h>``
 ------------------------------------------------------------
@@ -768,7 +767,7 @@ Here is the complete code for the above SPI initialization and transmission:
 Sending arbitrary wide SPI data
 '''''''''''''''''''''''''''''''
 
-``spi_transmit()`` supports arbitrary wide SPI transmits through its optional last parameter named as ``islast``. This param indicates if the chip select line should be left low or can be pulled high. Otherway around it tells whether the current transmission was the last one or not. Thus the param is called ``islast``. By default ``islast`` is set true and the CS line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 32 bit wide SPI data you can do this:
+``spi_transmit()`` supports arbitrary wide SPI transmits through its optional last parameter named as ``islast``. This param indicates if the chip select line should be left low or can be pulled high. Otherway around it tells whether the current transmission was the last one or not. Thus the param is called ``islast``. By default ``islast`` is set true and the CS line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 24 bit wide SPI data you can do this:
 
 .. code-block:: c++
 
