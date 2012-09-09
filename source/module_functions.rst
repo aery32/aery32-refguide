@@ -119,12 +119,7 @@ Other possible trigger sources, that can be used for example with the Timer/Coun
 Flash Controller, ``#include <aery32/flashc.h>``
 ------------------------------------------------
 
-.. image:: ../images/avr32_flash_structure.png
-    :width: 8 cm
-    :target: _images/avr32_flash_structure.png
-    :alt: AVR32 UC3A1/0 Flash Structure
-
-Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the figure above. The init function of the Flash Controller sets the flash wait state and the state of the sense amplifiers. 
+Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the figure below. The init function of the Flash Controller sets the flash wait state (zero or one, ``FLASH_0WS`` or ``FLASH_1WS``, respectively). The last param of the init function enables/disables the sense amplifiers of flash controller.
 
 .. code-block:: c++
 
@@ -132,10 +127,20 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 
 .. warning::
 
-    Setting up the correct flash wait state is extremely important! If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state, ``FLASH_0WS``. Note that this has to be set correctly even if the flash read and write operations, described below, are not used.
+    Setting up the correct flash wait state is extremely important! Note that this has to be set correctly even if the flash read and write operations, described below, are not used. If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state.
+
+.. image:: ../images/avr32_flash_structure.png
+    :width: 8 cm
+    :target: _images/avr32_flash_structure.png
+    :alt: AVR32 UC3A1/0 Flash Structure
 
 Read and write operations
 '''''''''''''''''''''''''
+
+.. warning::
+
+    UC3A1's internal flash supports 100,000 write cycles and 15-year Data Retention. However, you can easily make a for-loop with 100,000 writes to the same
+    spot and destroy your chip in a second. So be careful!
 
 Flash memory is accessed via pages that are 512 bytes and only 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
