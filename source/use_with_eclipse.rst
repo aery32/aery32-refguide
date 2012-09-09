@@ -19,17 +19,17 @@ Eclipse stores your projects in a folder called a workspace. You may have severa
     :target: _images/eclipse_juno_select_workspace.png
     :alt: Select workspace in Eclipse Juno
 
-When Eclipse has been started, change the perspective from Java to C/C++ by clicking the **Open perspective** icon from the right upper corner.
-
-.. image:: ../images/eclipse_juno_open_perspective.png
-    :target: _images/eclipse_juno_open_perspective.png
-    :alt: Open perspective in Eclipse Juno
-
-Then select **C/C++** and press OK
+When Eclipse has been started, change the perspective from Java to C/C++ by clicking the **Open perspective** icon from the right upper corner. Then select **C/C++** and press OK.
 
 .. image:: ../images/eclipse_juno_open_cdt_perspective.png
     :target: _images/eclipse_juno_open_cdt_perspective.png
     :alt: Open perspective in Eclipse Juno
+
+It is also good idea to use **UTF-8** text file encoding and Unix style new text file line delimiter (Aery32 Framework uses these settings). You can change these preferences globally for the workspace you are working from **Window / Preferences**. From the left side list select **General / Workspace**.
+
+.. image:: ../images/eclipse_juno_utf8_by_default.png
+    :target: _images/eclipse_juno_utf8_by_default.png
+    :alt: How to set UTF-8 text file encoding in Eclipse Juno
 
 Lastly get rid of the welcome screen by closing it. You can open it again, if you like from **Help / Welcome**
 
@@ -59,5 +59,26 @@ Now you have a project created and you can open e.g. the ``main.cpp`` from the *
     :alt: This is how it looks after creating a Makefile project in Eclipse Juno
 
 Setting Paths and Symbols
-'''''''''''''''''''''''''
+-------------------------
+
+To get Eclipse indexer working with the AVR32 Toolchain and Aery32 include files, you have to set up paths and symbols. Open **Project / Properties** and then **C/C++ General / Paths and Symbols**. Add the following include paths. When you are adding the aery32 include path be sure to check **Is a workspace path** box too.
+
+.. image:: ../images/eclipse_juno_add_includes.png
+    :target: _images/eclipse_juno_add_includes.png
+    :alt: Setting up include paths for AVR32 and Aery32 Framework in Eclipse Juno
+
+Next open **Symbols** tab and add the following symbols.
+
+.. image:: ../images/eclipse_juno_add_symbols.png
+    :target: _images/eclipse_juno_add_symbols.png
+    :alt: Setting up symbols for AVR32 in Eclipse Juno
+
+Setting Makefile targets
+------------------------
+
+Makefile targets can be added from the right-hand side panel. Here I have added all targets needed for compiling and programming the board along additional supportive targets. You can run the target by double clicking it.
+
+.. image:: ../images/eclipse_juno_add_make_targets.png
+    :target: _images/eclipse_juno_add_make_targets.png
+    :alt: Setting up Makefile targets for Aery32 Framework in Eclipse Juno
 
