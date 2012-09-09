@@ -721,25 +721,25 @@ Now we are ready to enable SPI peripheral
 
     spi_enable(spi0);
 
-There's also function for disabling the desired SPI peripheral ``spi_disable(spi0)``. To write data into SPI bus use the transmit function
+There's also function for disabling the desired SPI peripheral, ``spi_disable()``.
+
+To read and write data use the SPI transmit function
 
 .. code-block:: c++
 
     uint16_t rd;
-    rd = spi_transmit(spi0, 0, 0x55, true); /* writes 0x55 to SPI0, NPCS0 */
+    rd = spi_transmit(spi0, 0, 0x55);
 
-.. hint::
-    
-    ``spi_transmit()`` writes and reads SPI bus simultaneusly. If you only want to read data, just ignore write data by sending dummy bits.
+The above call to ``spi_transmit`` writes 0x55 to SPI0 using NPCS0 slave (or chip) select pin. Notice that ``spi_transmit()`` writes and reads the SPI bus simultaneusly. If you only want to read data, just ignore write data by sending dummy bits.
 
 Here is the complete code for the above SPI initialization and transmission:
 
 .. code-block:: c++
     :linenos:
 
+    #include "board.h"
     #include <aery32/gpio.h>
     #include <aery32/spi.h>
-    #include "board.h"
 
     using namespace aery;
 
@@ -757,7 +757,7 @@ Here is the complete code for the above SPI initialization and transmission:
         spi_enable(spi0);
 
         for (;;) {
-            rd = spi_transmit(spi0, 0, 0x55, true);
+            rd = spi_transmit(spi0, 0, 0x55);
         }
 
         return 0;
@@ -768,7 +768,7 @@ Here is the complete code for the above SPI initialization and transmission:
 Sending arbitrary wide SPI data
 '''''''''''''''''''''''''''''''
 
-The last parameter, ``islast``, of the ``spi_transmit()`` function indicates for the SPI whether the current transmission was the last one. If true, chip select line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 32 bit wide SPI data you can do this:
+``spi_transmit()`` supports arbitrary wide SPI transmits through its optional last parameter named as ``islast``. This param indicates if the chip select line should be left low or can be pulled high. Otherway around it tells whether the current transmission was the last one or not. Thus the param is called ``islast``. By default ``islast`` is set true and the CS line rises immediately when the last bit has been written. If ``islast`` is defined false, CS line is left low for the next transmission that should occur immediately after the previous one. This feature allows SPI to operate with arbitrary wide shift registers. For example, to read and write 32 bit wide SPI data you can do this:
 
 .. code-block:: c++
 
