@@ -137,7 +137,7 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 Read and write operations
 '''''''''''''''''''''''''
 
-Flash memory is accessed via pages that are 512 bytes long, and only 512 bytes. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
+Flash memory is accessed via pages that are 512 bytes and only 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
 .. code-block:: c++
 
@@ -148,7 +148,7 @@ Flash memory is accessed via pages that are 512 bytes long, and only 512 bytes. 
     strcpy(buf, "foo");                     /* Save string "foo" to page buffer */
     flashc_save_page(FLASH_LAST_PAGE, buf); /* Write page buffer back to flash */
 
-You can also read and write values with different types as long as the page buffer size is that 512 bytes--Yes, 512 bytes per page.
+You can also read and write values with different types as long as the page buffer size is that 512 bytes.
 
 .. code-block:: c++
 
