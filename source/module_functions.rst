@@ -788,11 +788,11 @@ First initialize the bus. Only master mode has supported.
 
     twi_init_master();
 
-The default TWI initializer sets the SLK frequency to 400 kHz and clears the internal device address. If you want to change TWI clockwave use ``twi_setup_clkwaveform()`` after calling the init(). For example, to set SLK to 100 kHz with 50% dutycycle, call
+The default TWI initializer sets the SLK frequency to 100 kHz and clears the internal device address. If you want to change TWI clockwave, use ``twi_setup_clkwaveform()`` after calling the init(). For example, to set SLK to 400 kHz with 50% dutycycle, call
 
 .. code-block:: c++
 
-    twi_setup_clkwaveform(4, 0x3f, 0x3f);
+    twi_setup_clkwaveform(1, 0x3f, 0x3f);
 
 The first parameter is clock divider, the second and third params defines the dividers for clock low and high states, respectively. Refer to datasheet to learn how to set different waveforms for SLK.
 
@@ -833,10 +833,13 @@ Both read and write functions can take an optional 8-bit internal device address
 
 When optional address has been given the same address is used in every read and write operations that follows the previous operation, if not changed by giving a different address. To clear this behaviour, call ``twi_clear_internal_address()``.
 
-Wider than 8-bit internal device addresses can be set with ``twi_use_internal_address()`` function. The largest supported internal device address is 3 bytes long.
+If you want to use wider than 8-bit internal device addresses pass the additional param for the TWI read/write function, for example like this
 
 .. code-block:: c++
+    
+    uint8_t byte = 0x04;
+    uint16_t iadr = 0x8080;
 
-    twi_use_internal_address(0xffee, 2); /* 2 bytes long address */
-    twi_use_internal_address(0xaabbcc, 3); /* 3 bytes long address */
+    twi_write_byte(byte, iadr, 2);
 
+The largest supported internal device address is 3 bytes long.
