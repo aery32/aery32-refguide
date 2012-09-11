@@ -4,7 +4,7 @@ Eclipse Juno
 Installation
 ------------
 
-First make sure that you have Java runtime environment (Java JRE) installed. You can `download Java <http://www.java.com/en/download/manual>`_ from Oracle. After then `download Eclipse IDE for C/C++ Developers <http://www.eclipse.org/downloads/>`_ from Eclipse's homepage. Be sure to select the same bit version than your JRE.
+First make sure that you have Java runtime environment (Java JRE) installed. You can `download Java <http://www.java.com/en/download/manual.jsp>`_ from Oracle. After then `download Eclipse IDE for C/C++ Developers <http://www.eclipse.org/downloads/>`_ from Eclipse's homepage. Be sure to select the same bit version than your JRE.
 
 To continue browse to the folder where you downloaded Eclipse and unzip the file there. Now you have a folder called ``eclipse``. You can just browse to that folder and double click ``eclipse.exe`` to start Eclipse. However, before doing that you may like to move the ``eclipse`` folder some other place (away from your download directory) and then make a shortcut to ``eclipse.exe``.
 
