@@ -115,7 +115,7 @@ Other possible trigger sources, that can be used for example with the Timer/Coun
 
 .. note::
 
-    You always have to call ``adc_start_cnv()`` individually for every started conversion. If you suspect that your conversions may have overrun, you can check this with the ``adc_hasoverrun(chamask)`` function. If you omit the channel mask input param, all the channels will be checked, being essentially the same than calling ``adc_hasoverrun(0xff)``.
+    You always have to call ``adc_start_cnv()`` individually for every started conversion. If you suspect that your conversions may have overrun, you can check this with the ``adc_has_overrun(chamask)`` function. If you omit the channel mask input param, all the channels will be checked, being essentially the same than calling ``adc_has_overrun(0xff)``.
 
 Flash Controller, ``#include <aery32/flashc.h>``
 ------------------------------------------------
@@ -576,7 +576,7 @@ The parameter of the enable and disable functions is a bitmask of the channels t
 
 .. code-block:: c++
 
-    if (pwm_isenabled(1 << 2)) {
+    if (pwm_is_enabled(1 << 2)) {
         /* Do something */
     }
 
@@ -799,14 +799,16 @@ The first parameter is the clock divider. The second and third one define the di
 
 .. note::
 
-    TWI module does not have an enable function as other modules. The module is enabled when TWI pins are initialized with GPIO module::
+    TWI module does not have an enable function as other modules. The module is enabled when TWI pins are initialized with GPIO module:
 
-    #define TWI_PINS ((1 << 29) | (1 << 30))
-    gpio_init_pins(porta, TWI_PINS, GPIO_FUNCTION_A | GPIO_OPENDRAIN);
+    .. code-block:: c++
+
+        #define TWI_PINS ((1 << 29) | (1 << 30))
+        gpio_init_pins(porta, TWI_PINS, GPIO_FUNCTION_A | GPIO_OPENDRAIN);
 
 .. warning::
 
-    Important! Don't forgot to connect appropriate size external pull-up resistors to your SDA and SLK pins. Try for example 4k7 value resistors. The exact optimal value depends on the SLK and the parasitic capacitance of the bus.
+    Important! Don't forget to connect the appropriate size external pull-up resistors to your SDA and SLK pins. Try for example 4k7 value resistors. The exact optimal value depends on the SLK and the parasitic capacitance of the bus.
 
 Read and write operations
 '''''''''''''''''''''''''
