@@ -59,24 +59,22 @@ All module functions will return -1 on general error. This will happen most prob
 Analog-to-digital conversion, ``#include <aery32/adc.h>``
 ---------------------------------------------------------
 
-UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The maximum ADC clock frequency for the 10-bit precision is 5 MHz. For 8-bit precision it is 8 MHz. This frequency is related to the frequency of the Peripheral Bus A (PBA). When initialized a correct prescaler value has to be used. ``adc_init()`` will check this for you. -1 will be returned, if the clock requirement was not fullfilled.
+UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The maximum ADC clock frequency for the 10-bit precision is 5 MHz. For 8-bit precision it is 8 MHz. This frequency is related to the frequency of the Peripheral Bus A (PBA).
 
 .. code-block:: c++
 
-    int errno;
-    errno = adc_init(
+    adc_init(
         7,    /* prescal, adclk = pba_clk / (2 * (prescal+1)) */
         true, /* hires, 10-bit (false would be 8-bit) */
         0,    /* shtim, sample and hold time = (shtim + 1) / adclk */
         0     /* startup, startup time = (startup + 1) * 8 / adclk */
     );
 
-The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. After initialization, you have to enable the channels that you like to use for the conversion. This can be done through the masking, so there is use for the good old ``<<`` bitwise shift operator.
+The initialization statement given above, uses the prescaler value 7, so if the PBA clock was 66 MHz, the ADC clock would be 4.125 MHz. After initialization, you have to enable the channels that you like to use for the conversion. For example, to enable channel three call
 
 .. code-block:: c++
 
-    if (errno != -1)
-        adc_enable(1 << 3); /* enables the channel 3 */
+    adc_enable(1 << 3);
 
 Now you can start the conversion. Be sure to wait that the conversion is ready before reading the conversion value.
 
@@ -88,12 +86,15 @@ Now you can start the conversion. Be sure to wait that the conversion is ready b
     while (adc_isbusy(1 << 3));
     result = adc_read_cnv(3);
 
-If you only want to read the latest conversion, whatever was the channel, you can omit the channel mask for busy function and read the conversion with another function like this
+If you only want to read the latest conversion, whatever was the channel, you can omit the channel mask for the busy function and read the conversion with another function like this
 
 .. code-block:: c++
 
     while (adc_isbusy());
     result = adc_read_lastcnv();
+
+ADC hardware triggers
+'''''''''''''''''''''
 
 To setup the ADC hardware trigger, call ``adc_setup_trigger()`` after init
 
@@ -782,19 +783,30 @@ Sending arbitrary wide SPI data
 Two-wire (I2C) Interface Bus, ``#include <aery32/twi.h>``
 ---------------------------------------------------------
 
-First initialize the bus. Only master mode has supported.
+TWI interface is initialized as a master like this
 
 .. code-block:: c++
 
     twi_init_master();
 
-The default TWI initializer sets the SLK frequency to 100 kHz and clears the internal device address. If you want to change TWI clockwave, use ``twi_setup_clkwaveform()`` after calling the init(). For example, to set SLK to 400 kHz with 50% dutycycle, call
+By default the initializer sets the bus' SLK frequency to 100 kHz. The maximum supported frequency is 400 kHz. This can be set up with ``twi_setup_clkwaveform()`` after you have called the init function. For example, to set SLK to 400 kHz with 50% dutycycle, call
 
 .. code-block:: c++
 
     twi_setup_clkwaveform(1, 0x3f, 0x3f);
 
-The first parameter is clock divider, the second and third params defines the dividers for clock low and high states, respectively. Refer to datasheet to learn how to set different waveforms for SLK.
+The first parameter is the clock divider. The second and third one define the dividers for the clock low and high states, respectively. Altering these divider values for clock high and low states you can modify the SLK waveform. However, you most likely want to set those equal to get 50% dutycycle for the clock.
+
+.. note::
+
+    TWI module does not have an enable function as other modules. The module is enabled when TWI pins are initialized with GPIO module::
+
+    #define TWI_PINS ((1 << 29) | (1 << 30))
+    gpio_init_pins(porta, TWI_PINS, GPIO_FUNCTION_A | GPIO_OPENDRAIN);
+
+.. warning::
+
+    Important! Don't forgot to connect appropriate size external pull-up resistors to your SDA and SLK pins. Try for example 4k7 value resistors. The exact optimal value depends on the SLK and the parasitic capacitance of the bus.
 
 Read and write operations
 '''''''''''''''''''''''''
@@ -808,7 +820,7 @@ The read and write operations for a single byte works like this
     twi_write_byte(0x04);
     twi_read_byte(&rd);
 
-Both functions return the number of written or read bytes. So on error the return value would be 0 and on success 1.
+Both functions return the number of successfully written or read bytes. So for one byte read/write operation the return value would be 0 on error and 1 on success.
 
 To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
 
@@ -823,7 +835,7 @@ To read and write multiple bytes use ``twi_read/write_nbytes()``, like this
 Using internal device address
 '''''''''''''''''''''''''''''
 
-Both read and write functions can take an optional internal device address in their last param. Internal device address is the slave's internal register where to write the given byte. For example, the following snippet writes a byte ``0x04`` to slave register ``0x80``.
+Both read and write functions can take an optional internal device address in their last param. Internal device address is the slave's internal register where data is written or read from. For example, the following snippet writes a byte ``0x04`` to the slave register (or in other words slave's internal address) ``0x80``.
 
 .. code-block:: c++
 
@@ -832,7 +844,7 @@ Both read and write functions can take an optional internal device address in th
 
     twi_write_byte(byte, iadr);
 
-When optional address has been given the same address is used in every read and write operations that follows the previous operation even if the address is omitted in function call. To clear this behaviour, call ``twi_clear_internal_address()``.
+When optional address has been given the same address is used in every read and write operations that follows the previous operation even if the address is omitted from the function call. To clear this behaviour, call ``twi_clear_internal_address()``.
 
 If you want to use a wider than 8-bit internal device addresses, you have to indicate the address lenght via additional third parameter. For example to use 2 bytes long address, you may call the write function like this
 
@@ -843,4 +855,4 @@ If you want to use a wider than 8-bit internal device addresses, you have to ind
 
     twi_write_byte(byte, iadr, 2);
 
-The largest supported internal device address length is 3 bytes long.
+The largest supported internal device address length is three bytes long.
