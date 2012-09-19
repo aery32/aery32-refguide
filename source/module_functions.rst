@@ -789,13 +789,13 @@ TWI interface is initialized as a master like this
 
     twi_init_master();
 
-By default the initializer sets the bus' SLK frequency to 100 kHz. The maximum supported frequency is 400 kHz. This can be set up with ``twi_setup_clkwaveform()`` after you have called the init function. For example, to set SLK to 400 kHz with 50% dutycycle, call
+By default the initializer sets the bus' SCL frequency to 100 kHz. The maximum supported frequency is 400 kHz. This can be set up with ``twi_setup_clkwaveform()`` after you have called the init function. For example, to set SCL to 400 kHz with 50% dutycycle, call
 
 .. code-block:: c++
 
     twi_setup_clkwaveform(1, 0x3f, 0x3f);
 
-The first parameter is the clock divider. The second and third one define the dividers for the clock low and high states, respectively. Altering these divider values for clock high and low states you can modify the SLK waveform. However, you most likely want to set those equal to get 50% dutycycle for the clock.
+The first parameter is the clock divider. The second and third one define the dividers for the clock low and high states, respectively. Altering these divider values for clock high and low states you can modify the SCL waveform. However, you most likely want to set those equal to get 50% dutycycle for the clock.
 
 .. note::
 
@@ -808,7 +808,7 @@ The first parameter is the clock divider. The second and third one define the di
 
 .. warning::
 
-    Important! Don't forget to connect the appropriate size external pull-up resistors to your SDA and SLK pins. Try for example 4k7 value resistors. The exact optimal value depends on the SLK and the parasitic capacitance of the bus.
+    Important! Don't forget to connect the appropriate size external pull-up resistors to SDA and SCL pins. Try for example 4k7 value resistors. The exact optimal value depends on the SCL and the parasitic capacitance of the bus.
 
 Read and write operations
 '''''''''''''''''''''''''
