@@ -20,12 +20,28 @@ After then change the default build system to *Aery32* from *Tools/Build System*
 Shortcut keys for compile and board programming
 -----------------------------------------------
 
-Use **Ctrl+B** and **Ctrl+Shift+B** shortcut keys to compile the project and to program the board, respectively. For other make targets press **Ctrl+Shift+P** and write *build*. Then select the desired target from the list.
+Use **Ctrl+B** and **Ctrl+Shift+B** shortcut keys to compile the project and to program the board, respectively.
+
+.. image:: ../images/st2_board_flashing.png
+    :target: _images/st2_board_flashing.png
+    :alt: The board is programmed via ST2
+
+For other make targets press **Ctrl+Shift+P** and write *build*. Then select the desired target from the list.
+
+.. image:: ../images/st2_build_debug.png
+    :target: _images/st2_build_debug.png
+    :alt: Building with debug statements in ST2
 
 Open files quickly
 ------------------
 
-If you want to open a file, let's say ``aery32/aery32/gpio.h``, press **Ctrl+P** and write *gpio*. Then select the file from the list. Otherwise use the folder tree at the left side. The folder tree can be switched on and off with **Ctrl+K+B** (first press Ctrl+K then keep pressing Ctrl and press B).
+If you want to open a file, let's say ``aery32/aery32/gpio.h``, press **Ctrl+P** and write *gpio*. Then select the file from the list.
+
+.. image:: ../images/st2_open_file_quickly.png
+    :target: _images/st2_open_file_quickly.png
+    :alt: Open files quickly in ST2
+
+Of course you can also use the folder tree at the left-hand side. It can be switched on and off with **Ctrl+K+B** (first press Ctrl+K then keep pressing Ctrl and press B).
 
 Autocompletion with SublimeClang
 --------------------------------
@@ -52,7 +68,7 @@ SublimeClang prerequisites for the clang static analyzer is to have clang instal
 		"-D__GNUC__=4",
 		"-D__SCHAR_MAX__=127",
 		"-D__INT_MAX__=2147483647",
-		"-D__SHRT_MAX__=32767",
+		"-D__SHRT_MAX__=32767"
 		"-I${this_file_path}/aery32",
 		"-Wall"
 	],
