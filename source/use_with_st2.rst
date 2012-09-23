@@ -52,7 +52,7 @@ SublimeClang prerequisites for the clang static analyzer is to have clang instal
 		"-D__GNUC__=4",
 		"-D__SCHAR_MAX__=127",
 		"-D__INT_MAX__=2147483647",
-		"-D__SHRT_MAX__=32767"
+		"-D__SHRT_MAX__=32767",
 		"-I${this_file_path}/aery32",
 		"-Wall"
 	],
