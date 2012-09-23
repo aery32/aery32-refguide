@@ -49,6 +49,7 @@ SublimeClang prerequisites for the clang static analyzer is to have clang instal
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include-fixed",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include/c++",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include/c++/avr32",
+		"-ccc-host-triple", "mips",
 		"-D__AVR32_UC3A1128__",
 		"-D__GNUC__=4",
 		"-D__SCHAR_MAX__=127",
