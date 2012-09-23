@@ -17,8 +17,8 @@ After then change the default build system to *Aery32* from *Tools/Build System*
     :target: _images/st2_select_build_system.png
     :alt: Change ST2 build system to Aery32
 
-Shortcut keys for compile and board programming
------------------------------------------------
+Shortcut keys
+-------------
 
 Use **Ctrl+B** and **Ctrl+Shift+B** shortcut keys to compile the project and to program the board, respectively.
 
@@ -32,16 +32,11 @@ For other make targets press **Ctrl+Shift+P** and write *build*. Then select the
     :target: _images/st2_build_debug.png
     :alt: Building with debug statements in ST2
 
-Open files quickly
-------------------
-
-If you want to open a file, let's say ``aery32/aery32/gpio.h``, press **Ctrl+P** and write *gpio*. Then select the file from the list.
+When you want to open a file, let's say ``aery32/aery32/gpio.h``, press **Ctrl+P** and write *gpio*. Then select the file from the list. Of course you can also use the folder tree from the left-hand side if you like. Btw. it can be switched on and off with **Ctrl+K+B**.
 
 .. image:: ../images/st2_open_file_quickly.png
     :target: _images/st2_open_file_quickly.png
     :alt: Open files quickly in ST2
-
-Of course you can also use the folder tree at the left-hand side. It can be switched on and off with **Ctrl+K+B** (first press Ctrl+K then keep pressing Ctrl and press B).
 
 Autocompletion with SublimeClang
 --------------------------------
