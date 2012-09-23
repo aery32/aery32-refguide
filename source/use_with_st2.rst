@@ -42,8 +42,6 @@ SublimeClang prerequisites for the clang static analyzer is to have clang instal
 
 	"sublimeclang_enabled": true,
 	"sublimeclang_options": [
-		"-Wall",
-		"-I${this_file_path}/aery32",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/avr32/include",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include-fixed",
@@ -55,6 +53,8 @@ SublimeClang prerequisites for the clang static analyzer is to have clang instal
 		"-D__SCHAR_MAX__=127",
 		"-D__INT_MAX__=2147483647",
 		"-D__SHRT_MAX__=32767"
+		"-I${this_file_path}/aery32",
+		"-Wall"
 	],
 	"sublimeclang_dont_prepend_clang_includes": true,
 	"sublimeclang_show_output_panel": false,
