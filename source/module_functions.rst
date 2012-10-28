@@ -120,14 +120,6 @@ Other possible trigger sources, that can be used for example with the Timer/Coun
 Flash Controller, ``#include <aery32/flashc.h>``
 ------------------------------------------------
 
-.. warning::
-
-    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255.
-
-.. warning::
-
-    According to Atmel UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot of flash and destroy your chip in a second. So be careful!
-
 .. image:: ../images/avr32_flash_structure.png
     :width: 8 cm
     :target: _images/avr32_flash_structure.png
@@ -142,6 +134,14 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 .. warning::
 
     Setting up the correct flash wait state is extremely important! Note that this has to be set correctly even if the flash read and write operations, described below, are not used. If CPU clock speed is higher than 33 MHz you have to use one wait state for flash. Otherwise you can use zero wait state.
+
+.. warning::
+
+    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255.
+
+.. warning::
+
+    According to Atmel UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot of flash and destroy your chip in a second. So be careful!
 
 Read and write operations
 '''''''''''''''''''''''''
@@ -198,7 +198,7 @@ erase. The User page can only be read and write by proprietary commands, which a
 
 .. code-block:: c++
 
-    uint8_t buf[512] = "";
+    uint8_t buf[512];
     flashc_read_userpage(buf);
 
 and
