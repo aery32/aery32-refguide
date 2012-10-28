@@ -120,6 +120,14 @@ Other possible trigger sources, that can be used for example with the Timer/Coun
 Flash Controller, ``#include <aery32/flashc.h>``
 ------------------------------------------------
 
+.. warning::
+
+    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255.
+
+.. warning::
+
+    According to Atmel UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot of flash and destroy your chip in a second. So be careful!
+
 .. image:: ../images/avr32_flash_structure.png
     :width: 8 cm
     :target: _images/avr32_flash_structure.png
@@ -138,7 +146,7 @@ Flash Controller provides low-level access to the chip's internal flash memory, 
 Read and write operations
 '''''''''''''''''''''''''
 
-Flash memory is accessed via pages that are 512 bytes and only 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
+Flash memory is accessed via pages that are 512 bytes long. This means that you have to make sure that your page buffer is large enough to read and write pages, like this
 
 .. code-block:: c++
 
@@ -149,7 +157,7 @@ Flash memory is accessed via pages that are 512 bytes and only 512 bytes long. T
     strcpy(buf, "foo");                     /* Save string "foo" to page buffer */
     flashc_save_page(FLASH_LAST_PAGE, buf); /* Write page buffer back to flash */
 
-You can also read and write values with different types as long as the page buffer size is that 512 bytes.
+You can also read and write values with different types as long as the page buffer size is that 512 bytes. For example like this
 
 .. code-block:: c++
 
@@ -158,31 +166,79 @@ You can also read and write values with different types as long as the page buff
     uint16_t buf16[256];
     uint32_t buf32[128];
 
-After saving the page it can be locked to prevent write or erase sequences.
+Page locking
+''''''''''''
+
+The flash page can be locked to prevent the write and erase sequences. To lock the first page (page number 0), call
 
 .. code-block:: c++
 
-    flashc_lock_page(0); /* Locks the first page, number 0 */
+    flashc_lock_page(0);
 
-Locking is performed on a per-region basis, so the above statement does not lock only page zero, but all pages within the region (16 pages per region). To unlock the page call
+Locking is performed on a per-region basis, so the above statement does not lock only page zero, but all pages within the region. There are 16 pages per region so the above command locks also pages 1-15.
+
+To unlock the page, call
 
 .. code-block:: c++
 
     flashc_unlock_page(0);
 
-There are also functions that takes the region as an input param, ``flashc_lock_preg()`` and ``flashc_unlock_preg()``. Furthermore, there is a function to check if the page is empty
+You can also use, ``flashc_lock_page_region()`` and ``flashc_unlock_page_region()``. to lock and unlock pages by region. Furthermore, there is a function to check if the page is empty
 
 .. code-block:: c++
 
     flashc_isempty(0);
 
-.. warning::
+User page
+'''''''''
 
-    The uploaded program is also stored into the flash, so it is possible to overwrite it by using the Flash controller. The best practice for flash programming, is starting from the top. ``FLASH_LAST_PAGE`` macro definition gives the number of the last page in the flash. For 128 KB flash this would be 255.
+The User page is an additional page, outside the regular flash array, that can be used to store
+various data, like calibration data and serial numbers. This page is not erased by regular chip
+erase. The User page can only be read and write by proprietary commands, which are
 
-.. warning::
+.. code-block:: c++
 
-    According to Atmel UC3A1's internal flash supports approximately 100,000 write cycles and it has 15-year data retention. However, you can easily make a for-loop with 100,000 writes to the same spot of flash and destroy your chip in a second. So be careful!
+    uint8_t buf[512] = "";
+    flashc_read_userpage(buf);
+
+and
+
+.. code-block:: c++
+
+    flashc_save_userpage(buf);
+
+To check whether the user page is empty or not call
+
+.. code-block:: c++
+
+    flashc_userpage_isempty();
+
+General purpose fuse bits
+'''''''''''''''''''''''''
+
+You can read all 32 fuse bits into 32 bit variable by using the following command
+
+.. code-block:: c++
+    
+    uint32_t fusebits;
+    fusebits = flashc_read_fusebits();
+
+To write one bit true or false use this:
+
+.. code-block:: c++
+    
+    flashc_write_fusebit(uint16_t fusebit, bool value);
+
+You can also write fuse bits by a byte at a time, like this
+
+.. code-block:: c++
+
+    flashc_write_fusebyte(0, 0xff);
+    flashc_write_fusebyte(1, 0xff);
+    flashc_write_fusebyte(2, 0xff);
+    flashc_write_fusebyte(3, 0xff);
+
+Now all fuse bits are written to 1. The first parameter is the byte address that can be 0-3 in a 32-bit word and the second one is the byte value.
 
 General Periheral Input/Output, ``#include <aery32/gpio.h>``
 ------------------------------------------------------------
