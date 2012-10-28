@@ -19,7 +19,6 @@ Follow `Linux kernel coding style <https://github.com/torvalds/linux/blob/master
 
 .. code-block:: c
 
-    #include <stdbool.h>
     #include <avr32/io.h>
 
     typedef struct Foo Foo;
@@ -59,17 +58,16 @@ Follow `Linux kernel coding style <https://github.com/torvalds/linux/blob/master
 
     int main(void)
     {
-        char *c;     /* not char* c */
+        char *c;
         Foo foo;
         Bar bar;
 
         bar.foo = &foo;
+
         /*
          * This is multiline comment that reminds you not to use compound literals
-         * in Aery32 library, because avr32-g++ does not support those.
-         *
-         * Example of the use of compound literal:
-         * bar = (Bar) {.foo = &foo};
+         * in Aery32 library, because avr32-g++ does not support those. What's
+         * compound literal? This is: bar = (Bar) {.foo = &foo};
          */
 
         for (;;) {      /* This is how infinite loops are written */
