@@ -43,9 +43,9 @@ Autocomplete with SublimeClang
 
 `SublimeClang <https://github.com/quarnster/SublimeClang>`_ provides a neat autocompletion for Aery32 project. With this plugin you don't have to remember all the function names and their parameters completely. Just write the beginning of the function, for example *gpio_t*, and you get a list of functions. Press **Ctrl+Space** to move on the list and **Tab** to select the function. When you have set the first param, you can press **Tab** again to jump to the next one.
 
-.. image:: ../images/st2_autocompletion.png
-    :target: _images/st2_autocompletion.png
-    :alt: Example of ST2 autocompletion with SublimeClang
+.. image:: ../images/st2_autocomplete.png
+    :target: _images/st2_autocomplete.png
+    :alt: Example of ST2 autocomplete with SublimeClang
 
 SublimeClang prerequisites for the clang static analyzer is to have clang installed and set in your path. The other functionality works without having the clang binaries installed. Here we only use the "other functionalities" and thus do not need clang. So install SublimeClang as instructed in its README without paying any attention toward clang. In Linux you can also skip the additional prerequisities.
 
@@ -82,7 +82,7 @@ Now open ``aery32.sublime-project`` and add the following settings. If you are o
 Aery32 plug-in
 --------------
 
-With `Aery32 plug-in for Sublime Text 2 <https://github.com/aery32/sublime-aery32>`_ you can easily create new projects and all the above setup process is automated for you. Just install the plugin via package control and start using it as any other ST2 plug-in.
+With `Aery32 plug-in for Sublime Text 2 <https://github.com/aery32/sublime-aery32>`_ you can easily create new projects. All the above setup process is automated for you. Just install the plugin via the Package Control plug-in (manual install also possible) and start using it as any other ST2 plug-in. See https://github.com/aery32/sublime-aery32#installation.
 
 .. image:: ../images/st2_aery32_plugin_create_new_project.png
     :target: _images/st2_aery32_plugin_create_new_project.png
