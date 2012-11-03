@@ -49,7 +49,7 @@ Autocomplete with SublimeClang
 
 SublimeClang prerequisites for the clang static analyzer is to have clang installed and set in your path. The other functionality works without having the clang binaries installed. Here we only use the "other functionalities" and thus do not need clang. So install SublimeClang as instructed in its README without paying any attention toward clang. In Linux you can also skip the additional prerequisities.
 
-Now open ``aery32.sublime-project`` and add the following settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately.
+Now open ``aery32.sublime-project`` and add the following settings. If you are on Linux or Mac OS X, alter the AVR Toolchain installation directory appropriately. The preprocessor definitions within the sublimeclang_options, like *-D__AVR32_UC3A1128__=1*, are the few that we have found to be essentials. If you use `Aery32 Sublime Text 2 plug-in <https://github.com/aery32/sublime-aery32>`_ to create a new project, other definitions are added too so the list will be far longer.
 
 .. code-block:: none
 
@@ -79,11 +79,11 @@ Now open ``aery32.sublime-project`` and add the following settings. If you are o
     :target: _images/st2_sublimeclang_settings_for_avr32.png
     :alt: ST2 SublimeClang settings for AVR32 Toolchain
 
-.. note::
-
-	The following preprocessor definitions within the sublimeclang_options, like *-D__AVR32_UC3A1128__=1*, are the few that we have found to be essentials. If you use `Aery32 Sublime Text 2 plug-in <https://github.com/aery32/sublime-aery32>`_ to create a new project, all of the definitions are added. These have an effect on the autocomplete.
-
 Aery32 plug-in
 --------------
 
 With `Aery32 plug-in for Sublime Text 2 <https://github.com/aery32/sublime-aery32>`_ you can easily create new projects and all the above setup process is automated for you. Just install the plugin via package control and start using it as any other ST2 plug-in.
+
+.. image:: ../images/st2_aery32_plugin_create_new_project.png
+    :target: _images/st2_aery32_plugin_create_new_project.png
+    :alt: Aery32 Sublime Text2 plug-in, create new project
