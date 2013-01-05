@@ -151,9 +151,9 @@ of what's the reference voltage and accuracy of ADC. Notice that this function
 uses ``ADC_VREF`` and ``ADC_BITS`` internally to calculate the correct voltage
 for the conversion.
 
-It's inteded that you define your board related functions in ``board.h``
+It's intended that you define all your board related functions in ``board.h``
 and then implement those in ``board.cpp``. For example, if you had a device
-which to communicate via spi you could write a function like this
+which to communicate via SPI, you could write a function like this
 
 .. code-block:: c++
 
@@ -161,6 +161,8 @@ which to communicate via spi you could write a function like this
     {
         return aery::spi_transmit(spi0, 2, byte);
     }
+
+See how the above function abstracts which SPI and slave select you are using?
 
 Default board initializer
 '''''''''''''''''''''''''
@@ -182,9 +184,8 @@ how the board is initialized, ``board::init()`` is the place where to do it.
 
 .. note::
 
-    All board related functions are intended to use a namespace ``board``
-    to not introduce any name collision with other functions added into
-    the project.
+    All board related functions should use a namespace ``board`` to not
+    introduce any name collision with other functions added into the project.
 
 Build system, ``Makefile``
 --------------------------
