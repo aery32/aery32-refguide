@@ -11,11 +11,12 @@ Welcome to Aery32's documentation!
 
    getting_started
    project_structure
+   examples
    build_system
-   system_clocks
-   module_functions
    delay_functions
+   module_functions
    string_functions
+   system_clocks
    contribute
 
 Aery32 Framework in your favorite editor
