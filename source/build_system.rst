@@ -16,9 +16,7 @@ The program size is also showed at the end of the compile, like this::
        3724    1344    4176    9244    241c aery32.elf
           0    5068       0    5068    13cc aery32.hex
 
-``.text`` correspond the FLASH usage and ``.data + .bss`` is the total amount of RAM allocation. Note that you have to take the size of the stack (and possibly heap) into account as well.
-
-At runtime, the initialized data is copied to ``.bss`` during the startup.
+``.text`` correspond the FLASH usage and ``.data + .bss`` is the total amount of RAM allocation. Note that you have to take the size of the stack (and possibly heap) into account as well. ``.bss`` section is the place where the initialized data is copied at runtime during the startup.
 
 .. note::
 

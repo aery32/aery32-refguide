@@ -914,3 +914,108 @@ If you want to use a wider than 8-bit internal device addresses, you have to ind
     twi_write_byte(byte, iadr, 2);
 
 The largest supported internal device address length is three bytes long.
+
+Universal Synchronous/Asynchronous Receiver/Transmitter (USART), ``#include <aery32/usart.h>``
+----------------------------------------------------------------------------------------------
+
+USART module can be used for several kind of communication. The RS-232 serial
+communication with a personal computer (PC) is likely the most common one. To
+initialize the USART0 for serial communication call
+
+.. code-block:: c++
+
+    usart_init_serial(usart0, USART_PARITY_NONE, USART_STOPBITS_1);
+
+Serial communication initialized with no parity and 1 stop bits is the
+default setup for most of the devices, so you may omit the last two
+parameters if you like. Other options are ``EVEN``, ``ODD``, ``MARKED`` and
+``SPACE`` for parity, and ``1p5`` and ``2`` for stop bits.
+
+After then you have to set up the baudrate. The baudrate is derived from
+clock of the peripheral bus B (PBA) or at external pin. This source clock
+is then diveded in divider for integer part and additionally for fractional
+part to achieve even smaller baudrate error. Assuming that the PBA bus
+speed is 66 MHz we have to divide it by 71 to get the baud rate of 115 200
+bit/s (error 0.8%).
+
+.. code-block:: c++
+    
+    usart_setup_speed(usart0, USART_CLK_PBA, 71, 0);
+
+The last parameter is the divider for the fractional part which could have
+been also omitted because it was set to zero. We could have set the 
+fractional part here to 5 to get even smaller baud rate error (0.015%).
+
+At last you have to enable RX and TX channels separately for receiving
+and transmitting bytes
+
+.. code-block:: c++
+    
+    usart_enable_rx(usart0);
+    usart_enable_rx(usart0);
+
+Transmitting bytes
+''''''''''''''''''
+
+Sending a char type byte is as convenient as calling
+
+.. code-block:: c++
+
+    usart_putc(usart0, 'b');
+
+To transmit strings you can use ``puts`` like this
+
+.. code-block:: c++
+
+    usart_puts(usart0, "hello");
+
+To add a new line add ``\n`` to the end of your string, e.g. ``"hello\n"``.
+In Windows you may also like to add carrier return character, which is ``\r``.
+With that the 'hello' string would look like this ``"hello\n\r"``.
+    
+You can also use an intrinsic write function for more general use
+
+.. code-block:: c++
+
+    usart_write(usart0, buf, n);
+
+where ``buf`` is the pointer to the buffer and ``n`` is the number of
+elements to be written.
+
+Receiving bytes
+'''''''''''''''
+
+To get a single char just call
+
+.. code-block:: c++
+
+    char b = usart_getc(usart0);
+
+To get multiple chars you have to declare a read buffer
+
+.. code-block:: c++
+
+    #define BUFSIZE 100
+    char buf[BUFSIZE] = "";
+
+    usart_gets(buf, BUFSIZE);
+
+This snippet of code will receive a string into read buffer called ``buf``.
+Maximum of 100 bytes are received. The ``usart_gets()`` function will
+return when the terminator character has been read. This character is not
+included into buffer. By default newline ``\n`` is used, but you can use
+other by giving it via the last parameter. For example, to use ``\r`` call
+
+.. code-block:: c++
+
+    usart_gets(buf, BUFSIZE), '\r');
+
+For more general receiving, use the intrinsic read function
+
+.. code-block:: c++
+
+    int input;
+    usart_read(usart0, &input);
+
+    int input[100];
+    usart_read(usart0, input, 100);
