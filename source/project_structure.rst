@@ -8,8 +8,6 @@ The default project directory structure looks like this::
     projectname/
         aery32/
             ...
-        examples/
-            ...
         board.cpp
         board.h
         main.cpp
@@ -40,35 +38,6 @@ curious.
 
     Although you can, you should not need to hassle with any file under this
     directory.
-
-Example programs, ``examples/``
--------------------------------
-
-Aery32 Framework comes with plenty of example programs, which are placed
-under the ``examples/`` directory. Every file is an independent program
-that does not need other files to work. So it should work out of box if you
-just replace the default ``main.cpp`` with the example.
-
-To test, for example, the LED toggling demo open the Command Prompt
-and command::
-
-    cp examples\toggle_led.cpp main.cpp
-    make programs
-
-The following lines of commands overwrite the present ``main.cpp`` file
-from the project root with the example, compiles the project and uploads
-the new binary to the development board. The program starts running
-immediately.
-
-.. note ::
-
-    The quickest way to access Command Prompt in Windows is to press
-    Windows-key and R (Win+R) at the same time, and type cmd.
-
-.. note ::
-
-    You are free to remove the ``examples/`` directory from your project
-    if you don't need it.
 
 Main source file, ``main.cpp``
 ------------------------------
@@ -145,15 +114,29 @@ throughput rate of the analog to digital converter. With smaller accuracy
 ADCs generally work faster.
 
 From these ADC related settings, we get to one of the functions declared in
-the default version of ``board.h``. That's ``board::cnv2volt()``. This
-function has not been declared in a library because it's highly dependant
-of what's the reference voltage and accuracy of ADC. Notice that this function
-uses ``ADC_VREF`` and ``ADC_BITS`` internally to calculate the correct voltage
-for the conversion.
+the default version of ``board.h``. That's ``board::cnv2volt()``.
+
+.. code-block:: c++
+
+    static inline double cnv2volt(uint32_t cnv)
+    {
+        return cnv * ((double) ADC_VREF / (1UL << ADC_BITS));
+    }
+
+
+This function han't been declared in a library because it's highly dependant
+of the reference voltage and accuracy of ADC. Note how it uses ``ADC_VREF``
+and ``ADC_BITS`` internally to calculate the correct voltage for the
+conversion.
 
 It's intended that you define all your board related functions in ``board.h``
-and then implement those in ``board.cpp``. For example, if you had a device
-which to communicate via SPI, you could write a function like this
+and then implement those in ``board.cpp``. :doc:`Example programs <examples>`
+coming with the framework are built in one file with the main function in
+purpose, but when used in real application those should be refactored into
+board.h and .cpp.
+
+For example, consider that you had a device which to communicate via SPI. To
+take an advance of the board abstraction you could write a function like this
 
 .. code-block:: c++
 
@@ -162,8 +145,7 @@ which to communicate via SPI, you could write a function like this
         return aery::spi_transmit(spi0, 2, byte);
     }
 
-See how the above function abstracts which SPI peripheral and slave select
-you are using?
+See how the above function abstracts which SPI and slave select you are using.
 
 Default board initializer
 '''''''''''''''''''''''''
