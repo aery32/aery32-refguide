@@ -49,16 +49,16 @@ under the ``examples/`` directory. Every file is an independent program
 that does not need other files to work. So it should work out of box if you
 just replace the default ``main.cpp`` with the example.
 
-To test, for example, the LED toggling demo do the following:
-
-Open Command Prompt and command::
+To test, for example, the LED toggling demo open the Command Prompt
+and command::
 
     cp examples\toggle_led.cpp main.cpp
     make programs
 
 The following lines of commands overwrite the present ``main.cpp`` file
-with the example and uploads (or programs) it into the development board.
-The program starts running immediately.
+from the project root with the example, compiles the project and uploads
+the new binary to the development board. The program starts running
+immediately.
 
 .. note ::
 
@@ -119,13 +119,13 @@ PORTC.
 Build system, ``Makefile``
 --------------------------
 
-Makefile contains all the make recipes to compile the project and uploading
+Makefile contains all the make recipes for compiling the project and uploading
 the compiled binary to the board. See more detailed instructions
 from the :doc:`build system <build_system>` section.
 
 .. note ::
 
-    Genrally Makefiles don't have a file prefix like ``.cpp`` etc. and it's
+    Genrally Makefiles don't have a file postfix like ``.cpp`` and it's
     a common practice to start its name with capital M.
 
 Project wide settings, ``settings.h``

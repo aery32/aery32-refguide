@@ -53,31 +53,28 @@ Now open ``aery32.sublime-project`` and add the following settings. If you are o
 
 .. code-block:: none
 
-	"sublimeclang_enabled": true,
-	"sublimeclang_show_status": true,
-	"sublimeclang_show_output_panel": true,
-	"sublimeclang_hide_output_when_empty": true, 
-	"sublimeclang_show_visual_error_marks": true,
-	"sublimeclang_dont_prepend_clang_includes": true,
+	"sublimeclang_enabled": True,
+	"sublimeclang_dont_prepend_clang_includes": True,
+	"sublimeclang_show_output_panel": True,
+	"sublimeclang_hide_output_when_empty": True,
+	"sublimeclang_show_status": True,
+	"sublimeclang_show_visual_error_marks": True,
 	"sublimeclang_options": [
-		"-Wall", "-Wno-attributes", 
-		"-ccc-host-triple", "mips", 
-		"-I${project_path:aery32}", 
+		"-Wall", "-Wno-attributes",
+		"-ccc-host-triple", "mips",
+		"-I${project_path:aery32}",
+		"-include", "${project_path:settings.h}",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/avr32/include",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include-fixed",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include/c++",
 		"-IC:/Program Files (x86)/Atmel/AVR Tools/AVR Toolchain/lib/gcc/avr32/4.4.3/include/c++/avr32",
-		"-D__AVR32_UC3A1128__=1",
 		"-D__GNUC__=4",
-		"-D__SCHAR_MAX__=127",
+		"-D__AVR32_UC3A1128__=1",
 		"-D__INT_MAX__=2147483647",
-		"-D__SHRT_MAX__=32767"
+		"-D__SHRT_MAX__=32767",
+		"-D__SCHAR_MAX__=127"
 	]
-
-.. image:: ../images/st2_sublimeclang_settings_for_avr32.png
-    :target: _images/st2_sublimeclang_settings_for_avr32.png
-    :alt: ST2 SublimeClang settings for AVR32 Toolchain
 
 Aery32 plug-in
 --------------
