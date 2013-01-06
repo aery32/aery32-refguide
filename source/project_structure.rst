@@ -145,7 +145,8 @@ take an advance of the board abstraction you could write a function like this
         return aery::spi_transmit(spi0, 2, byte);
     }
 
-See how the above function abstracts which SPI and slave select you are using.
+See how the above function abstracts which SPI peripheral and slave select
+you are using.
 
 Default board initializer
 '''''''''''''''''''''''''
