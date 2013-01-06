@@ -1,8 +1,38 @@
 Getting Started
 ===============
 
-The best way to get started is to follow the Quick Start from Aery32's homepage, http://www.aery32.com/pages/quick-start.
+`Aery32 development board <https://github.com/aery32/aery32-devboard>`_
+and `framework <https://github.com/aery32/aery32>`_ is a starting point for
+AVR32-based projects. The framework provides a project structure and library
+enabling **rapid prototyping and development**. Aery32 aims to be both
+**professional** and **fun** that makes it ideal choise for R&D Engineers,
+Academics and Hobbyists.
 
+The best way to get started is to follow the `Quick Start from Aery32's
+homepage <http://www.aery32.com/pages/quick-start>`_.
+
+.. note::
+
+    Aery32 Software Framework and its library is copyright `Muiku Oy
+    <http://www.muiku.com>`_ and licensed under the new BSD license.
+
+Installation
+------------
+
+You don't have to install Aery32 Software Framework as you would do with
+regular software. Just `download the framework
+<https://github.com/aery32/aery32/tags>`_, unzip it and start working with it.
+
+.. note::
+
+    Aery32 Framework is developed with Git distributed version control system
+    at GitHub.
+
+Requirements
+------------
+
+- Atmel AVR Toolchain
+- Batchisp (for Windows) or DFU-programmer (for Mac OS X & Linux)
 
 Basics of the embedded software
 -------------------------------
