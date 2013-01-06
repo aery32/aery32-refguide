@@ -1,20 +1,20 @@
 Getting Started
 ===============
 
-`Aery32 development board <https://github.com/aery32/aery32-devboard>`_
-and `framework <https://github.com/aery32/aery32>`_ is a starting point for
-AVR32-based projects. The framework provides a project structure and library
+`Aery32 development board <http://www.aery32.com>`_ and `framework
+<https://github.com/aery32/aery32>`_ is a starting point for AVR32-based
+projects. The framework provides a project structure and library
 enabling **rapid prototyping and development**. Aery32 aims to be both
 **professional** and **fun** that makes it ideal choise for R&D Engineers,
 Academics and Hobbyists.
 
-The best way to get started is to follow the `Quick Start from Aery32's
-homepage <http://www.aery32.com/pages/quick-start>`_.
+The best way to get started is to follow the `Quick Start <http://www.aery32.com/pages/quick-start>`_ from Aery32's homepage.
 
 .. note::
 
-    Aery32 Software Framework and its library is copyright `Muiku Oy
-    <http://www.muiku.com>`_ and licensed under the new BSD license.
+    Aery32 development board and framework are copyright `Muiku Oy
+    <http://www.muiku.com>`_. The framework, which this reference guide
+    handles, is licensed under the new BSD license.
 
 Installation
 ------------
