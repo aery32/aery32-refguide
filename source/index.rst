@@ -27,8 +27,6 @@ These drivers commonly use low level module functions to provide more
 convenient and feature richer API. You most likely want to use these, when
 ever possible, instead of using lower level module functions.
 
-List of drivers:
-
 .. toctree::
    :maxdepth: 1
 
