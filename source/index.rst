@@ -24,8 +24,10 @@ Class drivers
 
 Aery32 class drivers are high level C++ classes. Thus the name class driver.
 These drivers commonly use low level module functions to provide more
-convenient and feature richer APIs to peripherals. You most likely want
-to use these in your application rather than lower level functions.
+convenient and feature richer API. You most likely want to use these, when
+ever possible, instead of using lower level module functions.
+
+List of drivers:
 
 .. toctree::
    :maxdepth: 1
