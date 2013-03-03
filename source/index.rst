@@ -19,6 +19,20 @@ Welcome to Aery32's documentation!
    system_clocks
    contribute
 
+Class drivers
+-------------
+
+Aery32 class drivers are high level C++ classes. Thus the name class driver.
+These drivers commonly use low level module functions to provide more
+convenient and feature richer APIs to peripherals. You most likely want
+to use these in your application rather than lower level functions.
+
+.. toctree::
+   :maxdepth: 1
+
+   clsdrv/periph_iodma
+   clsdrv/serial_port
+
 Aery32 Framework in your favorite editor
 ========================================
 
