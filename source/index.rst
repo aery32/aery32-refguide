@@ -22,13 +22,10 @@ Welcome to Aery32's documentation!
 Class drivers
 -------------
 
-.. note::
-
-   You most likely want to use these, when ever possible.
-
 Aery32 class drivers, abbreviated as *clsdrv*, are high level C++ classes.
 Thus the name class driver. Class drivers commonly use low level module
-functions to provide even more convenient and feature richer peripheral APIs.
+functions to provide even more convenient and feature rich peripheral APIs.
+**You most likely want to use thes when ever possible.**
 
 .. toctree::
    :maxdepth: 1
@@ -36,8 +33,15 @@ functions to provide even more convenient and feature richer peripheral APIs.
    clsdrv/periph_iodma
    clsdrv/serial_port
 
-Aery32 Framework in your favorite editor
-========================================
+Aery32 framework in your favorite editor
+----------------------------------------
+
+Aery32 framework is not restricted to any specific integrated development
+environment (IDE) or editor. We respect your taste. The best one is the one
+you like best and to figure out which one you like best you have to try a few.
+We like Sublime Text 2 and thus the framework comes with a preset project-file
+for this editor. However, we have kindly made instructions to use Aery32 in
+Eclipse as well :)
 
 .. toctree::
   :maxdepth: 2
