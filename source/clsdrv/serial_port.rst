@@ -1,12 +1,17 @@
 Serial port class driver
 ========================
 
-#include ** `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_ **
-
 Serial port class driver implements serial port communication using USART.
 The driver can be used to communicate with PC via COM port and with other
 integrated chips (ICs) which provide RX and TX signal pins. Hardware
 handshaking (the use of RTS and CTS signal pins) is also supported.
+
+Header file:
+
+`<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
+
+How to instantiate the class
+----------------------------
 
 To instantiate a serial port class we need to create input and output
 buffers are needed, where the read and write characters. For these we
@@ -16,7 +21,7 @@ can be any size, for example 128 bytes as done below.
 
 .. code-block:: c++
 
-  volatile uint8_t bufdma0[128];
+	volatile uint8_t bufdma0[128];
 	volatile uint8_t bufdma1[128];
 
 After then instantiate two DMA channels with these allocated buffer arrays.
