@@ -75,7 +75,7 @@ A single character can be read like this
 
     char c = pc.getc();
 
-If you like to put the get character back to read buffer use
+If you like to put the character back to read buffer, use
 ``putback()`` member function.
 
 Setting speed, parity and stop/data bits
