@@ -6,7 +6,9 @@ The driver can be used to communicate with PC via COM port and with other
 integrated chips (ICs) which provide RX and TX signal pins. Hardware
 handshaking (the use of RTS and CTS signal pins) is also supported.
 
-For a quick API overview, refer to `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_.
+.. note::
+
+	#include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_.
 
 Class instantiation
 -------------------
@@ -50,13 +52,17 @@ The first param is a pointer to the chosen USART module register.
 The second param is the reference to the Peripheral Input DMA class
 driver and the third one to Peripheral Output DMA class driver.
 
-When the Serial Port class driver is enabled it's ready to be used.
-For instance, the well known "Hello World!" example would go like
-this
+
+Hello World!
+------------
+
+When the Serial Port class driver is instantiated and enabled it's ready
+to be used. The well known "Hello World!" example would work like this
 
 .. code-block:: c++
 
 	pc << "Hello World!";
+
 
 Setting speed, parity, etc.
 ---------------------------
