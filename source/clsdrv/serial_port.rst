@@ -20,15 +20,15 @@ method which USART module we like to use by giving a pointer to the USART
 module register. Additionally input and output buffers, *idma* and *odma*,
 are needed.
 
-Let's first allocate some space for the needed buffers.
+First let's allocate some space for the needed buffers.
 
 .. code-block:: c++
 
     volatile uint8_t bufdma0[128];
     volatile uint8_t bufdma1[128];
 
-After then let's instantiate Peripheral DMA class drivers using the
-buffers we just allocated.
+After then we can instantiate Peripheral DMA class drivers using the
+buffers we just created.
 
 .. code-block:: c++
 
@@ -39,7 +39,8 @@ The DMA pid value, which is the second parameter of the *periph_i/odma*
 constructor, defines the USART data direction, so be sure to select
 *periph_idma* and *periph_odma* classes properly.
 
-Now the end is as easy as calling
+Now we are ready to instantiate the Serial Port class driver. Do not forgot
+to enable after instantiated.
 
 .. code-block:: c++
 
@@ -69,6 +70,15 @@ or like this
 
     pc.printf("Hello Aery%d", 32);
 
+Single character can be get like this
+
+.. code-block:: c++
+
+    char c = pc.getc();
+
+If you like to put the get character back to read buffer use
+``putback()`` member function.
+
 Setting speed, parity and stop/data bits
 ----------------------------------------
 
@@ -96,6 +106,13 @@ Parity and stop bits can be set like this
 The possible parity options are ``USART_PARITY_EVEN``, ``USART_PARITY_ODD``,
 ``USART_PARITY_MARKED`` and ``USART_PARITY_SPACE``. The number of stop bits can be
 ``USART_STOPBITS_1``, ``USART_STOPBITS_1p5`` or ``USART_STOPBITS_2``.
+
+The Serial Port class driver supports several data bits values from 5 to 9,
+``USART_DATABITS_5`` etc. Generally 8 data bits is used, but if you need change
+this it's possible to do with ``set_databits()`` member function. However,
+keep in mind that if 9 data bits is used, you also have to change the size
+of transfer of the used *periph_idma* and *periph_odma* class drivers
+(9 bits do not fit in one byte, which is the default DMA transfer size)
 
 Getline and line termination
 ----------------------------
@@ -161,8 +178,27 @@ omitted the default setting ``\r\n`` is used. You can change this default settin
         }
 
 
-Setting up the terminal software in PC side
--------------------------------------------
+Flush and other supportive functions
+------------------------------------
+
+.. code-block:: c++
+
+    serial_port&    flush();
+    size_t          bytes_available();
+
+    serial_port&    reset();
+    serial_port&    enable();
+    serial_port&    disable();
+
+    bool            is_enabled();
+
+Sometimes you need to flush all bytes read into the input buffer. This
+can be done with ``flush()`` member function. If you like to know
+how many bytes have been received, call ``bytes_available()``.
+
+It's also possible that the input buffer gets overflown, which can
+be checked by calling ``has_overflown()``. If the buffer has been
+overflown, you can reset the serial port by calling ``reset()``.
 
 Hardware handshaking
 --------------------
@@ -170,3 +206,8 @@ Hardware handshaking
 To enable hardware handshaking just call ``pc.enable_hw_handshaking();``.
 When the handshaking is enabled the receiver drives the RTS pin and the level
 on the CTS pin modifies the behavior of the transmitter.
+
+
+Setting up the terminal software in PC side
+-------------------------------------------
+
