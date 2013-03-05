@@ -105,10 +105,76 @@ Stop bits options:
     - ``USART_STOPBITS_1p5``
     - ``USART_STOPBITS_2``
 
+To enable hardware handshaking just call
+
+.. code-block:: c++
+
+    pc.enable_hw_handshaking();
+
 Getline and line termination
 ----------------------------
 
-asd
+.. code-block:: c++
+
+    char* getline(char *str, size_t *nread, char delim);
+    char* getline(char *str, size_t *nread, const char *delim);
+
+The upper two member functions can be used to get a user input as lines.
+This means that characters are extracted until either the DMA input buffer
+is full or the delimiting character is found. The delimitation character
+*delim* can be either single character or two characters. *nread* is the
+total number of characters read. Delimitation character and '\0' aren't
+added to this value.
+
+
+The following code would wait user input until the delimation character
+``\n`` has been found.
+
+.. code-block:: c++
+
+    size_t nread = 0;
+    char line[32] = "";
+
+    pc.getline(line, &nread, '\n');
+
+You can also omit the last two params (nread and delim). When delim has been
+omitted the default one is used. You can change this default setting by calling
+``set_default_delim()`` member function as shown below.
+
+.. code-block:: c++
+
+    pc.set_default_delim('\n');
+    pc.set_default_delim("\r\n");
+
+.. note::
+
+    Be specific with the '' and "" notation. For example ``set_default_delim("\n")``
+    would set the default line termination to ``\n\0`` instead of ``\n`` that you
+    might have expected.
+
+.. note::
+
+    For input scanning it's a good practice first fetch the line and then use ``sscanf()``
+    for that.
+
+    .. code-block:: c++
+
+        pc.getline(line);
+        sscanf(line, "%d", &i);
+
+.. hint::
+
+    In main for loop you can skip empty lines this way
+
+    .. code-block:: c++
+
+        for (;;) {
+            pc.getline(line, &nread);
+            if (nread == 0) continue;
+
+            // else do something
+        }
+
 
 Setting up the terminal software in PC side
 -------------------------------------------
