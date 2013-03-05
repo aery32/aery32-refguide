@@ -8,7 +8,7 @@ handshaking (the use of RTS and CTS signal pins) is also supported.
 
 .. note::
 
-	#include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_.
+	#include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
 
 Class instantiation
 -------------------
@@ -25,15 +25,11 @@ can be any size, for example 128 bytes as has been done below.
 	volatile uint8_t bufdma0[128];
 	volatile uint8_t bufdma1[128];
 
-After then let's instantiate two Peripheral DMA class drivers using
-the buffers allocated above. One input and one output type.
+After then let's instantiate two Peripheral DMA class drivers. One input and one output type.
 
 .. code-block:: c++
 
-	// Input DMA
 	periph_idma dma0 = periph_idma(0, AVR32_PDCA_PID_USART0_RX, bufdma0, sizeof(bufdma0));
-
-	// Output DMA
 	periph_odma dma1 = periph_odma(1, AVR32_PDCA_PID_USART0_TX, bufdma1, sizeof(bufdma1));
 
 The DMA pid value, which is the second parameter of the periph_i/odma
