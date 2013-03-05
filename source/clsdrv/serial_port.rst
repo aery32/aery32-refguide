@@ -69,18 +69,22 @@ or like this
 
     pc.printf("Hello Aery%d", 32);
 
-Setting speed, parity, stop bits etc.
--------------------------------------
-
-By default the speed is set to 115200 bit/s. The default setting for parity
-is none. Stop and data bits are 1 and 8, respectively. All these settings can
-be changed via class member functions.
-
-To change speed call
+Setting speed, parity and stop/data bits
+----------------------------------------
 
 .. code-block:: c++
 
-    pc.set_speed(speed);
+    serial_port& set_speed(unsigned int speed);
+    serial_port& set_parity(enum Usart_parity parity);
+    serial_port& set_stopbits(enum Usart_stopbits stopbits);
+    serial_port& set_databits(enum Usart_databits databits);
+
+By default the speed is set to 115200 bit/s and the default setting for parity
+is none. Stop and data bits are 1 and 8, respectively. All these settings can
+be changed with the upper class member functions.
+
+To change speed call ``pc.set_speed(speed);``. The baud error rate is
+set to public ``error`` member and can be checked by calling ``pc.error``.
 
 Parity and stop bits can be set like this
 
@@ -89,30 +93,9 @@ Parity and stop bits can be set like this
     pc.set_parity(USART_PARITY_NONE);
     pc.set_stopbits(USART_STOPBITS_1);
 
-The parity options:
-
-.. hlist::
-    :columns: 2
-
-    - ``USART_PARITY_EVEN``
-    - ``USART_PARITY_ODD``
-    - ``USART_PARITY_MARKED``
-    - ``USART_PARITY_SPACE``
-
-Stop bits options:
-
-.. hlist::
-    :columns: 3
-
-    - ``USART_STOPBITS_1``
-    - ``USART_STOPBITS_1p5``
-    - ``USART_STOPBITS_2``
-
-To enable hardware handshaking just call
-
-.. code-block:: c++
-
-    pc.enable_hw_handshaking();
+The possible parity options are ``USART_PARITY_EVEN``, ``USART_PARITY_ODD``,
+``USART_PARITY_MARKED`` and ``USART_PARITY_SPACE``. The number of stop bits can be
+``USART_STOPBITS_1``, ``USART_STOPBITS_1p5`` or ``USART_STOPBITS_2``.
 
 Getline and line termination
 ----------------------------
@@ -180,3 +163,10 @@ omitted the default setting ``\r\n`` is used. You can change this default settin
 
 Setting up the terminal software in PC side
 -------------------------------------------
+
+Hardware handshaking
+--------------------
+
+To enable hardware handshaking just call ``pc.enable_hw_handshaking();``.
+When the handshaking is enabled the receiver drives the RTS pin and the level
+on the CTS pin modifies the behavior of the transmitter.
