@@ -6,12 +6,14 @@ The driver can be used to communicate with PC via COM port and with other
 integrated chips (ICs) which provide RX and TX signal pins. Hardware
 handshaking (the use of RTS and CTS signal pins) is also supported.
 
-.. note::
-
-    #include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
 
 Class instantiation
 -------------------
+
+.. code-block:: c++
+
+    #include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
+    serial_port(volatile avr32_usart_t *usart, aery::periph_idma &idma, aery::periph_odma &odma);
 
 To instantiate a Serial Port class driver, input and output buffers are needed.
 For these we use the Aery32 frameworks' Peripheral Input and Output DMA
