@@ -7,8 +7,7 @@ Serial Port class driver implements serial port communication using USART.
 The driver can be used to communicate with PC via COM port and with other
 integrated chips (ICs) which provide RX and TX signal pins. Hardware
 handshaking (the use of RTS and CTS signal pins) is also supported.
-
-`Skip to the example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class_driver.cpp>`_.
+`Skip to example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class_driver.cpp>`_.
 
 Class instantiation
 -------------------
