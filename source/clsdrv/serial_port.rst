@@ -194,9 +194,8 @@ Flush and other supportive functions
 
 Sometimes you need to flush all bytes read into the input buffer. This
 can be done with ``flush()`` member function. If you like to know
-how many bytes have been received, call ``bytes_available()``.
-
-It's also possible that the input buffer gets overflown, which can
+how many bytes have been received, call ``bytes_available()``. It's also
+possible that the input buffer gets overflown, which can
 be checked by calling ``has_overflown()``. If the buffer has been
 overflown, you can reset the serial port by calling ``reset()``.
 
