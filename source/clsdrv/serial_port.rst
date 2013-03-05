@@ -16,11 +16,9 @@ Class instantiation
     serial_port(volatile avr32_usart_t *usart, aery::periph_idma &idma, aery::periph_odma &odma);
 
 To instantiate a Serial Port class driver we need to tell its constructor
-method which USART module we like to use by giving a pointer to the USART
-module register. Additionally input and output buffers, *idma* and *odma*,
-are needed.
-
-First let's allocate some space for the needed buffers.
+method which USART module we like to use. Additionally input and output
+buffers, *idma* and *odma*, are needed. So let's allocate some space for
+the needed buffers.
 
 .. code-block:: c++
 
@@ -40,7 +38,7 @@ constructor, defines the USART data direction, so be sure to select
 *periph_idma* and *periph_odma* classes properly.
 
 Now we are ready to instantiate the Serial Port class driver. Do not forgot
-to enable after instantiated.
+to enable it after instantiation.
 
 .. code-block:: c++
 
@@ -70,7 +68,7 @@ or like this
 
     pc.printf("Hello Aery%d", 32);
 
-Single character can be get like this
+A single character can be read like this
 
 .. code-block:: c++
 
@@ -122,12 +120,12 @@ Getline and line termination
     char* getline(char *str, size_t *nread, char delim);
     char* getline(char *str, size_t *nread, const char *delim);
 
-The upper two member functions can be used to get a user input as lines.
-This means that characters are extracted to *str* (C string) until either
-the DMA input buffer is full or the delimiting character is found.
-The delimitation character *delim* can be either single character or two characters.
-*nread* is the total number of characters read. Delimitation character and ``\0`` aren't
-added to this value.
+The upper two member functions can be used to read the user input as lines.
+This means that ``getline()`` will extract characters to *str* C string until
+either the DMA input buffer is full or the delimiting character is found.
+The delimitation character *delim* can be either a single character or two
+sequential characters. *nread* is the total number of characters read
+(delimitation character and ``\0`` aren't added to this value).
 
 The following code would wait user input until the delimation character
 ``\n`` has been found.
@@ -139,9 +137,9 @@ The following code would wait user input until the delimation character
 
     pc.getline(line, &nread, '\n');
 
-You can also omit the last two params (*nread* and *delim*). When *delim* has been
-omitted the default setting ``\r\n`` is used. You can change this default setting by calling
-``set_default_delim()`` member function as shown below.
+You can also omit the last two params (*nread* and *delim*). When *delim*
+has been omitted the default setting ``\r\n`` is used. You can change this
+by calling ``set_default_delim()`` member function as shown below.
 
 .. code-block:: c++
 
@@ -150,14 +148,14 @@ omitted the default setting ``\r\n`` is used. You can change this default settin
 
 .. note::
 
-    Be specific with the ``''`` and ``""`` notation. For example, ``set_default_delim("\n");``
-    would set the default line termination to ``\n\0`` instead of ``\n`` that you
-    might have expected.
+    Be specific with the ``''`` and ``""`` notation. For example,
+    ``set_default_delim("\n");``     would set the default line
+    termination to ``\n\0`` instead of ``\n``.
 
 .. note::
 
-    For input scanning it's a good practice first fetch the line and then use ``sscanf()``
-    for that.
+    For input scanning, it's a good practice first fetch the line
+    and then use ``sscanf()`` for that.
 
     .. code-block:: c++
 
