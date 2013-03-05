@@ -1,14 +1,13 @@
 Serial Port class driver
 ========================
 
+#include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
+
 Serial Port class driver implements serial port communication using USART.
 The driver can be used to communicate with PC via COM port and with other
 integrated chips (ICs) which provide RX and TX signal pins. Hardware
 handshaking (the use of RTS and CTS signal pins) is also supported.
 
-.. note::
-
-    #include `<aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
 
 Class instantiation
 -------------------
@@ -120,12 +119,11 @@ Getline and line termination
     char* getline(char *str, size_t *nread, const char *delim);
 
 The upper two member functions can be used to get a user input as lines.
-This means that characters are extracted until either the DMA input buffer
-is full or the delimiting character is found. The delimitation character
-*delim* can be either single character or two characters. *nread* is the
-total number of characters read. Delimitation character and '\0' aren't
+This means that characters are extracted to *str* (C string) until either
+the DMA input buffer is full or the delimiting character is found.
+The delimitation character *delim* can be either single character or two characters.
+*nread* is the total number of characters read. Delimitation character and ``\0`` aren't
 added to this value.
-
 
 The following code would wait user input until the delimation character
 ``\n`` has been found.
@@ -137,8 +135,8 @@ The following code would wait user input until the delimation character
 
     pc.getline(line, &nread, '\n');
 
-You can also omit the last two params (nread and delim). When delim has been
-omitted the default one is used. You can change this default setting by calling
+You can also omit the last two params (*nread* and *delim*). When *delim* has been
+omitted the default setting ``\r\n`` is used. You can change this default setting by calling
 ``set_default_delim()`` member function as shown below.
 
 .. code-block:: c++
@@ -148,7 +146,7 @@ omitted the default one is used. You can change this default setting by calling
 
 .. note::
 
-    Be specific with the '' and "" notation. For example ``set_default_delim("\n")``
+    Be specific with the ``''`` and ``""`` notation. For example, ``set_default_delim("\n");``
     would set the default line termination to ``\n\0`` instead of ``\n`` that you
     might have expected.
 
