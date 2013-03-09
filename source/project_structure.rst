@@ -80,14 +80,15 @@ The second call is to set the LED pin high.
 Board specific functions, ``board.h`` and ``.cpp``
 --------------------------------------------------
 
-Use these two files for your board specific functions and macro definitions.
-A macro definition is for example the following pin declaration
+All board specific functions and macro definitions should be placed in
+``board.h`` header file. A macro definition is for example the following pin
+declaration
 
 .. code-block:: c++
 
     #define LED    AVR32_PIN_PC04
 
-Now you don't have to always recall which pin the LED was connected when
+By doing this you don't need to remember which pin the LED was connected when
 you want to switch it on. So instead of using this
 
 .. code-block:: c++
@@ -100,40 +101,8 @@ you can use this
 
     aery::gpio_set_pin_high(LED);
 
-You can find this default LED macro definition from ``board.h``. There are
-also other default board related definitions, which you may need to change
-according to your project. Those are for example
-
-.. code-block:: c++
-
-    #define ADC_VREF    3.0
-    #define ADC_BITS    10
-
-These two macro definitions are related to the analog to digital converter
-(ADC). To change the reference voltage of the ADC, modify the ``ADC_VREF``.
-Similarly if you decide to use, for example, only eight bits accuracy alter
-``ADC_BITS`` accordingly. You may like to reduce the accuracy in favor
-throughput rate of the analog to digital converter. With smaller accuracy
-ADCs generally work faster.
-
-From these ADC related settings, we get to one of the functions declared in
-the default version of ``board.h``. That's ``board::cnv2volt()``.
-
-.. code-block:: c++
-
-    static inline double cnv2volt(uint32_t cnv)
-    {
-        return cnv * ((double) ADC_VREF / (1UL << ADC_BITS));
-    }
-
-
-This function han't been declared in a library because it's highly dependant
-of the reference voltage and accuracy of ADC. Note how it uses ``ADC_VREF``
-and ``ADC_BITS`` internally to calculate the correct voltage for the
-conversion.
-
-It's intended that you define all your board related functions in ``board.h``
-and then implement those in ``board.cpp``. :doc:`Example programs <examples>`
+It's intended that you define all your board related functions in board.h
+and then implement those in board.cpp. :doc:`Example programs <examples>`
 coming with the framework are built in one file with the main function in
 purpose, but when used in real application those should be refactored into
 board.h and .cpp.
@@ -167,12 +136,25 @@ Here's what it basicly does by default
   which is 66 MHz
 
 If you like to change the master clock frequency or want to change the way
-how the board is initialized, ``board::init()`` is the place where to do it.
+how the board is initialized, board::init() is the place where to do it.
 
 .. note::
 
     All board related functions should use a namespace ``board`` to not
     introduce any name collision with other functions added into the project.
+
+Frequency settings
+''''''''''''''''''
+
+.. code-block:: c++
+
+    #define F_OSC0 12000000UL
+    #define F_OSC1 16000000UL
+    #define F_CPU  66000000UL
+
+These three macro definitions are related to the board operating frequency.
+If you choose to change the board CPU frequency, make sure to redefine
+it in the board.h, or otherwise delay functions won't work as expected.
 
 Build system, ``Makefile``
 --------------------------
