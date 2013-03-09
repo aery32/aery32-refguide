@@ -34,9 +34,9 @@ buffers we just created.
     periph_idma dma0 = periph_idma(0, AVR32_PDCA_PID_USART0_RX, bufdma0, sizeof(bufdma0));
     periph_odma dma1 = periph_odma(1, AVR32_PDCA_PID_USART0_TX, bufdma1, sizeof(bufdma1));
 
-The DMA pid value, which is the second parameter of the *periph_i/odma*
-constructor, defines the USART data direction, so be sure to select
-*periph_idma* and *periph_odma* classes properly.
+The DMA pid value, which is the second parameter of the *periph_idma* and
+*periph_odma* constructors, defines the USART data direction, so be sure to
+select Peripheral DMA class' direction properly.
 
 Now we are ready to instantiate the Serial Port class driver. Do not forgot
 to enable it after instantiation.
