@@ -12,7 +12,6 @@ The default project directory structure looks like this::
         board.h
         main.cpp
         Makefile
-        settings.h
 
 It is intended that you work under the root directory most of the time as
 that is the place where you keep adding your .c, .cpp and .h source files.
@@ -53,8 +52,12 @@ The second call is to set the LED pin high.
 .. code-block:: c++
     :linenos:
 
+    #include <aery32/all.h>
     #include "board.h"
+
     using namespace aery;
+
+    #define LED AVR32_PIN_PC04
 
     int main(void)
     {
@@ -182,22 +185,3 @@ from the :doc:`build system <build_system>` section.
 
     Generally Makefiles don't have a file postfix like ``.cpp`` and it's
     a common practice to start its name with capital M.
-
-Project wide settings, ``settings.h``
--------------------------------------
-
-In this file you can define project wide global settings. Aery32 Framework
-is also aware some of the settings defined in this file. For example, to get
-the delay functions work properly you have to define the correct CPU frequency,
-``F_CPU``, in this file. Below you can see how some essential settings have
-been defined.
-
-.. code-block:: c++
-
-    #define F_OSC0 12000000UL
-    #define F_OSC1 16000000UL
-    #define F_CPU  66000000UL
-
-.. note ::
-
-    This file is provided to GCC via ``-include``
