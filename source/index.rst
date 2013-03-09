@@ -41,7 +41,7 @@ MCU's internal peripheral modules.
    functions/rtc
    functions/spi
    functions/twi
-   Universal Synchronous/Asynchronous Receiver/Transmitter (USART) <functions/usart>
+   Universal Sync/Asynchronous Receiver/Transmitter <functions/usart>
 
 Class drivers
 -------------
