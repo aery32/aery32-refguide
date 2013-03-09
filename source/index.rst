@@ -24,14 +24,14 @@ Welcome to Aery32's documentation!
 Module functions
 ----------------
 
-Modules are library components that operate straightly with the MCU's
-internal peripheral modules.
+Module functionss are library components that operate straightly with the
+MCU's internal peripheral modules.
 
 .. toctree::
    :maxdepth: 2
 
    functions/naming_convention
-   function/adc
+   functions/adc
 
 Class drivers
 -------------
