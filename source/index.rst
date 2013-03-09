@@ -28,7 +28,7 @@ Module functions are library components that operate straightly with the
 MCU's internal peripheral modules.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    functions/naming_convention
    functions/gpio
@@ -52,7 +52,7 @@ functions into a nice package providing even more convenient and feature rich
 APIs. You most likely want to use these when ever possible.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    clsdrv/periph_iodma
    clsdrv/serial_port
@@ -68,7 +68,7 @@ for this editor. However, we have kindly made instructions to use Aery32 in
 Eclipse as well :)
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 1
 
   use_with_eclipse
   use_with_st2
