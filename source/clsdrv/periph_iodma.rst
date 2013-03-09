@@ -90,14 +90,20 @@ Reading the input DMA
     size_t read(uint16_t *dest, size_t n);
     size_t read(uint32_t *dest, size_t n);
 
-The read function returns the total number of blocks moved from the DMA input
-buffer to the another destination *dest*. If there was nothing to read,
-zero is returned despite the size of *n*. To poll the input buffer whether
-there are bytes call ``bytes_available()``. ``has_overflown()`` in turn
-tells if the buffer has been overflown.
+The read function of the Peripheral Input DMA returns the total number of
+elements moved from the DMA input buffer to new destination *dest*. If there
+was nothing to move, zero is returned despite the size of *n*. To poll the
+input buffer whether there are bytes which to read call ``bytes_available()``.
+``has_overflown()`` in turn tells if the buffer has been overflown.
 
 In case you want to remove all bytes from the input buffer once and all call
 ``flush()``.
+
+.. note::
+
+    With 32-bit size of transfer one read operation will increase the available
+    bytes by 4, because one word (32-bit) is 4 * 8-bit. 16-bit size of transfer
+    in turn would increase the available bytes by 2.
 
 Writing to the output DMA
 -------------------------
@@ -108,7 +114,8 @@ Writing to the output DMA
     periph_odma& write(uint16_t *dest, size_t n);
     periph_odma& write(uint32_t *dest, size_t n);
 
-The write function fills the output buffer, but does not start the
-transmission yet. To start tramission call ``flush()``. After then you can use
-``bytes_in_progress()`` to follow the send process. If you are unsure how
-many bytes you have written in the buffer call ``bytes_in_buffer()``.
+The write function of the Peripheral Output DMA fills the output buffer, but
+does not start the transmission yet. To start the transmission call
+``flush()``. After then you can use ``bytes_in_progress()`` to follow the send
+process. If you are unsure how many bytes you have written in the buffer call
+``bytes_in_buffer()``.
