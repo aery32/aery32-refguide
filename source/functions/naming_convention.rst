@@ -1,7 +1,15 @@
-Naming convention and the calling order
-=======================================
+Function naming conventions
+===========================
 
-The common calling order for modules is the following: 1) initialize, 2) do some extra setuping and after then 3) enable the module. In pseudo code it looks like this
+Every module function has its own namespace according to the peripheral name.
+For example, Power Manager has module namespace of ``pm_``, Serial Peripheral
+Interface falls under the ``spi_`` namespace and so on. To use the module just
+include its header file. So, for example, to include and use functions that
+operate with the Power Manager include ``<aery32/pm.h>``.
+
+A common calling order for module functions is following: 1) initialize,
+2) do some extra setuping and after then 3) enable the module.
+In pseudo code these three steps would looks like this
 
 .. code-block:: c++
 
@@ -36,3 +44,17 @@ If you have read through the MCU datasheet, you may wonder why you cannot set al
 
         #define SPI0_GPIO_MASK ((1 << 10) | (1 << 11) | (1 << 12) | (1 << 13))
         gpio_init_pins(porta, SPI0_GPIO_MASK, GPIO_FUNCTION_A);
+
+Global variables
+----------------
+
+Every module declares global shortcut variables to the main registers of the module. For example, the GPIO module declares ``porta``, ``b`` and ``c`` global pointers to the MCU ports by default. Otherwise, you should have been more verbose and use ``&AVR32_GPIO.port[0]``, ``&AVR32_GPIO.port[1]`` and ``&AVR32_GPIO.port[2]``, respectively. Similarly, ``pll0`` and ``pll1`` declared in PM module provide quick access to MCU PLL registers etc.
+
+.. hint::
+
+    As ``porta``, ``b`` and ``c`` are pointers to the GPIO port, you can access its registers with arrow operator, for example, instead of using function ``gpio_toggle_pin(AVR32_PIN_PC04)`` you could have written ``portc->ovrt = (1 << 4);`` This is also way how you can set/unset/read/toggle multiple pins at once. Refer to the UC3A0/1 datasheet pages 175--177 for GPIO Register Map.
+
+Error handling
+--------------
+
+All module functions will return -1 on general error. This will happen most probably because of invalid parameter values. Greater nagative return values have a specific meaning and a macro definition in the module's header file. For example, ``flashc_save_page()`` of Flash Controller may return -2 and -3, which have been defined with ``E`` prefixed names ``EFLASH_PAGE_LOCKED`` and ``EFLASH_PROG_ERR``, respectively.

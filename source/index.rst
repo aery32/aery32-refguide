@@ -25,18 +25,12 @@ Module functions
 ----------------
 
 Modules are library components that operate straightly with the MCU's
-internal peripheral modules. Every module function has its own namespace
-according to the peripheral name. For example, Power Manager has module
-namespace of ``pm_`` and Serial Peripheral Interface falls under the ``spi_``
-namespace etc. To use the module just include its header file. So, for
-example, to include and use functions that operate with the Power Manager
-include ``<aery32/pm.h>``.
+internal peripheral modules.
 
 .. toctree::
    :maxdepth: 2
 
    functions/naming_convention
-   functions/globals
    function/adc
 
 Class drivers
