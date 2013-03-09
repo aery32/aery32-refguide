@@ -1,7 +1,5 @@
-General Periheral Input/Output
-------------------------------
-
-#include `<aery32/gpio.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/gpio.h>`_
+General Periheral Input/Output, ``#include <aery32/gpio.h>``
+------------------------------------------------------------
 
 To initialize any pin to be output high, there is a oneliner which can be used
 

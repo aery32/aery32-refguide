@@ -31,7 +31,7 @@ MCU's internal peripheral modules.
    :maxdepth: 1
 
    functions/naming_convention
-   functions/gpio
+   General Periheral Input/Output <functions/gpio>
    functions/pm
    functions/flashc
    functions/intc
@@ -41,7 +41,7 @@ MCU's internal peripheral modules.
    functions/rtc
    functions/spi
    functions/twi
-   functions/usart
+   Universal Synchronous/Asynchronous Receiver/Transmitter (USART) <functions/usart>
 
 Class drivers
 -------------
