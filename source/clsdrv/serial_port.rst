@@ -1,5 +1,5 @@
-Serial Port class driver, ``#include <aery32/serial_port_clsdrv.h>``
-====================================================================
+Serial Port class driver, `#include <aery32/serial_port_clsdrv.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/serial_port_clsdrv.h>`_
+========================
 
 Serial Port class driver implements serial port communication using :doc:`USART
 module functions <../functions/usart>` and :doc:`Periperhal Input/Output DMA
