@@ -1,5 +1,5 @@
-Function naming conventions
-===========================
+Naming conventions of module functions
+======================================
 
 Every module function has its own namespace according to the peripheral name.
 For example, Power Manager has module namespace of ``pm_``, Serial Peripheral

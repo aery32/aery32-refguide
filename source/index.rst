@@ -30,7 +30,7 @@ MCU's internal peripheral modules.
 .. toctree::
    :maxdepth: 1
 
-   functions/naming_convention
+   Naming conventions <functions/naming_conventions>
    General Periheral Input/Output <functions/gpio>
    functions/pm
    functions/flashc
@@ -54,8 +54,8 @@ APIs. You most likely want to use these when ever possible.
 .. toctree::
    :maxdepth: 1
 
-   clsdrv/periph_iodma
-   clsdrv/serial_port
+   Input/Output DMA <clsdrv/periph_iodma>
+   Serial port <clsdrv/serial_port>
 
 Aery32 framework in your favorite editor
 ----------------------------------------

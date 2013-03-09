@@ -1,8 +1,8 @@
 Serial Port class driver, ``#include <aery32/serial_port_clsdrv.h>``
-========================
+====================================================================
 
 Serial Port class driver implements serial port communication using :doc:`USART
-module functions <../functions/usart>` and :doc:`Periperhal input/output DMA
+module functions <../functions/usart>` and :doc:`Periperhal Input/Output DMA
 class drivers <periph_iodma>`. The driver can be used to communicate
 with PC via COM port and with other integrated chips (ICs) which provide
 RX and TX signal pins. Hardware handshaking (the use of RTS and CTS signal
