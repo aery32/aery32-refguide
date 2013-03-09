@@ -32,8 +32,8 @@ MCU's internal peripheral modules.
 
    Naming conventions <functions/naming_conventions>
    General Periheral Input/Output <functions/gpio>
-   functions/pm
-   functions/flashc
+   Power Manager <functions/pm>
+   Flash Controller <functions/flashc>
    functions/intc
 
    functions/adc

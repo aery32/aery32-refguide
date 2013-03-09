@@ -1,9 +1,7 @@
-Flash Controller
-================
+Flash Controller, ```#include <aery32/flashc.h>`` <https://github.com/aery32/aery32/blob/master/aery32/aery32/flashc.h>`_
+=========================================================================================================================
 
-#include `<aery32/flashc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/flashc.h>`_
-
-.. image:: ../images/avr32_flash_structure.png
+.. image:: ../../images/avr32_flash_structure.png
     :width: 8 cm
     :target: _images/avr32_flash_structure.png
     :alt: AVR32 UC3A1/0 Flash Structure
