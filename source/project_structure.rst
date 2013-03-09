@@ -46,7 +46,7 @@ start building your project. First the ``board.h`` header file has been
 included. This file includes your application specific function prototypes,
 which are defined in ``board.cpp``. For your convenience a small
 ``board::init()`` function is provided by default. This function is called
-within the main function at line 11. It's the first function call here.
+within the main function at line 15. It's the first function call here.
 The second call is to set the LED pin high.
 
 .. code-block:: c++
@@ -105,20 +105,19 @@ It's intended that you define all your board related functions in board.h
 and then implement those in board.cpp. :doc:`Example programs <examples>`
 coming with the framework are built in one file with the main function in
 purpose, but when used in real application those should be refactored into
-board.h and .cpp.
-
-For example, consider that you had a device which to communicate via SPI. To
-take an advance of the board abstraction you could write a function like this
+board.h and .cpp. For example, consider that you had a device which to
+communicate via SPI. To take an advance of the board abstraction you could
+write the following board specific function in board.h
 
 .. code-block:: c++
 
-    uint8_t board::write_to_device(uint8_t byte)
+    inline uint8_t board::write_to_device(uint8_t byte)
     {
         return aery::spi_transmit(spi0, 2, byte);
     }
 
-See how the above function abstracts which SPI peripheral and slave select
-you are using.
+See how the above function abstracts which SPI peripheral number and slave
+select your device is connected.
 
 Default board initializer
 '''''''''''''''''''''''''
