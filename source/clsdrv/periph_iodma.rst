@@ -81,8 +81,8 @@ converter.
     periph_idma dma0 = periph_idma(0, AVR32_PDCA_PID_ADC_RX, buf, sizeof(buf));
     dma0.set_sizeof_transfer(PDCA_TRANSFER_SIZE_WORD).enable();
 
-Reading the input DMA
----------------------
+Reading the input DMA, ``periph_idma``
+--------------------------------------
 
 .. code-block:: c++
 
@@ -105,8 +105,8 @@ In case you want to remove all bytes from the input buffer once and all call
     bytes by 4, because one word (32-bit) is 4 * 8-bit. 16-bit size of transfer
     in turn would increase the available bytes by 2.
 
-Writing to the output DMA
--------------------------
+Writing to the output DMA, ``periph_odma``
+------------------------------------------
 
 .. code-block:: c++
 
