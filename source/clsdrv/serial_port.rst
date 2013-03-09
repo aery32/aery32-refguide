@@ -6,7 +6,8 @@ module functions <../functions/usart>` and :doc:`Periperhal Input/Output DMA
 class drivers <periph_iodma>`. The driver can be used to communicate
 with PC via COM port and with other integrated chips (ICs) which provide
 RX and TX signal pins. Hardware handshaking (the use of RTS and CTS signal
-pins), which requires DMA to work, is also supported by the class. `Skip to example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class_driver.cpp>`_.
+pins), which requires DMA to work, is also supported by the class. `Skip to
+example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class_driver.cpp>`_.
 
 Class instantiation
 -------------------
@@ -47,9 +48,8 @@ to enable it after instantiation.
 
 .. note::
 
-    The object name ``pc`` was used here, because of the example where
-    the connection is intended to be use with PC. See the *Setting
-    up the terminal software in PC side* below.
+    The object name ``pc`` was used here, because the connection is intended
+    to be use with PC. See the :ref:`setting-up-terminal` below.
 
 
 Hello World!
@@ -87,9 +87,10 @@ Setting speed, parity and stop/data bits
     serial_port& set_stopbits(enum Usart_stopbits stopbits);
     serial_port& set_databits(enum Usart_databits databits);
 
-By default the speed is set to 115200 bit/s and the default setting for parity
-is none. Stop and data bits are 1 and 8, respectively. All these settings can
-be changed with the upper class member functions.
+By default the speed is set to 115200 bit/s (error 0.16% with 66 MHz PBA
+freq.). The default setting for parity is none. Stop and data bits are
+1 and 8, respectively. All these settings can be changed with the upper class
+member functions.
 
 To change speed call ``pc.set_speed(speed);``. The baud error rate is
 set to public ``error`` member and can be checked by calling ``pc.error``.
@@ -204,6 +205,7 @@ To enable hardware handshaking just call ``pc.enable_hw_handshaking();``.
 When the handshaking is enabled the receiver drives the RTS pin and the level
 on the CTS pin modifies the behavior of the transmitter.
 
+.. _setting-up-terminal:
 
 Setting up the terminal software in PC side
 -------------------------------------------
