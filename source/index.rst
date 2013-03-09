@@ -11,22 +11,41 @@ Welcome to Aery32's documentation!
 
    getting_started
    project_structure
-   examples
    build_system
-   delay_functions
-   module_functions
-   string_functions
+   examples
+
    system_clocks
+
+   delay_functions
+   string_functions
+
    contribute
+
+Module functions
+----------------
+
+Modules are library components that operate straightly with the MCU's
+internal peripheral modules. Every module function has its own namespace
+according to the peripheral name. For example, Power Manager has module
+namespace of ``pm_`` and Serial Peripheral Interface falls under the ``spi_``
+namespace etc. To use the module just include its header file. So, for
+example, to include and use functions that operate with the Power Manager
+include ``<aery32/pm.h>``.
+
+.. toctree::
+   :maxdepth: 2
+
+   functions/naming_convention
+   functions/globals
+   function/adc
 
 Class drivers
 -------------
 
 Aery32 class drivers, abbreviated as *clsdrv*, are high level C++ classes.
-Thus the name class driver. Class drivers commonly use low level module
-functions to provide even more convenient and feature rich peripheral APIs.
-You most likely want to use these when ever possible. However, keep in mind
-that everything cannot be a class driver.
+Thus the name class driver. Class drivers commonly wrap bunch of module
+functions into a nice package providing even more convenient and feature rich
+APIs. You most likely want to use these when ever possible.
 
 .. toctree::
    :maxdepth: 2
