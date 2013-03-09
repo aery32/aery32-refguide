@@ -53,7 +53,7 @@ calculate the buffer size in bytes, like this
 
 .. code-block:: c++
 
-    volatile uint16_t buf[128];
+    volatile uint16_t buf[128] = {};
     periph_idma dma0 = periph_idma(0, AVR32_PDCA_PID_USART0_RX, buf, sizeof(buf));
 
 Note that the buffer has to be volatile type but the element size is not
@@ -69,10 +69,17 @@ Lastly enable DMA
 Size of transfer
 ----------------
 
-The size of transfer is set to 8 bits by default. It can be changed with the
-``set_sizeof_transfer()`` peripheral function. The possible settings are
-``PDCA_SIZE_BYTE``, ``PDCA_SIZE_HALFWORD`` and ``PDCA_SIZE_WORD``. One word
-is 4 bytes long.
+The size of transfer is set to 8-bit by default, but can be changed with the
+``set_sizeof_transfer()`` peripheral function. Either a byte, half-word or
+word can be used (8-bit, 16-bit or 32-bit respectively). The example code
+below shows how to use the size of transfer of 32-bit with Analog-to-Digital
+converter.
+
+.. code-block:: c++
+
+    volatile uint32_t buf[32] = {};
+    periph_idma dma0 = periph_idma(0, AVR32_PDCA_PID_ADC_RX, buf, sizeof(buf));
+    dma0.set_sizeof_transfer(PDCA_TRANSFER_SIZE_WORD).enable();
 
 Reading the input DMA
 ---------------------
