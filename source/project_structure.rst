@@ -41,13 +41,13 @@ curious.
 Main source file, ``main.cpp``
 ------------------------------
 
-The ``main.cpp`` source file contains the default main function where to
-start building your project. First the ``board.h`` header file has been
+The main.cpp source file contains the default main function where to
+start building your project. First the board.h header file has been
 included. This file includes your application specific function prototypes,
-which are defined in ``board.cpp``. For your convenience a small
+which are defined in board.cpp. For your convenience a small
 ``board::init()`` function is provided by default. This function is called
-within the main function at line 15. It's the first function call here.
-The second call is to set the LED pin high.
+within the main function at line 15 and is the first function call.
+The second function call before the empty main loop sets the LED pin high.
 
 .. code-block:: c++
     :linenos:
