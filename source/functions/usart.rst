@@ -1,13 +1,13 @@
 Universal Sync/Asynchronous Receiver/Transmitter, `#include <aery32/usart.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/usart.h>`_
 ================================================
 
+USART module can be used for several kind of communication. The RS-232 serial
+communication with a personal computer (PC) is likely the most common one.
+
 .. note::
 
     There's also a class driver for serial port communication. Skip to
-    :doc:`Serial port class driver <../clsdrv/serial_port>`.
-
-USART module can be used for several kind of communication. The RS-232 serial
-communication with a personal computer (PC) is likely the most common one.
+    :doc:`Serial Port class driver <../clsdrv/serial_port>`.
 
 Initialization
 --------------
