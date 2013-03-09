@@ -1,4 +1,4 @@
-Analog-to-digital converter, `#include <aery32/adc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/adc.h>`_
+Analog-to-Digital Converter, `#include <aery32/adc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/adc.h>`_
 ===========================
 
 AVR32 UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters.

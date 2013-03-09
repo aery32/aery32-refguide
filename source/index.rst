@@ -34,13 +34,13 @@ MCU's internal peripheral modules.
    General Periheral Input/Output <functions/gpio>
    Power Manager <functions/pm>
    Flash Controller <functions/flashc>
-   functions/intc
+   Interrupt Controller <functions/intc>
 
-   functions/adc
-   functions/pwm
-   functions/rtc
-   functions/spi
-   functions/twi
+   Analog-to-Digital Converter <functions/adc>
+   Pulse Width Modulation <functions/pwm>
+   Real-time Counter <functions/rtc>
+   Serial Peripheral Interface <functions/spi>
+   Two-wire (I2C) Interface <functions/twi>
    Universal Sync/Asynchronous Receiver/Transmitter <functions/usart>
 
 Class drivers

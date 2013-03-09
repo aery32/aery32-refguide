@@ -1,5 +1,5 @@
-Serial Peripheral Bus, `#include <aery32/spi.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/spi.h>`_
-=====================
+Serial Peripheral Interface, `#include <aery32/spi.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/spi.h>`_
+===========================
 
 Aery32 includes two separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
