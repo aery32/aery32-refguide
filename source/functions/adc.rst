@@ -1,9 +1,11 @@
-Analog-to-digital converter
+Analog-to-digital converter, `#include <aery32/adc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/adc.h>`_
 ===========================
 
-#include `<aery32/adc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/adc.h>`_
-
-UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters. The maximum ADC clock frequency for the 10-bit precision is 5 MHz. For 8-bit precision it is 8 MHz. This frequency is related to the frequency of the Peripheral Bus A (PBA). `Skip to example <https://github.com/aery32/aery32/blob/master/examples/adc.cpp>`_.
+AVR32 UC3A0/1 microcontrollers have eight 10-bit analog-to-digital converters.
+The maximum ADC clock frequency for the 10-bit precision is 5 MHz and for
+8-bit precision it's 8 MHz. This sampling frequency is related to the
+frequency of the Peripheral Bus A (PBA), so take care when setting ADC
+clock prescaler values. `Skip to example <https://github.com/aery32/aery32/blob/master/examples/adc.cpp>`_.
 
 Initialization
 --------------

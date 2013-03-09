@@ -1,7 +1,5 @@
-Pulse Width Modulation
+Pulse Width Modulation, `#include <aery32/pwm.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/usart.h>`_
 ======================
-
-#include `<aery32/pwm.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/pwm.h>`_
 
 Start by initializing the PWM channel which you want to use
 

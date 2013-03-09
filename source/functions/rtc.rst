@@ -1,7 +1,5 @@
-Real-time Counter
+Real-time Counter, `#include <aery32/rtc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/rtc.h>`_
 =================
-
-#include `<aery32/rtc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/rtc.h>`_
 
 Real-time counter is for accurate real-time measurements. It enables periodic interrupts at long intervals and the measurement of real-time sequences. RTC has to be init to start counting from the chosen value to the chosen top value. This can be done in this way
 

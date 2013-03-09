@@ -1,9 +1,7 @@
-Serial Peripheral Bus
+Serial Peripheral Bus, `#include <aery32/spi.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/spi.h>`_
 =====================
 
-#include `<aery32/spi.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/spi.h>`_
-
-AVR32 UC3A1 includes to separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
+Aery32 includes two separate SPI buses, SPI0 and SPI1. To initialize SPI bus it is good practice to define pin mask for the SPI related pins. Refering to datasheet page 45, SPI0 operates from PORTA:
 
 - PA07, NPCS3
 - PA08, NPCS1

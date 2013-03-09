@@ -1,7 +1,5 @@
-Power Manager
+Power Manager, `#include <aery32/pm.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/pm.h>`_
 =============
-
-#include `<aery32/pm.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/pm.h>`_
 
 Power Manager controls integrated oscillators and PLLs among other power related things. By default the MCU runs on the internal RC oscillator (115 kHz). However, it's often preferred to switch to the higher CPU clock frequency, so one of the first things what to do after the power up, is the initialization of oscillators. Aery32 Development Board has 12 MHz crystal oscillator connected to the OSC0. This can be started as
 

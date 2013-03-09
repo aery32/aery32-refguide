@@ -1,5 +1,5 @@
-Universal Sync/Asynchronous Receiver/Transmitter, ``#include <aery32/usart.h>``
-===============================================================================
+Universal Sync/Asynchronous Receiver/Transmitter, `#include <aery32/usart.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/usart.h>`_
+================================================
 
 .. note::
 

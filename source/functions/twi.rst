@@ -1,7 +1,5 @@
-Two-wire (I2C) Interface Bus
+Two-wire (I2C) Interface Bus, `#include <aery32/twi.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/twi.h>`_
 ============================
-
-#include `<aery32/twi.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/twi.h>`_
 
 TWI interface is initialized as a master like this
 

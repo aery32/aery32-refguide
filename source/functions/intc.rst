@@ -1,7 +1,5 @@
-Interrupt Controller
+Interrupt Controller, `#include <aery32/intc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/intc.h>`_
 ====================
-
-#include `<aery32/intc.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/intc.h>`_
 
 Before enabling interrupts define and register your interrupt service routine (ISR) functions. First write ISR function as you would do for any other functions
 
