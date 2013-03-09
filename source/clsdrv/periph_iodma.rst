@@ -90,12 +90,14 @@ Reading the input DMA
     size_t read(uint16_t *dest, size_t n);
     size_t read(uint32_t *dest, size_t n);
 
-The read function returns the total number of elements read. If there was
-nothing to read, the zero is returned despite the size of *n*. The
-``bytes_available()`` member function tells the total number of bytes
-in the read buffer, so you can use that for polling. If you want to remove
-all bytes from the buffer call ``flush()``. To test if the read buffer has
-been overflown call, ``has_overflown()``.
+The read function returns the total number of blocks moved from the DMA input
+buffer to the another destination *dest*. If there was nothing to read,
+zero is returned despite the size of *n*. To poll the input buffer whether
+there are bytes call ``bytes_available()``. ``has_overflown()`` in turn
+tells if the buffer has been overflown.
+
+In case you want to remove all bytes from the input buffer once and all call
+``flush()``.
 
 Writing to the output DMA
 -------------------------
@@ -108,5 +110,5 @@ Writing to the output DMA
 
 The write function fills the output buffer, but does not start the
 transmission yet. To start tramission call ``flush()``. After then you can use
-``bytes_in_progress()`` to follow the send process. IF you are unsure how
+``bytes_in_progress()`` to follow the send process. If you are unsure how
 many bytes you have written in the buffer call ``bytes_in_buffer()``.
