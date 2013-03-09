@@ -54,8 +54,8 @@ APIs. You most likely want to use these when ever possible.
 .. toctree::
    :maxdepth: 1
 
-   Input/Output DMA <clsdrv/periph_iodma>
-   Serial port <clsdrv/serial_port>
+   Peripheral Input/Output DMA <clsdrv/periph_iodma>
+   Serial Port <clsdrv/serial_port>
 
 Aery32 framework in your favorite editor
 ----------------------------------------
