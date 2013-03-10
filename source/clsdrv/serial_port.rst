@@ -219,7 +219,7 @@ If you choose to use PuTTY, select serial and set up the port (serial line)
 and speed. Before saving the session go to the Terminal slide and enable
 *Implicit LF in every CR*. Additionally force the local echo to see what you
 type. If you want to use Linux type line termination, select *Implicit CR in
-every LF* and use *CTRL+J* to send lines instead of pressing *ENTER*.
+every LF* and use **CTRL+J** to send lines instead of pressing **ENTER**.
 
 .. image:: ../../images/putty1.png
     :width: 8 cm
