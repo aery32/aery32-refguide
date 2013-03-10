@@ -210,3 +210,24 @@ on the CTS pin modifies the behavior of the transmitter.
 Setting up the terminal software in PC side
 -------------------------------------------
 
+There are several free terminal emulator software which to use in Windows.
+`PuTTY <http://en.wikipedia.org/wiki/PuTTY>`_ and
+`Tera Term <http://en.wikipedia.org/wiki/Tera_Term>`_ are most known and
+widely used.
+
+If you choose to use PuTTY, select serial and set up the port (serial line)
+and speed. Before saving the session go to the Terminal slide and enable
+*Implicit LF in every CR*. Additionally force the local echo to see what you
+type. If you want to use Linux type line termination, select *Implicit CR in
+every LF* and use *CTRL+J* to send lines instead of pressing *ENTER*.
+
+.. image:: ../../images/putty1.png
+    :width: 8 cm
+    :target: ../_images/putty1.png
+    :alt: PuTTY select serial line and speed
+
+.. image:: ../../images/putty2.png
+    :width: 8 cm
+    :target: ../_images/putty2.png
+    :alt: PuTTY enable implicit LF in every CR
+

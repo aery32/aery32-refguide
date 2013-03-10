@@ -3,7 +3,7 @@ Flash Controller, `#include <aery32/flashc.h> <https://github.com/aery32/aery32/
 
 .. image:: ../../images/avr32_flash_structure.png
     :width: 8 cm
-    :target: _images/avr32_flash_structure.png
+    :target: ../_images/avr32_flash_structure.png
     :alt: AVR32 UC3A1/0 Flash Structure
 
 Flash Controller provides low-level access to the chip's internal flash memory, whose structure has been sketched in the figure above. The init function of the Flash Controller sets the flash wait state (zero or one, ``FLASH_0WS`` or ``FLASH_1WS``, respectively). The last param of the init function enables/disables the sense amplifiers of flash controller.
