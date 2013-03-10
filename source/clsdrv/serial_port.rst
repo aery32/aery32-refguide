@@ -23,8 +23,8 @@ the needed buffers.
 
 .. code-block:: c++
 
-    volatile uint8_t bufdma0[128];
-    volatile uint8_t bufdma1[128];
+    volatile uint8_t bufdma0[128] = {};
+    volatile uint8_t bufdma1[128] = {};
 
 After then we can instantiate Peripheral DMA class drivers using the
 buffers we just created.
