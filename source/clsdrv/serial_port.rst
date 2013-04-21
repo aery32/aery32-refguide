@@ -35,7 +35,8 @@ The DMA pid value, which is the second parameter of the *periph_idma* and
 *periph_odma* constructors, defines the USART data direction, so be sure to
 select Peripheral DMA class' direction properly.
 
-When DMAs are instatiated, instantiate the Serial Port class driver:
+When both DMA drivers have been instantiated, instantiate the Serial Port
+class driver:
 
 .. code-block:: c++
 
