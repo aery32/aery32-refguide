@@ -27,8 +27,8 @@ its size **in bytes**.
     volatile uint8_t ibuf[128] = {};
     volatile uint8_t obuf[128] = {};
 
-    periph_idma input = periph_idma(/* chnum */, /* pid */, ibuf, sizeof(ibuf));
-    periph_odma output = periph_odma(/* chnum */, /* pid */, obuf, sizeof(obuf));
+    periph_idma input = periph_idma(0, ipid, ibuf, sizeof(ibuf));
+    periph_odma output = periph_odma(1, opid, obuf, sizeof(obuf));
 
 Instantiation does not enable the DMA by default, so you have to enable it
 before the driver activates the DMA channel
@@ -76,38 +76,51 @@ Peripheral DMA can work with 8, 16 or 32-bit wide size of transfers.
 The size of transfer is set to 8-bit by default, but can be changed with the
 ``set_sizeof_transfer()`` member function. Either a byte, half-word or
 word can be used (8-bit, 16-bit or 32-bit respectively). The example code
-below shows how to use 32-bit size of transwers with Analog-to-Digital
+below shows how to use 32-bit size of transfer with Analog-to-Digital
 converter.
 
 .. code-block:: c++
 
     volatile uint32_t buf[32] = {};
     periph_idma dma0 = periph_idma(0, AVR32_PDCA_PID_ADC_RX, buf, sizeof(buf));
+
     dma0.set_sizeof_transfer(PDCA_TRANSFER_SIZE_WORD);
+    dma0.enable();
 
 Reading the input DMA, ``periph_idma``
 --------------------------------------
 
 The read member function of the Peripheral Input DMA returns the total
-number of elements moved from the DMA input buffer to new destination *dest*.
-If there was nothing to move, zero is returned.
+number of elements moved from the DMA input buffer to a new destination
+*dest*. If there was nothing to move zero is returned.
 
 .. code-block:: c++
 
-    uint8_t a;
-    if (input.read(&a, 1)) {
-        /* a holds the 8-bit value read from input DMA buffer */
-    } else {
-        /* There was nothing to read */
-    }
+    uint8_t dest;
+    if (input.read(&dest, 1))
+        // one byte read
+    else
+        // there was nothing to read
 
 To poll the input buffer whether there are bytes which to read call
-``bytes_available()``.
 
-``has_overflown()`` in turn tells if the buffer has been overflown.
+.. code-block:: c++
+
+    input.bytes_available();
+
+If you suspect that the buffer has been overflown and thus needs to be reset
+you can do it like this:
+
+.. code-block:: c++
+
+    if (input.has_overflown())
+        input.reset();
 
 In case you want to remove all bytes from the input buffer once and all call
-``flush()``.
+
+.. code-block:: c++
+
+    input.flush();
 
 .. note::
 
@@ -118,22 +131,26 @@ In case you want to remove all bytes from the input buffer once and all call
 Writing to the output DMA, ``periph_odma``
 ------------------------------------------
 
-.. code-block:: c++
-
-    periph_odma& write(uint8_t *dest, size_t n);
-    periph_odma& write(uint16_t *dest, size_t n);
-    periph_odma& write(uint32_t *dest, size_t n);
-
 The write member function of the Peripheral Output DMA fills the output
-buffer, but does not start the transmission yet. To start the transmission call
-``flush()``. After then you can use ``bytes_in_progress()`` to follow the send
-process. If you are unsure how many bytes you have written in the buffer call
-``bytes_in_buffer()``.
+buffer, but does not start the transmission yet. To start the transmission
+you have to call ``flush()``.
 
 .. code-block:: c++
 
-    char foo = "foo";
+    output.write(dest, 1);
+    output.flush();
 
-    output.write((uint8_t*) foo, 3).flush();
-    while (output.bytes_in_progress());
-    /* All done */
+After calling ``flush()`` you can follow the send process like this:
+
+.. code-block:: c++
+
+    while (output.bytes_in_progress())
+        // still trasmitting
+
+If you are unsure how many bytes you have written in the buffer you can check
+it like this:
+
+.. code-block:: c++
+
+    if (output.bytes_in_buffer() > output.bufsize)
+        output.flush();  // buffer is full, flush it

@@ -4,7 +4,7 @@ Serial Port class driver, `#include <aery32/serial_port_clsdrv.h> <https://githu
 Serial Port class driver implements serial port communication using :doc:`USART
 module functions <../functions/usart>` and :doc:`Peripheral Input/Output DMA
 class drivers <periph_iodma>`. The driver can be used to communicate
-with PC via COM port and with other integrated chips (ICs) which provide
+with PC via COM port or with other integrated chips (ICs) which provide
 RX and TX signal pins. Hardware handshaking (the use of RTS and CTS signal
 pins), which requires DMA to work, is also supported by the class. `Skip to
 example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class_driver.cpp>`_.
@@ -12,22 +12,19 @@ example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class
 Class instantiation
 -------------------
 
-.. code-block:: c++
-
-    serial_port(volatile avr32_usart_t *usart, aery::periph_idma &idma, aery::periph_odma &odma);
-
 To instantiate a Serial Port class driver we need to tell its constructor
 method which USART module we like to use. Additionally input and output
-buffers, *idma* and *odma*, are needed. So let's allocate some space for
-the these buffers:
+DMA buffers, *idma* and *odma*, are needed.
+
+First allocate some space for the the DMA buffers:
 
 .. code-block:: c++
 
     volatile uint8_t bufdma0[128] = {};
     volatile uint8_t bufdma1[128] = {};
 
-After then we can instantiate Peripheral DMA class drivers by using the
-buffers we just created:
+After then instantiate Peripheral DMA class drivers by using the buffers
+we just created:
 
 .. code-block:: c++
 
@@ -38,12 +35,11 @@ The DMA pid value, which is the second parameter of the *periph_idma* and
 *periph_odma* constructors, defines the USART data direction, so be sure to
 select Peripheral DMA class' direction properly.
 
-Now we are ready to instantiate the Serial Port class driver. Do not forget
-to enable it after instantiation:
+When DMAs are instatiated, instantiate the Serial Port class driver:
 
 .. code-block:: c++
 
-    serial_port pc = serial_port(usart0, dma0, dma1);
+    serial_port pc = serial_port(usart0 /* usart module */, dma0, dma1);
     pc.enable();
 
 .. note::
@@ -60,12 +56,12 @@ To change speed call
 
 .. code-block:: c++
 
-    pc.set_speed(speed); /* speed in bit/s */
+    pc.set_speed(speed); // speed in bit/s
 
-The baud error rate is set to public ``error`` member and can be checked by
-calling ``pc.error``.
+Everytime you change the speed, the baud error rate is set to public
+``error`` member and can be checked by calling ``pc.error``.
 
-Parity and stop bits can be set like this
+Parity and stop bits can be set like this:
 
 .. code-block:: c++
 
@@ -76,13 +72,18 @@ The possible parity options are ``USART_PARITY_EVEN``, ``USART_PARITY_ODD``,
 ``USART_PARITY_MARKED`` and ``USART_PARITY_SPACE``. The number of stop bits can be
 ``USART_STOPBITS_1``, ``USART_STOPBITS_1p5`` or ``USART_STOPBITS_2``.
 
-The Serial Port class driver supports several data bits values from 5 to 9,
-``USART_DATABITS_5`` etc. Generally 8 data bits is used, but it can be changed
-by ``set_databits()`` member function. However, keep in mind that if 9 data
-bits is used, you also have to change the size of transfer of the used
-*periph_idma* and *periph_odma* class drivers (9 bits do not fit in one byte,
-which is the default DMA transfer size).
+The Serial Port class driver supports several data bits values from 5 to 9.
+Generally 8 data bits is used, but it can be changed with ``set_databits()``
+member function:
 
+.. code-block:: c++
+
+    pc.set_databits(USART_DATABITS_5);
+
+However, keep in mind that if 9 data bits is used, you also have to change
+the size of transfer of the used *periph_idma* and *periph_odma* class
+drivers, because 9 bits do not fit in one byte, which is the default
+DMA transfer size.
 
 Hello World!
 ------------
@@ -100,20 +101,24 @@ or like this
 
     pc.printf("Hello Aery%d", 32);
 
-A single character can be read like this
+A single character can be read and write like this
 
 .. code-block:: c++
 
     char c = pc.getc();
+    pc.putc(c);
 
-If you like to put the character back to read buffer, use
-``putback()`` member function.
+If you like to put the read character back to the read buffer call
+
+.. code-block:: c++
+
+    pc.putback(c);
 
 
 Getline and line termination
 ----------------------------
 
-To read the user input as lines call
+You can read user input in lines like this:
 
 .. code-block:: c++
 
@@ -125,14 +130,16 @@ the DMA input buffer is full or the delimiting character, which is ``\r\n``
 by defaut, is found.
 
 You can also save the total number of characters read
-(delimitation character and ``\0`` aren't added to this value)
+(delimitation character and ``\0`` aren't added to this value):
+
+.. code-block:: c++
 
     size_t nread;
     pc.getline(line, *nread);
 
 The delimitation character *delim* can be either a single character or two
 sequential characters. The default *delim* can be set by calling
-``set_default_delim()`` member function as shown below.
+``set_default_delim()`` member function this way:
 
 .. code-block:: c++
 

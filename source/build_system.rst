@@ -18,8 +18,9 @@ The program size is also showed at the end of the compile, like this::
 
     Program size:
        text    data     bss     dec     hex filename
-       3724    1344    4176    9244    241c aery32.elf
-          0    5068       0    5068    13cc aery32.hex
+       3700    1340   64196   69236   10e74 aery32.elf
+          0    5040       0    5040    13b0 aery32.hex
+    SDRAM usage: 5512 bytes, 8.41064 %
 
 Here the program size has been given in separate sections and the static
 RAM usage has been calculated.
