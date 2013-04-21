@@ -1,13 +1,18 @@
 The build system
 ================
 
-Aery32 Framework comes with a powerful Makefile that provides a convenient way to compile the project. It also has targets for chip programming.
+Aery32 Framework comes with a powerful Makefile that provides a convenient way
+to compile the project. It also has targets for chip programming.
 
 To compile the project just command::
 
     make
 
-When the compilation process is done, binaries will appear under the project's root (``aery32.hex`` and ``aery32.elf``). These two files are used in chip programming or program uploading, or chip flashing. Whatever you like to call it. In addition to the binaries, assembly listing and file mapping files, have been created. ``aery32.lst`` and ``aery32.map``, respectively.
+When the compilation process is done, binaries will appear under the project's
+root (``aery32.hex`` and ``aery32.elf``). These two files are used in chip
+programming or program uploading, or chip flashing. Whatever you like to call
+it. In addition to the binaries, assembly listing and file mapping files, have
+been created. ``aery32.lst`` and ``aery32.map``, respectively.
 
 The program size is also showed at the end of the compile, like this::
 
@@ -16,11 +21,23 @@ The program size is also showed at the end of the compile, like this::
        3724    1344    4176    9244    241c aery32.elf
           0    5068       0    5068    13cc aery32.hex
 
-``.text`` correspond the FLASH usage and ``.data + .bss`` is the total amount of RAM allocation. Note that you have to take the size of the stack (and possibly heap) into account as well. ``.bss`` section is the place where the initialized data is copied at runtime during the startup.
+Here the program size has been given in separate sections and the static
+RAM usage has been calculated.
+
+``.text`` correspond the FLASH usage and ``.data + .bss`` indicates the
+RAM allocation. ``.bss`` section is the place where the initialized
+data is copied at runtime during the startup.
+
+Dynamic RAM usage of stack and heap sections cannot be calculated before hand
+so make sure that there are always reasonable amount of RAM available for heap.
+Default stack size is 4 kB and you just have to know if it's enough. You
+can increase the stack size from linker script if needed.
 
 .. note::
 
-    By default the project is compiled with -O2 optimization. If you run into troubles and your program behaves unpredictly on the chip, first try some other level of optimization
+    By default the project is compiled with -O2 optimization. If you run into
+    troubles and your program behaves unpredictly on the chip, first try some
+    other level of optimization
 
     .. code-block:: none
 
@@ -33,7 +50,9 @@ To program the chip with the compiled binary type::
 
     make program
 
-At this point the Makefile attempts to use batchisp in Windows and dfu-programmer in Linux, so make sure you have those installed. If you also want to start the program immediately type::
+At this point the Makefile attempts to use batchisp in Windows and
+dfu-programmer in Linux, so make sure you have those installed. If you also
+want to start the program immediately type::
 
     make program start
 

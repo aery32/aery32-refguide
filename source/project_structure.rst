@@ -12,6 +12,7 @@ The default project directory structure looks like this::
         board.h
         main.cpp
         Makefile
+        settings.h
 
 It is intended that you work under the root directory most of the time as
 that is the place where you keep adding your .c, .cpp and .h source files.
@@ -142,19 +143,6 @@ how the board is initialized, board::init() is the place where to do it.
     All board related functions should use a namespace ``board`` to not
     introduce any name collision with other functions added into the project.
 
-Frequency settings
-''''''''''''''''''
-
-.. code-block:: c++
-
-    #define F_OSC0 12000000UL
-    #define F_OSC1 16000000UL
-    #define F_CPU  66000000UL
-
-These three macro definitions are related to the board operating frequency.
-If you choose to change the board CPU frequency, make sure to redefine
-it in the board.h, or otherwise delay functions won't work as expected.
-
 Build system, ``Makefile``
 --------------------------
 
@@ -166,3 +154,22 @@ from the :doc:`build system <build_system>` section.
 
     Generally Makefiles don't have a file postfix like ``.cpp`` and it's
     a common practice to start its name with capital M.
+
+Project wide settings, ``settings.h``
+-------------------------------------
+
+This file is provided to GCC via ``-include`` allowing you to set project
+wide global setting definitions. Aery32 Framework is also aware of these
+definitions. For example, to get the delay functions work properly you have
+to define the correct CPU frequency, ``F_CPU``, in this file:
+
+.. code-block:: c++
+
+    #define F_OSC0 12000000UL
+    #define F_OSC1 16000000UL
+    #define F_CPU  66000000UL
+
+.. note ::
+    
+    If you choose to change the board CPU frequency, make sure to redefine
+    these or otherwise delay functions won't work as expected.
