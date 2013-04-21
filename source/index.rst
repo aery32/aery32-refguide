@@ -48,8 +48,7 @@ Class drivers
 
 Aery32 class drivers, abbreviated as *clsdrv*, are high level C++ classes.
 Thus the name class driver. Class drivers provide a convenient and feature
-rich APIs than basic module functions. You most likely want to use these when
-ever possible.
+rich APIs, so you most likely want to use these when ever possible.
 
 .. toctree::
    :maxdepth: 1

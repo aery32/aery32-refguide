@@ -17,7 +17,7 @@ MCU and output DMA from MCU to PC.
 Class instantiation
 -------------------
 
-To instantiate input or output type DMA class driver one need to tell which
+To instantiate input or output type DMA class driver you need to tell which
 DMA channel number *chnum* and peripheral identifier *pid* will be used.
 Additionally you have to give a pointer to the preallocated buffer and tell
 its size **in bytes**. 
@@ -38,9 +38,9 @@ before the driver activates the DMA channel
     input.enable();
     output.enable();
 
-The total number of DMA channels in Aery32 board is 15 (0-14). Any channel can
+The total number of DMA channels in UC3A type MCUs is 15 (0-14). Any channel can
 be assigned to any peripheral id. Be specific with the peripheral id and class
-driver type, RX is input and TX is output. The possible pid values are
+driver type, RX is input and TX is output. The possible pid values are:
 
 .. hlist::
     :columns: 3
@@ -76,7 +76,7 @@ Peripheral DMA can work with 8, 16 or 32-bit wide size of transfers.
 The size of transfer is set to 8-bit by default, but can be changed with the
 ``set_sizeof_transfer()`` member function. Either a byte, half-word or
 word can be used (8-bit, 16-bit or 32-bit respectively). The example code
-below shows how to use 32-bit size of transfer with Analog-to-Digital
+below shows how to use 32-bit size of transfer with the analog-to-digital
 converter.
 
 .. code-block:: c++
@@ -116,7 +116,8 @@ you can do it like this:
     if (input.has_overflown())
         input.reset();
 
-In case you want to remove all bytes from the input buffer once and all call
+In case you want to remove all bytes from the input buffer once and for all
+call:
 
 .. code-block:: c++
 
@@ -147,10 +148,10 @@ After calling ``flush()`` you can follow the send process like this:
     while (output.bytes_in_progress())
         // still trasmitting
 
-If you are unsure how many bytes you have written in the buffer you can check
-it like this:
+If you are unsure how many bytes you have written into the output buffer,
+you can check it like this:
 
 .. code-block:: c++
 
-    if (output.bytes_in_buffer() > output.bufsize)
+    if (output.bytes_in_buffer() == output.bufsize)
         output.flush();  // buffer is full, flush it

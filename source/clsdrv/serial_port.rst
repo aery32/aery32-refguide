@@ -12,8 +12,8 @@ example <https://github.com/aery32/aery32/blob/master/examples/serial_port_class
 Class instantiation
 -------------------
 
-To instantiate a Serial Port class driver we need to tell its constructor
-method which USART module we like to use. Additionally input and output
+To instantiate a Serial Port class driver you need to tell its constructor
+which USART module you like to use. Additionally input and output
 DMA buffers, *idma* and *odma*, are needed.
 
 First allocate some space for the the DMA buffers:
@@ -24,7 +24,7 @@ First allocate some space for the the DMA buffers:
     volatile uint8_t bufdma1[128] = {};
 
 After then instantiate Peripheral DMA class drivers by using the buffers
-we just created:
+you just created:
 
 .. code-block:: c++
 
@@ -39,7 +39,7 @@ When DMAs are instatiated, instantiate the Serial Port class driver:
 
 .. code-block:: c++
 
-    serial_port pc = serial_port(usart0 /* usart module */, dma0, dma1);
+    serial_port pc = serial_port(usart0, dma0 /* input */, dma1 /* output */);
     pc.enable();
 
 .. note::
@@ -47,8 +47,8 @@ When DMAs are instatiated, instantiate the Serial Port class driver:
     The object name ``pc`` was used here, because the connection is intended
     to be use with PC. See the :ref:`setting-up-terminal` below.
 
-By default the speed is set to 115200 bit/s (error 0.16% with 66 MHz PBA
-freq.). The default setting for parity is none. Stop and data bits are
+By default the speed is set to 115200 bit/s (baud error 0.16% with 66 MHz PBA
+frequency). The default setting for parity is none. Stop and data bits are
 1 and 8, respectively. All these settings can be changed with the class
 member functions.
 
@@ -58,8 +58,8 @@ To change speed call
 
     pc.set_speed(speed); // speed in bit/s
 
-Everytime you change the speed, the baud error rate is set to public
-``error`` member and can be checked by calling ``pc.error``.
+Everytime you change the speed, the baud error rate is set to the
+public ``error`` member and can be checked by calling ``pc.error``.
 
 Parity and stop bits can be set like this:
 
@@ -80,28 +80,30 @@ member function:
 
     pc.set_databits(USART_DATABITS_5);
 
-However, keep in mind that if 9 data bits is used, you also have to change
-the size of transfer of the used *periph_idma* and *periph_odma* class
-drivers, because 9 bits do not fit in one byte, which is the default
-DMA transfer size.
+.. warning::
+
+    Keep in mind that if 9 data bits is used, you also have to change
+    the size of transfer of the used *periph_idma* and *periph_odma* class
+    drivers, because 9 bits do not fit in one byte, which is the default
+    DMA transfer size.
 
 Hello World!
 ------------
 
-When the Serial Port class driver is instantiated and enabled it's ready
-to be used. The well known "Hello World!" example would work like this
+When the Serial Port class driver is enabled it's ready to be used.
+The well known "Hello World!" example would work like this:
 
 .. code-block:: c++
 
     pc << "Hello Aery" << 32;
 
-or like this
+or like this:
 
 .. code-block:: c++
 
     pc.printf("Hello Aery%d", 32);
 
-A single character can be read and write like this
+A single character can be read and write like this:
 
 .. code-block:: c++
 
@@ -127,27 +129,29 @@ You can read user input in lines like this:
 
 ``getline()`` will extract characters to *line* C string until either
 the DMA input buffer is full or the delimiting character, which is ``\r\n``
-by defaut, is found.
+by defaut, is found. Characters that precede the char (del), which is a
+backspace (decimal value 127), are discarded from the line.
 
-You can also save the total number of characters read
-(delimitation character and ``\0`` aren't added to this value):
+The total number of the read characters can be saved like this:
 
 .. code-block:: c++
 
     size_t nread;
     pc.getline(line, *nread);
 
-The delimitation character *delim* can be either a single character or two
-sequential characters. The default *delim* can be set by calling
-``set_default_delim()`` member function this way:
+Delimitation character and ``\0`` aren't added to *nread*.
+
+The default *delim* can be set by calling ``set_default_delim()`` member
+function in this way:
 
 .. code-block:: c++
 
     pc.set_default_delim('\n');
     pc.set_default_delim("\r\n");
 
-If you need to use occasionally some other delimitation character, define it
-as a third argument like this:
+Note that the delimitation character *delim* can be either a single character
+or two sequential characters. If you need to use occasionally some other
+delimitation character, define it as a third argument like this:
 
 .. code-block:: c++
 
@@ -186,17 +190,6 @@ as a third argument like this:
 
 Flush and other supportive functions
 ------------------------------------
-
-.. code-block:: c++
-
-    serial_port&    flush();
-    size_t          bytes_available();
-
-    serial_port&    reset();
-    serial_port&    enable();
-    serial_port&    disable();
-
-    bool            is_enabled();
 
 Sometimes you need to flush all bytes read into the input buffer. This
 can be done with ``flush()`` member function. If you like to know
