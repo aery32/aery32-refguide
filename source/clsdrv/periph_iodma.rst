@@ -1,7 +1,7 @@
 Peripheral Input/Output DMA, `#include <aery32/periph_iodma.h> <https://github.com/aery32/aery32/blob/master/aery32/aery32/periph_iodma_clsdrv.h>`_
 ===========================
 
-AVR32 microcontrollers have PDCA module (Peripheral DMA Controller), which
+AVR32 microcontrollers have a PDCA module (Peripheral DMA Controller), which
 allows direct memory access (DMA) between peripheral hardware and MCU's memory
 independently of the central processing unit (CPU). This feature is useful
 when the CPU cannot keep up with the rate of data transfer, or where the CPU
@@ -11,7 +11,7 @@ transfer.
 Aery32 Framework implements two types of peripheral DMA drivers, input and output.
 Input type driver can transfer data from a peripheral to memory whereas output
 type driver transfers data from memory to a peripheral. For example, when using
-USART peripheral to communicate with PC, input DMA writes data from PC to
+USART peripheral to communicate with PC, input DMA transmit data from PC to
 MCU and output DMA from MCU to PC.
 
 Class instantiation
@@ -109,7 +109,7 @@ To poll the input buffer whether there are bytes which to read call
     input.bytes_available();
 
 If you suspect that the buffer has been overflown and thus needs to be reset
-you can do it like this:
+you can do the reset like this:
 
 .. code-block:: c++
 
@@ -117,7 +117,7 @@ you can do it like this:
         input.reset();
 
 In case you want to remove all bytes from the input buffer once and for all
-call:
+call ``flush()``:
 
 .. code-block:: c++
 
@@ -138,7 +138,7 @@ you have to call ``flush()``.
 
 .. code-block:: c++
 
-    output.write(dest, 1);
+    output.write(src, 1);
     output.flush();
 
 After calling ``flush()`` you can follow the send process like this:

@@ -36,7 +36,7 @@ bit/s (error 0.8%).
 
 The last parameter is the divider for the fractional part which could have
 been also omitted because it was set to zero. We could have set the 
-fractional part here to 5 to get even smaller baud rate error (0.015%).
+fractional part here to 5 to get even smaller baud rate error (0.16%).
 
 At last you have to enable RX and TX channels separately for receiving
 and transmitting data

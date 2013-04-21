@@ -137,7 +137,7 @@ The total number of the read characters can be saved like this:
 .. code-block:: c++
 
     size_t nread;
-    pc.getline(line, *nread);
+    pc.getline(line, &nread);
 
 Delimitation character and ``\0`` aren't added to *nread*.
 
@@ -170,6 +170,7 @@ delimitation character, define it as a third argument like this:
 
     .. code-block:: c++
 
+        int i = 0;
         pc.getline(line);
         sscanf(line, "%d", &i);
 
@@ -191,18 +192,23 @@ delimitation character, define it as a third argument like this:
 Flush and other supportive functions
 ------------------------------------
 
-Sometimes you need to flush all bytes read into the input buffer. This
+Sometimes you need to flush the input buffer from all read bytes. This
 can be done with ``flush()`` member function. If you like to know
 how many bytes have been received, call ``bytes_available()``.
 
-It's also possible that the input buffer gets overflown. This can can
+It's also possible that the input buffer gets overflown. This can
 be checked by calling ``has_overflown()``. If the buffer has been
 overflown, you can reset the serial port by calling ``reset()``.
 
 Hardware handshaking
 --------------------
 
-To enable hardware handshaking just call ``pc.enable_hw_handshaking();``.
+To enable hardware handshaking just call:
+
+.. code-block:: c++
+
+    pc.enable_hw_handshaking();
+
 When the handshaking is enabled the receiver drives the RTS pin and the level
 on the CTS pin modifies the behavior of the transmitter.
 
@@ -218,9 +224,8 @@ widely used.
 
 If you choose to use PuTTY, select serial and set up the port (serial line)
 and speed. Before saving the session go to the Terminal slide and enable
-*Implicit LF in every CR*. Additionally force the local echo to see what you
-type. If you want to use Linux type line termination, select *Implicit CR in
-every LF* and use **CTRL+J** to send lines instead of pressing **ENTER**.
+*Implicit CR in every LF*. Additionally force the local echo to see what you
+type. Use **CTRL+J** to send lines instead of pressing **ENTER**.
 
 .. image:: ../../images/putty1.png
     :width: 8 cm
@@ -230,5 +235,5 @@ every LF* and use **CTRL+J** to send lines instead of pressing **ENTER**.
 .. image:: ../../images/putty2.png
     :width: 8 cm
     :target: ../_images/putty2.png
-    :alt: PuTTY enable implicit LF in every CR
+    :alt: PuTTY enable implicit CR in every LF
 
