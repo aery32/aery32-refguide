@@ -44,4 +44,4 @@ and transmitting data
 .. code-block:: c++
     
     usart_enable_rx(usart0);
-    usart_enable_rx(usart0);
+    usart_enable_tx(usart0);
