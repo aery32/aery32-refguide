@@ -94,6 +94,14 @@ To check whether the user page is empty or not call
 
     flashc_userpage_isempty();
 
+.. warning::
+
+    Aery32 board ships with the preprogrammed bootloader, which uses the configuration
+    data saved to the first word (32 bits) of user page. This configuration data
+    includes the pin configuration for slide switch -- the switch that you have been using
+    to vary between bootloader and program modes. So to keep the board slide switch
+    working just do not alter the first word of user page.
+
 General purpose fuse bits
 -------------------------
 
