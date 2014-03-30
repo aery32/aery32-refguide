@@ -163,7 +163,7 @@ html_static_path = ['_static']
 # This is the file name suffix for HTML files (e.g. ".xhtml").
 #html_file_suffix = None
 
-html_context = { "css_files": ["_static/rtd.css", "_static/pygments.css", "_static/custom.css"] }
+html_context = {}
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'aery32doc'
