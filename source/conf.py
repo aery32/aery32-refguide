@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Aery32'
-copyright = u'2012-2013, Muiku Oy'
+copyright = u'2012-2014, Muiku Oy'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -163,7 +163,7 @@ html_static_path = ['_static']
 # This is the file name suffix for HTML files (e.g. ".xhtml").
 #html_file_suffix = None
 
-html_context = { "css_files": ["_static/custom.css"] }
+html_context = { "css_files": ["_static/*.css"] }
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'aery32doc'
